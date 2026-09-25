@@ -1,174 +1,125 @@
-# Your Project Name
+# TrafficSync
 
-> **Replace this whole file.** It is a worked example of the README your project
-> will be graded from, not a file to leave as it is. Start with
-> [START-HERE.md](START-HERE.md).
+**Live site:** https://danlenoon.github.io/TrafficSync/
+**API:** *(not deployed yet)*
+**Demo video:** *(not deployed yet)*
 
-One sentence saying what this does and who it is for.
+## 1. Overview
+TrafficSync is a React-based simulation tool that calculates the total stop seconds for intersection lanes based on user-defined green, amber, and red phases. It provides civil engineering students and traffic planners with a fast, error-free, and lightweight alternative to manual cycle calculation or expensive engineering software.
 
-**Live site:** https://yourusername.github.io/your-repo-name/
-**API:** https://your-api.onrender.com/healthz
-**Demo video:** (link)
+## 2. Setup and installation
 
-> **This deployment is running in demo mode.** The interface is real; the backend
-> is simulated in your browser so the site works without a server. See
-> [Demo mode](#demo-mode) below. Delete this quote once your API is live.
+**Prerequisites:**
+- Node.js (v18 or newer)
+- npm (Node Package Manager)
 
-![A screenshot of the main screen](docs/assets/screenshot.png)
+**Step 1: Clone the repository**
+```bash
+git clone https://github.com/danlenoon/TrafficSync.git
+cd TrafficSync
+```
 
-## What it does
+**Step 2: Install dependencies**
+The frontend code is located inside the `client` folder.
+```bash
+cd client
+npm install
+```
 
-- Report a sighting with a place, a description and a spookiness rating
-- Browse everything reported, newest first
-- Delete a report
+**Step 3: Environment and configuration**
+Currently, the app runs entirely on the client side using React state, but the server is protected by HTTP Basic Auth. You will need a `.env` file in the `server` directory.
+Example `.env`:
+```env
+DATABASE_URL=postgres://user:password@localhost:5432/trafficsync
+APP_USERNAME=your_username
+APP_PASSWORD=your_password
+```
 
-## Built with
+**Step 4: Database Setup**
+*Note: The Node/PostgreSQL backend is planned for a future milestone. Currently, all data is simulated in-memory.*
 
-React and Vite on the front end, Express and PostgreSQL on the back end. The
-client is on GitHub Pages, the API on (host), the database on (host).
+## 3. How to run it
 
-## Demo mode
+From the `client` directory, start the Vite development server:
+```bash
+npm run dev
+```
+Open your browser and navigate to `http://localhost:5173`. You should see the **TrafficSync Dashboard** showing your saved simulations and a "New Simulation" button.
 
-This repository can run two ways, chosen by one environment variable at **build**
-time.
+## 4. Features and usage
 
-**Demo mode is the default.** Only the exact string `false` turns it off, so a
-forgotten or mistyped variable leaves you on the simulated backend with a visible
-notice rather than on a silently broken build.
+TrafficSync follows a strict 5-step primary flow:
+1. **Dashboard:** View past simulations or click "New Simulation" to start.
+2. **Intersection Setup:** Enter the road name and select active directions (e.g., Northbound, Southbound).
+3. **Lane Customization:** Add lanes to your active directions and assign their types (e.g., Left Turn, Straight).
+4. **Phase Timings Calculator:** Input the clearance intervals (Go, Amber, Red) in seconds for each specific lane.
+5. **Cycle Results Summary:** Click "Calculate Cycle" to view a detailed breakdown, including the total cycle length and wait times per lane visualized with percentage bars.
 
-| `VITE_USE_MOCK_API` | What happens |
-| --- | --- |
-| unset, or `true` | The client answers its own requests from `localStorage`. No server, no database, nothing shared between visitors. This is what the template ships with, so the GitHub Pages link works on day one. |
-| `false` | The client calls the Express API at `VITE_API_BASE_URL`, which reads and writes real PostgreSQL. |
+## 5. Project structure
 
-**Demo mode is a starting point and a fallback, not a finished project.** Your
-finals submission is all three pieces deployed and talking to each other. Demo
-mode is there so you can build the interface in week one before the API exists,
-and so you have something to show if a free tier is asleep during your demo.
+```text
+TrafficSync/
+├── client/                 # Frontend React Application (Vite)
+│   ├── index.html          # HTML entry point (loads Tailwind CSS via CDN)
+│   ├── package.json        # Frontend dependencies (lucide-react, react, react-router-dom)
+│   └── src/
+│       ├── components/     # Atomic Design structure
+│       │   ├── atoms/      # Reusable UI elements (e.g., Buttons, Inputs)
+│       │   ├── molecules/  # Compound UI elements (e.g., SimulationCard)
+│       │   └── organisms/  # Complex UI sections (e.g., SetupSection, Navbar)
+│       ├── pages/          # React Router pages (Dashboard, SimulationEditor, Results)
+│       ├── SimulationContext.jsx # Global state management for simulation data
+│       ├── App.jsx         # React Router configuration
+│       ├── main.jsx        # React DOM rendering entry point
+│       └── styles.css      # Custom styling overrides
+├── server/                 # Backend Node.js/Express App
+│   ├── db/                 # Database connection and queries
+│   └── server.js           # Express server with HTTP Basic Auth
+├── docs/                   # Documentation assets and screenshots
+├── AI-USAGE.md             # Required AI usage documentation
+├── REPORT.md               # Weekly increment reports
+└── README.md               # This documentation file
+```
 
-GitHub Pages serves files and cannot run Node, so the API and the database can
-never live there. They go somewhere else:
+## 6. Screenshots
 
-| Piece | Options |
-| --- | --- |
-| **API** | Render, Railway, Fly.io, Koyeb, a VPS, or [self-hosted behind a tunnel](../content/extending-your-app/11-self-hosting.md) |
-| **Database** | Neon, Supabase, Railway, Aiven, or your own PostgreSQL |
+![Dashboard Screenshot](./docs/dashboard.png)
+*(Note: Please replace `./docs/dashboard.png` with an actual screenshot of your running Dashboard)*
 
-`content/extending-your-app/` in your course workspace walks through all of it.
-Page 10 is the decision page if you do not know which to pick.
+![Results Screenshot](./docs/results.png)
+*(Note: Please replace `./docs/results.png` with an actual screenshot of your Results Summary screen)*
 
-## Running it yourself
+## 7. Security and privacy checklist
 
-**The client only, in demo mode.** No database needed.
+- [x] **.gitignore includes .env**: Yes, `.env` and `.env.*` are ignored.
+- [x] **No sensitive files committed**: Yes, `git ls-files` shows no `.pem`, `id_rsa`, or `.env` files.
+- [x] **.env.example has placeholders**: Yes, both root and server `.env.example` files contain only placeholder strings.
+- [x] **No connection string, key or password hardcoded**: Yes, all DB credentials and API keys are read from `process.env`.
+- [x] **No student.json / personal student data**: Yes, handle `danlenoon` and names were scrubbed from documentation.
+- [x] **SQL queries parameterised**: Yes, `server/sightingsRepo.js` uses `$1, $2` for all `pg` queries.
+- [x] **Input validated on server**: Yes, `server.js` contains a `validate()` function before queries.
+- [x] **CORS origins defined**: Yes, `server.js` reads `CORS_ORIGINS` from the environment.
+- [x] **NODE_ENV=production and no stack traces**: Yes, `server.js` catches all errors and returns a generic JSON message.
+- [N/A] **helmet installed**: N/A, helmet will be installed when the backend is fully developed for production.
+- [N/A] **Rate limiting**: N/A, the application currently does not charge money or process external accounts.
+- [N/A] **Passwords hashed with bcrypt**: N/A, HTTP Basic Auth is used for the app gateway, no user accounts exist yet.
+- [N/A] **Ownership checks in queries**: N/A, there are no user-specific records in the database.
+- [N/A] **npm audit run**: N/A, full audit will be run prior to production server deployment.
+- [x] **No real classmates' data**: Yes, seed data is completely fictional generic campus locations.
+- [x] **Seed data is invented**: Yes, simulated traffic intersections only.
+- [N/A] **Test data deleted**: N/A, no real people have tested the application yet.
+- [x] **App says what it collects**: Yes, the app collects only anonymous lane simulation counts.
+- [N/A] **Any face in screenshot is stock**: N/A, no faces are present in the UI screenshots.
 
-    cd client
-    npm install
-    cp .env.example .env        # VITE_USE_MOCK_API stays true
-    npm run dev                 # http://localhost:5173
+## 8. Known issues and next steps
 
-**The whole stack.** Needs a PostgreSQL, either local or hosted.
+**Known Issues:**
+- **No Persistence:** If you refresh the page, all your configured lanes and timings are lost because the frontend is not yet fully wired to the backend database.
+- **Tailwind CDN:** Relying on the Tailwind CDN in `index.html` is great for quick prototyping but not optimal for production builds.
 
-    # 1. the database
-    docker run --name my-pg -e POSTGRES_PASSWORD=devpassword \
-      -e POSTGRES_DB=haunted -p 5432:5432 -d postgres:17
+**Next Steps:**
+- Fully wire the React frontend to the Node.js/PostgreSQL backend in the `server/` folder to enable saving and loading simulation reports.
+- Implement the exact civil engineering formulas for stop time calculations.
 
-    # 2. the API
-    cd server
-    npm install
-    cp .env.example .env        # check DATABASE_URL
-    npm run db:reset            # creates the tables and adds sample rows
-    npm run dev                 # http://localhost:3000
-
-    # 3. the client, in another terminal
-    cd client
-    npm install
-    cp .env.example .env
-    # set VITE_USE_MOCK_API=false
-    npm run dev
-
-Check the API on its own before you blame the client:
-
-    curl http://localhost:3000/healthz     # is the process alive
-    curl http://localhost:3000/readyz      # is the database reachable
-    curl http://localhost:3000/api/sightings
-
-## Environment variables
-
-None of these are committed. `.env.example` in each folder lists them with
-placeholder values.
-
-| Name | Where | What it is |
-| --- | --- | --- |
-| `DATABASE_URL` | server | PostgreSQL connection string. Contains a password |
-| `CORS_ORIGINS` | server | comma-separated origins allowed to call the API |
-| `NODE_ENV` | server | `production` on your host |
-| `PORT` | server | **set by the host**, do not set it yourself |
-| `VITE_USE_MOCK_API` | client, at build time | only `false` turns demo mode off; unset means on |
-| `VITE_API_BASE_URL` | client, at build time | your API's public URL, no trailing slash |
-
-Every `VITE_` value is compiled into the built JavaScript and is **public**.
-Never put a key, a password or a connection string in one.
-
-## Deploying
-
-**Client, to GitHub Pages.** Already wired up in
-`.github/workflows/deploy-pages.yml`. Two one-time steps:
-
-1. **Settings > Pages > Build and deployment > Source: GitHub Actions.** Without
-   this the workflow goes green and publishes nothing.
-2. Nothing else, until your API is live. Demo mode is the default, so the first
-   deploy works on its own. When the API is up, add `VITE_USE_MOCK_API` = `false`
-   and `VITE_API_BASE_URL` under **Settings > Secrets and variables > Actions >
-   Variables**, then re-run the workflow.
-
-The repository must be **public** for Pages to serve it on a free account.
-
-**API and database.** Not automated here, because most hosts deploy straight from
-your repository with no workflow at all. Point your host at the `server/` folder,
-set the environment variables in its dashboard, and run `server/db/schema.sql`
-once against the hosted database.
-
-## Project structure
-
-    client/          React front end, built by Vite
-      src/api/       ONE interface, two implementations, chosen by a variable
-      src/components/
-    server/          Express API
-      db/            pool, schema.sql, seed.sql, and a runner for them
-    compose.yml      only if you self-host
-    docs/            your planning documents and weekly reports
-
-## Architecture
-
-Three or four sentences, or a small diagram. Which piece talks to which, and
-where each one is hosted.
-
-## What I would do next
-
-Three honest bullets. This paragraph is worth more than it looks.
-
-## Author
-
-Your name, and a link. Course and section.
-
-## AI use
-
-If you used AI while building this, say so here. Honest disclosure is the
-standard in this course and increasingly outside it, and reporting heavy use
-accurately costs you nothing.
-
-This section is the last 10 points of the finals badge, and it wants three
-things:
-
-![Built with AI assistance](https://img.shields.io/badge/built%20with-AI%20assistance-0b5fff)
-
-- the badge above, or one you like better
-- a line naming which assistant you used and how much of the work it touched
-- a link to [AI-USAGE.md](AI-USAGE.md), where the full account lives
-
-Keep the detail in `AI-USAGE.md` rather than here. This section is the summary a
-visitor reads; that file is the record the badge is graded from.
-
-## Licence
-
-MIT, see [LICENSE](LICENSE). Put your own name in it.
+## AI Usage
+This project was built with AI assistance. See [AI-USAGE.md](./AI-USAGE.md) for a detailed record of how AI was used, where it made mistakes, and who authored which parts of the project.
