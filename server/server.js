@@ -36,6 +36,32 @@ app.get('/readyz', async (request, response) => {
   }
 })
 
+// HTTP Basic Authentication Middleware (Option B)
+app.use((req, res, next) => {
+  const authHeader = req.headers.authorization
+  if (!authHeader || !authHeader.startsWith('Basic ')) {
+    res.set('WWW-Authenticate', 'Basic realm="TrafficSync"')
+    return res.status(401).json({ error: 'Authentication required' })
+  }
+  const base64Str = authHeader.substring(6)
+  const credentials = Buffer.from(base64Str, 'base64').toString('utf8')
+  const [username, password] = credentials.split(':')
+  
+  const expectedUsername = process.env.APP_USERNAME
+  const expectedPassword = process.env.APP_PASSWORD
+
+  if (
+    expectedUsername && expectedPassword &&
+    username === expectedUsername &&
+    password === expectedPassword
+  ) {
+    next()
+  } else {
+    res.set('WWW-Authenticate', 'Basic realm="TrafficSync"')
+    return res.status(401).json({ error: 'Invalid credentials' })
+  }
+})
+
 // Validation lives on the server because the client can be bypassed. The
 // browser form is for a fast, friendly message; this is for correctness.
 function validate(body) {
