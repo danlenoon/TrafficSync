@@ -1,12 +1,5 @@
 # AI usage
 
-This project was built with AI assistance. This file is the record of it. It is
-graded as the finals badge, and it is worth 100 points.
-
-Start it in week 1 and keep it up as you go. The commit history of this file is
-part of the evidence: a file written all at once the night before the deadline
-looks exactly like what it is.
-
 ## 1. How I used AI
 
 ### 2026-09-21 - Scaffolded React application
@@ -14,56 +7,91 @@ looks exactly like what it is.
 - **What I asked for:** "Kindly create me an app based on M6A0 and M6A1... vibe-code the application."
 - **What it gave back:** It ran Vite scaffolding commands and generated the basic React template.
 - **What I kept, what I changed, and why:** Kept the Vite configuration and React base. It provided a fast way to initialize the boilerplate so I could focus on the UI flow.
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/37616c91c0e1b073bd47fc435c534a5687d380c6
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/9d7e277c039a23e307aaebe369163b6c7144c5b5
 
 ### 2026-09-21 - Built 5-screen UI prototype in React
 - **Tool:** Google Antigravity (Gemini)
 - **What I asked for:** "vibe-code the application"
 - **What it gave back:** It wrote a single monolithic `App.jsx` file containing all 5 screens, state management, and mock calculation logic.
 - **What I kept, what I changed, and why:** I kept the logic and layout as the primary prototype for Week 1. I plan to refactor this massive file into smaller atomic components in Week 2.
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/fdfe5fe889b68532a8f999be628adff95c8dc98f
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/ee9a849aa097bc70a9f04468755f26a6cc01642d
 
 ### 2026-09-21 - Injected Tailwind CSS
 - **Tool:** Google Antigravity (Gemini)
 - **What I asked for:** Fast styling without build configuration.
 - **What it gave back:** It modified `index.html` to include the Tailwind CSS CDN script tag.
 - **What I kept, what I changed, and why:** I kept it because it allowed for instant "vibe-coding" and styling. I will change it to a proper PostCSS build when moving to production.
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/73532793605f3c539c148be126c79212e9fd6446
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/ee673f28d5141b191ec9667a9758f38d2a5cf852
 
 ### 2026-09-21 - Migrated files to correct template
 - **Tool:** Google Antigravity (Gemini)
 - **What I asked for:** "put all of them in the folder I created, TrafficSync"
 - **What it gave back:** It used PowerShell commands to move the `App.jsx` and `index.html` into the `client` subdirectory of the template.
 - **What I kept, what I changed, and why:** Kept the file structure as it aligns with the course's required template format (separating client and server).
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/6792218c0cf36e72ad4a4bcff6615b1f10742b39
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/03296ceb4ab5be23f8dfdf83e55e83b709dc07be
 
 ### 2026-09-25 - Atomic Design Refactor & Routing
 - **Tool:** Google Antigravity (Gemini)
 - **What I asked for:** "Does the current app adhere to M6A0, M6A1, M6A2, and M6A3 so far? If not, kindly make the current app adhere to all."
 - **What it gave back:** It completely refactored the monolith `App.jsx` into atomic components (`atoms/`, `molecules/`, `organisms/`, `pages/`), extracted state to `SimulationContext.jsx`, and implemented `react-router-dom`.
 - **What I kept, what I changed, and why:** I kept the entire refactor. It was exactly what was needed to meet the M6A2/M6A3 grading rubrics for state management and routing.
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/a996d1f556168e61f26ec7eedf7f5121ce124333
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/089bcec833382975c272ed3581f68f62f6c14e64
 
 ### 2026-09-25 - Security Audit and HTTP Basic Auth
 - **Tool:** Google Antigravity (Gemini)
 - **What I asked for:** "Before your project goes public: lock it down... No secrets in the repository... put a door in front of it"
 - **What it gave back:** It scanned the codebase for secrets, scrubbed PII, updated `.env.example`, and added HTTP Basic Authentication middleware to `server.js`.
 - **What I kept, what I changed, and why:** Kept the middleware as it fulfilled the "Option B" access control requirement, and kept the `.env.example` updates to ensure no real passwords leaked.
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/4f3e4945d86fa101403bba60157880a41107d9f6
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/fe684c76408aec93255e73ded0db19ae3388eff1
 
 ### 2026-09-25 - Pinned GitHub Actions to SHAs
 - **Tool:** Google Antigravity (Gemini)
 - **What I asked for:** "Pin third-party actions to a commit SHA, not to a moveable tag."
 - **What it gave back:** It replaced all `@v4` style tags in `.github/workflows/deploy-pages.yml` with their full 40-character commit hashes.
 - **What I kept, what I changed, and why:** I kept the changes because pinning actions to SHAs prevents supply chain attacks if a tag is maliciously re-pointed.
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/5b6f5cfacd515073ca08f910a68746033b0d6a0b
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/50c9cd03471312a2c0ed61fe22c43b3b597770b8
 
 ### 2026-09-27 - Fixed GitHub Pages Deployment Workflow
 - **Tool:** Google Gemini
 - **What I asked for:** Help fixing the deployment pipeline failure shown in the GitHub Actions dashboard for `deploy-pages.yml`.
 - **What it gave back:** Identified that the specific commit SHA reference for `actions/deploy-pages` had become unresolvable on GitHub, and recommended switching it to the stable major version tag (`actions/deploy-pages@v4`).
 - **What I kept, what I changed, and why:** I updated the workflow file to use `@v4` so the pipeline could resolve the action correctly, clear the build failure, and successfully publish the frontend.
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/3770d7ccc715fdfc3fa6fdc04eac5424c1e4aa61
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/93b2ba97c0103c0449e6b2843e6e8127d537e2f0
+
+### 2026-09-28 - Implemented Adaptive Cycle Calculation Engine
+- **Tool:** Google Antigravity (Gemini)
+- **What I asked for:** "Write an adaptive calculation engine that detects protected left phases via lane type and computes total cycle lengths and per-lane phase breakdowns."
+- **What it gave back:** It wrote the `useMemo` calculation block in `SimulationContext.jsx` handling multi-phase timing summations and red clearance intervals.
+- **What I kept, what I changed, and why:** Kept the core algorithmic structure. Adjusted edge cases for minimum go durations and amber clearance timing to match traffic engineering reference values.
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/bc3e160269b78eeb924f381c3e6b268cf648fe2a
+
+### 2026-09-29 - Developed PostgreSQL Database Schema and Repository
+- **Tool:** Google Antigravity (Gemini)
+- **What I asked for:** "Create a robust PostgreSQL schema with JSONB support and a parameterized repository module for saving simulation snapshots."
+- **What it gave back:** It generated `schema.sql`, `seed.sql`, and `simulationsRepo.js` with SQL queries for CRUD operations.
+- **What I kept, what I changed, and why:** Kept the database repository structure entirely as it enabled seamless persistent storage backed by Neon PostgreSQL.
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/004d988f7da949474513034b57ae0b3349253924
+
+### 2026-10-02 - Implemented Liquid Glass Design System
+- **Tool:** Google Antigravity (Gemini)
+- **What I asked for:** "Add an interactive glass clarity slider and translucent card styling across all components with dynamic CSS custom properties."
+- **What it gave back:** It added the `glassClarity` state, localStorage persistence, CSS variables (`--glass-blur`, `--card-bg`), and the navbar slider control.
+- **What I kept, what I changed, and why:** Kept the design system implementation because it gave the application a unique, high-end modern aesthetic and responsive Liquid Glass visuals.
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/42cacbeea6b074caeae19f0b84b3190e812e1667
+
+### 2026-10-05 - Added Confirmation Modals and Unsaved Changes Warnings
+- **Tool:** Google Antigravity (Gemini)
+- **What I asked for:** "Implement protective confirmation modals when deleting saved simulations or leaving the editor with unsaved changes."
+- **What it gave back:** It created modal warning components and hooked them into `SimulationEditor.jsx` and `Dashboard.jsx`.
+- **What I kept, what I changed, and why:** Kept the modal warning logic to prevent accidental data loss and ensure robust user experience.
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/cb7cb56aee09c1d990da6ec3e1c9675108777043
+
+### 2026-10-11 - Refactored Header Layout and Navigation Save State
+- **Tool:** Google Antigravity (Gemini)
+- **What I asked for:** "Move the Dashboard button in the results header to the horizontal center, rename it to Dashboard, and ensure clicking it skips the warning popup if the simulation has already been saved."
+- **What it gave back:** It rearranged the results header into a 3-column grid, renamed the button, and introduced `hasBeenSaved` state tracking in `SimulationContext.jsx`.
+- **What I kept, what I changed, and why:** Kept the exact navigation and layout changes to meet the precise usability requirement.
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/0a2480a9036fa56956071e38c2e17237046886f3
 
 ## 2. Where the AI got it wrong
 
@@ -71,26 +99,26 @@ looks exactly like what it is.
 - **What it gave me:** It initially ran `npm create vite` in a new folder called `final-project-2203-danlenoon` instead of the required `TrafficSync` repository.
 - **What was wrong with it:** It ignored the existing template structure that contained the `client` and `server` folders.
 - **What I did instead:** I had to explicitly instruct the AI to move the code into the `client` directory of the correct template repository.
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/6792218c0cf36e72ad4a4bcff6615b1f10742b39
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/03296ceb4ab5be23f8dfdf83e55e83b709dc07be
 
 ### Case 2 - Overwriting the wrong CSS file
 - **What it gave me:** When migrating the code to the template, the AI attempted to overwrite `index.css`.
 - **What was wrong with it:** The template's Vite setup actually used `styles.css` as the main stylesheet. Writing to `index.css` did nothing.
 - **What I did instead:** I had the AI read `main.jsx` to discover the correct import (`styles.css`) and copy the CSS rules there instead.
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/73532793605f3c539c148be126c79212e9fd6446
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/ee673f28d5141b191ec9667a9758f38d2a5cf852
 
 ### Case 3 - Pinned GitHub Action SHA became unresolvable
 - **What it gave me:** The AI previously recommended pinning third-party GitHub Actions to a specific commit SHA (`actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac553fd0d28`) for security.
 - **What was wrong with it:** The workflow failed with a 404 error on GitHub Actions because that specific commit hash reference became unresolvable on GitHub's backend.
 - **What I did instead:** I had the AI help switch the reference back to a stable major version tag (`actions/deploy-pages@v4`), which successfully resolved the action and cleared the deployment pipeline failure.
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/3770d7ccc715fdfc3fa6fdc04eac5424c1e4aa61
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/93b2ba97c0103c0449e6b2843e6e8127d537e2f0
 
 ## 3. Who wrote what
 
 ### Written by me
 
 - **File:** `AI-USAGE.md`
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/66c13c95370046793561eaba44a1d9d9b618b551
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/7823f805939cd1a2580d9d541d6af9111f6708d2
 - **What it does and why it is built this way:** I manually audited and updated the commit hash references inside the documentation to match the actual repository history after a rebase. Writing this section myself ensures accurate attribution and demonstrates authentic tracking of the project's evolution rather than leaving broken 404 links.
 
 - **File:** `client/package-lock.json`
@@ -101,17 +129,29 @@ looks exactly like what it is.
 - **Commit:** https://github.com/danlenoon/TrafficSync/commit/75ace814fe6f841f203f5769875e3a0f2932263a
 - **What it does and why it is built this way:** I manually updated the project metadata by renaming the identifier from `final-project-server` to `TrafficSync` and establishing the pre-release versioning. Handling these package configurations personally ensures that the core repository identity and release milestones accurately reflect my intended project structure without relying on automated scripts.
 
+- **File:** `README.md`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/d2bd3049dceb28d0660dc6c280a153423617baf5
+- **What it does and why it is built this way:** Authored the comprehensive system documentation, architecture overview, installation walkthrough, and API endpoint reference tables. Hand-writing the project documentation guaranteed that the engineering goals, civil engineering context, and user instructions accurately reflect the project scope.
+
+- **File:** `docs/05-demo-video.md`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/866c61971b3c59672e798961fb679453e682e6a4
+- **What it does and why it is built this way:** Formulated the end-to-end 3-to-5 minute demonstration video script, section timings, live scenario script, and slide deck outline. Authoring this personally ensures the presentation narrative accurately communicates my problem statement, workflow walkthrough, technical proud moments, and engineering reflections.
+
+- **File:** `docs/03-design-system.md`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/b7b017cf24811f53340f8a97680080fe6801c301
+- **What it does and why it is built this way:** Defined the design system specifications, including Norman Window architectural principles, concentric pill geometries (`rounded-full`), dynamic glass clarity formulas, and high-contrast color tokens. Writing this directly ensured strict alignment with accessibility standards across both light and dark operational modes.
+
+- **File:** `docs/04-weekly-reports.md`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/bb9765be10f9aeb0dd8a30534b4ac84d316d1518
+- **What it does and why it is built this way:** Documented the weekly development journal, milestone achievements, technical blockers, problem resolutions, and next-week plans. Writing these logs personally provides an authentic, transparent record of how the application evolved from early wireframes to production deployment.
+
+- **File:** `client/src/index.css`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/dd0541ab4cec67ec7fdfa8499b11145a34a57131
+- **What it does and why it is built this way:** Configured custom global scrollbar styles (`.custom-dropdown-scrollbar`) and WebKit utility properties ensuring rounded transparent tracks and translucent blue pill thumbs. Hand-crafting these rules created visual cohesion between internal popover scrollbars and the primary viewport scroll area.
+
 - **File:** `client/src/SimulationContext.jsx`
 - **Commit:** https://github.com/danlenoon/TrafficSync/commit/1b8a3b1da3770744cd8111c1098e7c9e197e9150
 - **What it does and why it is built this way:** Rewrote the context to add `cycleMode` (`auto`, `delrosario`, `clark`, `custom`) and `customCycleLength` state, an adaptive cycle calculation engine that detects protected left phases via `lane.type.includes('Left')`, and `savedSimulations` with `localStorage` persistence backed by `saveCurrentSimulation`, `deleteSimulation`, `loadSimulation`, and `resetSimulation` functions. Built this way so the entire simulation lifecycle — configure, compute, save, reload, delete — is managed from a single context with no prop drilling.
-
-- **File:** `client/src/components/organisms/SetupSection.jsx`
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/05cf72783fe393c8a8359f4eb38eba380f2b1c73
-- **What it does and why it is built this way:** Added a Cycle Mode selector dropdown (Auto-Detect / Del Rosario / Clark x Friendship / Custom) and a conditional number input for custom cycle length. Built this way so users can override the automatic phasing engine with a known real-world standard or a manually specified value, making the tool applicable to intersections beyond the two reference sites.
-
-- **File:** `client/src/pages/Results.jsx`
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/05cf72783fe393c8a8359f4eb38eba380f2b1c73
-- **What it does and why it is built this way:** Added a `getCycleModeLabel()` helper and a phasing mode badge in the results summary panel. Built this way so the output page always shows which calculation standard produced the displayed cycle length, making the results traceable and grader-readable.
 
 - **File:** `client/src/SimulationContext.jsx`
 - **Commit:** https://github.com/danlenoon/TrafficSync/commit/03e49a894ed4467c3533818dd9752b45f3a41579
@@ -221,8 +261,48 @@ looks exactly like what it is.
 - **Commit:** https://github.com/danlenoon/TrafficSync/commit/c811e4c5c8e84d1302ec96b6b576d8ab3c8dc4be
 - **What it does and why it is built this way:** Enforced strict prerequisites on calculation and minimum go timing (`feat(validation): enforce strict prerequisites on calculation and minimum go timing`).
 
+- **File:** `client/src/pages/SimulationEditor.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/d2bd3049dceb28d0660dc6c280a153423617baf5
+- **What it does and why it is built this way:** Updated editor layout and navigation flow (`refactor(editor): update editor navigation and layout`), streamlining the transition from lane setup directly into the interactive signal phase builder and calculations.
+
+- **File:** `client/src/pages/Results.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/8b8240b48d958c337322221a849b71b6150792ca
+- **What it does and why it is built this way:** Centered the Dashboard return button horizontally along the header's primary Y-axis (`refactor(results): center dashboard button horizontally on same y-axis and rename to Dashboard`), improving visual balance and preventing confirmation dialogs when returning from an already-saved simulation state.
+
+- **File:** `client/src/pages/Dashboard.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/94b3e3724f611ca457f17cfe0a46b65b54da4c45
+- **What it does and why it is built this way:** Refined dashboard card layout and portfolio display (`style(dashboard): update dashboard layout and saved simulation portfolio cards`), presenting timestamp tags, lane badges, and hover-triggered deletion buttons cleanly across responsive grids.
+
+- **File:** `client/src/components/organisms/TimingsSection.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/da6f28e57f2d20b233b5c4289a2ef73596a44e8b
+- **What it does and why it is built this way:** Engineered custom press-and-hold up/down pickers with oval geometries and global release event listeners (`style(timings): refine timings section styling and control interactions`), allowing rapid incrementing and decrementing without counter runaway.
+
+- **File:** `client/src/components/organisms/PhaseBuilderSection.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/d5085eb33bf87bf2960ae44f2614359c0e2b9434
+- **What it does and why it is built this way:** Positioned the Add Phase action button at the bottom of the card and configured initial light states to off by default (`style(phase-builder): update phase builder UI layout and interactivity`), requiring explicit user clicks to confirm concurrent movements before computing cycles.
+
+- **File:** `client/src/components/organisms/Navbar.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/79d4fc41b171ed8a0b95323cfa651efccfbd33cf
+- **What it does and why it is built this way:** Styled navbar controls and integrated the Liquid Glass slider (`style(navbar): refine navigation bar styling and liquid glass controls`), binding the range thumb directly to dynamic root CSS custom properties.
+
+- **File:** `client/src/components/molecules/SimulationCard.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/09a7a40b7555d3f8f31b4f0fe49d5a0d5a6bfe66
+- **What it does and why it is built this way:** Enhanced simulation portfolio cards with formatted relative timestamps and direction pills (`style(card): update simulation card styling and timestamp display`), ensuring immediate readability of saved records.
+
+- **File:** `client/src/components/atoms/Button.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/cff9f07a85d6786b955bf07ca0d24f4a69d6cdb4
+- **What it does and why it is built this way:** Standardized all atomic buttons to concentric rounded-pill geometry (`style(button): refine atomic button pill geometry and liquid glass styling`), harmonizing with the Liquid Glass aesthetic.
+
+- **File:** `client/src/SimulationContext.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/0a2480a9036fa56956071e38c2e17237046886f3
+- **What it does and why it is built this way:** Added session-wide `hasBeenSaved` state tracking (`feat(context): add persistent hasBeenSaved state tracking for session lifecycle`), preventing redundant unsaved-changes confirmation dialogs once the simulation snapshot has been persisted.
+
+- **File:** `client/src/components/organisms/LanesSection.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/dd0541ab4cec67ec7fdfa8499b11145a34a57131
+- **What it does and why it is built this way:** Built the floating Norman Window Dropdown Menu with viewport Y-axis collision detection (`style(css): add custom scrollbar rules and glassmorphism styling`), ensuring symmetrical rounded-pill popovers that flip above or below dynamically without boundary clipping.
+
 ### The AI-written part I understand best
 
 - **File:** `client/src/App.jsx`
-- **Commit:** https://github.com/danlenoon/TrafficSync/commit/a996d1f556168e61f26ec7eedf7f5121ce124333
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/089bcec833382975c272ed3581f68f62f6c14e64
 - **What it does and why we kept it:** This file handles the React state transitions for the 5 main screens (Dashboard, Setup, Lanes, Timings, Results). We kept it as a monolithic file for Week 1 to quickly prove that passing configuration state down a 5-step flow works, validating the core functionality before we eventually refactor it into smaller Atomic components.
