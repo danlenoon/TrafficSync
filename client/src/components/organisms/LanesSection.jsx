@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import { SimulationContext } from '../../SimulationContext';
 
 export default function LanesSection() {
-  const { directions, laneConfigs, addLane, updateLaneType } = useContext(SimulationContext);
+  const { directions, laneConfigs, addLane, removeLane, updateLaneType, pedestrians, setPedestrian } = useContext(SimulationContext);
 
   return (
     <section className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
@@ -14,8 +14,31 @@ export default function LanesSection() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {Object.keys(directions).filter(d => directions[d]).map(dir => (
           <div key={dir} className="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-            <div className="bg-gray-50 border-b border-gray-200 p-4 flex justify-between items-center">
-              <h3 className="font-bold text-gray-800">{dir}</h3>
+            <div className="bg-gray-50 border-b border-gray-200 p-4 flex flex-wrap justify-between items-center gap-3">
+              <div className="flex items-center gap-3">
+                <h3 className="font-bold text-gray-800">{dir}</h3>
+                <div className="flex items-center gap-1.5 text-xs bg-white border border-gray-200 px-2 py-0.5 rounded-lg shadow-2xs">
+                  <span className="text-gray-500 font-medium">Pedestrian:</span>
+                  <button
+                    type="button"
+                    onClick={() => setPedestrian(dir, 'Yes')}
+                    className={`px-2 py-0.5 rounded text-xs font-bold transition-colors ${
+                      pedestrians[dir] === 'Yes' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:text-gray-800'
+                    }`}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPedestrian(dir, 'No')}
+                    className={`px-2 py-0.5 rounded text-xs font-bold transition-colors ${
+                      pedestrians[dir] !== 'Yes' ? 'bg-gray-200 text-gray-800' : 'text-gray-500 hover:text-gray-800'
+                    }`}
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
               <button onClick={() => addLane(dir)} className="text-xs font-bold bg-white border border-gray-300 px-3 py-1.5 rounded hover:bg-gray-50 text-gray-700 shadow-sm flex items-center gap-1">
                 <Plus size={14}/> Add Lane
               </button>
@@ -37,7 +60,21 @@ export default function LanesSection() {
                       <option>Right Turn</option>
                       <option>U-Turn</option>
                       <option>Straight & Right</option>
+                      <option>Left & Straight</option>
+                      <option>Left & Right</option>
+                      <option>Left & U-Turn</option>
+                      <option>Straight & U-Turn</option>
+                      <option>Right & U-Turn</option>
+                      <option>Left, Straight, & U-Turn</option>
+                      <option>U-Turn, Straight, & Right</option>
                     </select>
+                    <button 
+                      onClick={() => removeLane(dir, lane.id)}
+                      className="p-1.5 text-gray-400 hover:text-red-500 transition-colors rounded hover:bg-red-50"
+                      title="Remove Lane"
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   </div>
                 ))
               )}

@@ -52,7 +52,6 @@ export default function Results() {
                     <div className="font-bold text-gray-800">{stat.label}</div>
                     <div className="text-sm text-gray-500">Wait time (Total Red Stop): <span className="font-bold text-red-500">{stat.stop}s</span></div>
                   </div>
-                  <div className="text-sm font-bold text-gray-400">Total: {results.maxCycle}s</div>
                 </div>
                 
                 {/* Visual Bar */}
