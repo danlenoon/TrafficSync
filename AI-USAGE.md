@@ -93,6 +93,14 @@ looks exactly like what it is.
 - **Commit:** https://github.com/danlenoon/TrafficSync/commit/66c13c95370046793561eaba44a1d9d9b618b551
 - **What it does and why it is built this way:** I manually audited and updated the commit hash references inside the documentation to match the actual repository history after a rebase. Writing this section myself ensures accurate attribution and demonstrates authentic tracking of the project's evolution rather than leaving broken 404 links.
 
+- **File:** `client/package-lock.json`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/75ace814fe6f841f203f5769875e3a0f2932263a
+- **What it does and why it is built this way:** I manually updated the project metadata by renaming the identifier from `final-project-client` to `TrafficSync` and establishing the pre-release versioning. Handling these package configurations personally ensures that the core repository identity and release milestones accurately reflect my intended project structure without relying on automated scripts.
+
+- **File:** `server/package-lock.json`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/75ace814fe6f841f203f5769875e3a0f2932263a
+- **What it does and why it is built this way:** I manually updated the project metadata by renaming the identifier from `final-project-server` to `TrafficSync` and establishing the pre-release versioning. Handling these package configurations personally ensures that the core repository identity and release milestones accurately reflect my intended project structure without relying on automated scripts.
+
 ### The AI-written part I understand best
 
 - **File:** `client/src/App.jsx`
