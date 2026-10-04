@@ -101,6 +101,43 @@ looks exactly like what it is.
 - **Commit:** https://github.com/danlenoon/TrafficSync/commit/75ace814fe6f841f203f5769875e3a0f2932263a
 - **What it does and why it is built this way:** I manually updated the project metadata by renaming the identifier from `final-project-server` to `TrafficSync` and establishing the pre-release versioning. Handling these package configurations personally ensures that the core repository identity and release milestones accurately reflect my intended project structure without relying on automated scripts.
 
+- **File:** `client/src/SimulationContext.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/1b8a3b1da3770744cd8111c1098e7c9e197e9150
+- **What it does and why it is built this way:** Rewrote the context to add `cycleMode` (`auto`, `delrosario`, `clark`, `custom`) and `customCycleLength` state, an adaptive cycle calculation engine that detects protected left phases via `lane.type.includes('Left')`, and `savedSimulations` with `localStorage` persistence backed by `saveCurrentSimulation`, `deleteSimulation`, `loadSimulation`, and `resetSimulation` functions. Built this way so the entire simulation lifecycle — configure, compute, save, reload, delete — is managed from a single context with no prop drilling.
+
+- **File:** `client/src/components/organisms/SetupSection.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/05cf72783fe393c8a8359f4eb38eba380f2b1c73
+- **What it does and why it is built this way:** Added a Cycle Mode selector dropdown (Auto-Detect / Del Rosario / Clark x Friendship / Custom) and a conditional number input for custom cycle length. Built this way so users can override the automatic phasing engine with a known real-world standard or a manually specified value, making the tool applicable to intersections beyond the two reference sites.
+
+- **File:** `client/src/pages/Results.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/05cf72783fe393c8a8359f4eb38eba380f2b1c73
+- **What it does and why it is built this way:** Added a `getCycleModeLabel()` helper and a phasing mode badge in the results summary panel. Built this way so the output page always shows which calculation standard produced the displayed cycle length, making the results traceable and grader-readable.
+
+- **File:** `client/src/SimulationContext.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/03e49a894ed4467c3533818dd9752b45f3a41579
+- **What it does and why it is built this way:** Fixed the `<SimulationContext.Provider value={{...}}>` object to include the 5 missing exports (`savedSimulations`, `saveCurrentSimulation`, `deleteSimulation`, `loadSimulation`, `resetSimulation`) that were added as functions in the Sep 28 session but never exposed to consumers. Without this fix all save/load calls silently received `undefined`.
+
+- **File:** `client/src/pages/Dashboard.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/d2d7d92140dbf5437cb02cd4bad994cabdb36f26
+- **What it does and why it is built this way:** Updated to consume `savedSimulations`, `deleteSimulation`, and `loadSimulation` from context and conditionally render either a responsive `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4` card grid or the empty state CTA. Built this way so the Dashboard is the single source of truth for saved simulations without any local state.
+
+- **File:** `client/src/components/molecules/SimulationCard.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/1c5c0236f4a45a3c9da692a17aceebd7441cf0db
+- **What it does and why it is built this way:** Added an `onDelete` prop and a `Trash2` icon button that appears on hover, positioned absolutely in the top-right corner, calling `onDelete` with `e.stopPropagation()`. The stop-propagation guard is critical because the entire card is a click target that navigates to `/editor` — without it, clicking delete would simultaneously load the simulation.
+
+- **File:** `client/src/pages/SimulationEditor.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/e49d53f69b58c0cc7d6ce9ce47d456ea828cae14
+- **What it does and why it is built this way:** Added a Save button next to Calculate Cycle that calls `saveCurrentSimulation()` and toggles to a ✓ "Saved!" state for 2 seconds using a `useState` timeout. Built this way to give immediate feedback without adding a toast library dependency, keeping the bundle size minimal.
+
+- **File:** `client/src/pages/Results.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/3ce9c992307778723b4b16a4bac2b6dbafb53ec3
+- **What it does and why it is built this way:** Added a Save button in the results header action bar alongside Edit and Done, wired to `saveCurrentSimulation()` with the same 2-second "Saved!" confirmation pattern. Built this way so users can save directly from the results view without navigating back to the editor first.
+
+- **File:** `client/index.html`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/33638eea9d67808e691a296259ebb10223b743bb
+- **What it does and why it is built this way:** Changed the `<title>` tag from `TrafficSync Simulation` to `TrafficSync`. Built this way because the app name in the browser tab should match the project name exactly, keeping the brand consistent across the tab bar, bookmarks, and page metadata.
+
+
 ### The AI-written part I understand best
 
 - **File:** `client/src/App.jsx`
