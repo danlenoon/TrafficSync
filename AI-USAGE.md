@@ -137,6 +137,37 @@ looks exactly like what it is.
 - **Commit:** https://github.com/danlenoon/TrafficSync/commit/33638eea9d67808e691a296259ebb10223b743bb
 - **What it does and why it is built this way:** Changed the `<title>` tag from `TrafficSync Simulation` to `TrafficSync`. Built this way because the app name in the browser tab should match the project name exactly, keeping the brand consistent across the tab bar, bookmarks, and page metadata.
 
+- **File:** `client/src/SimulationContext.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/0c42f7fe18134e77f074f27d437e911cd60375bf
+- **What it does and why it is built this way:** Refined the adaptive cycle calculation engine to compute red stop wait time accurately as `Total Cycle - Go - Amber` (or explicit clearance), matching ground-truth reference values for Del Rosario (345s) and Clark x Friendship (175s), and initialized per-lane phase lights and pedestrian active crossing durations. Built this way so the mathematical model precisely adheres to real-world traffic engineering standards.
+
+- **File:** `client/src/components/organisms/SetupSection.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/63726fb60f941a64fb4ff4c0d80aafdfe2c65011
+- **What it does and why it is built this way:** Built the Interactive Traffic Light Phase Builder with dynamic movement arrow lenses (`↰`, `↑`, `↱`, `↩`) per lane and integrated pedestrian traffic light signals (Walk/Don't Walk) with green/red states. Built this way to give users fine-grained, interactive control over individual lane phasing and pedestrian safety timing.
+
+- **File:** `client/src/components/organisms/TimingsSection.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/90af82478c990f80952befc246ef9198cb920a34
+- **What it does and why it is built this way:** Updated direction labels from 2-letter codes to single-letter abbreviations (`N`, `S`, `E`, `W`) and accounted for pedestrian crossing active duration (`go + red clearance`) in directional stop time calculations. Built this way to ensure concise direction labeling and precise pedestrian safety integration.
+
+- **File:** `client/src/pages/Results.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/c44649bc9b88740e0b3bf044c40f6308e2769b78
+- **What it does and why it is built this way:** Aligned the results summary layout, updated direction labels to single-letter `N`/`S`/`E`/`W` format, displayed amber caution seconds, and added hover tooltips over bar segments showing exact seconds and percentages. Built this way so users can inspect cycle breakdowns with high visual clarity and precision.
+
+- **File:** `server/db/schema.sql`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/004d988f7da949474513034b57ae0b3349253924
+- **What it does and why it is built this way:** Created the PostgreSQL database schema defining the `simulations` table with JSONB storage for full intersection configuration payloads and index support. Built this way to enable persistent storage of simulation snapshots.
+
+- **File:** `server/db/seed.sql`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/4bc06c76241f1e90cea13ecbaa671d5d16ce3367
+- **What it does and why it is built this way:** Added seed sample records for Del Rosario and Clark x Friendship intersection simulation snapshots. Built this way so the database starts with realistic ground-truth intersection configurations out-of-the-box.
+
+- **File:** `server/simulationsRepo.js`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/7c6ad80c93043c4a55deca110fb50ec2ef6e3cdb
+- **What it does and why it is built this way:** Created the data access repository module with parameterized queries for creating, reading, updating, and deleting simulation records in PostgreSQL. Built this way to abstract database operations cleanly from the Express routes.
+
+- **File:** `server/server.js`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/1e8e0d4d5c1e15b4a8895c0e10cefffab4ffcdd1
+- **What it does and why it is built this way:** Wired Express REST API endpoints (`/api/simulations`) protected by HTTP Basic Authentication middleware to interact with the simulations repository. Built this way to secure backend simulation persistence endpoints against unauthorized access.
 
 ### The AI-written part I understand best
 
