@@ -6,15 +6,10 @@ import { SimulationContext } from '../SimulationContext';
 
 export default function Results() {
   const navigate = useNavigate();
-  const { roadName, directions, cycleMode, customCycleLength, results, saveCurrentSimulation } = useContext(SimulationContext);
+  const { roadName, directions, results, saveCurrentSimulation } = useContext(SimulationContext);
   const [saved, setSaved] = useState(false);
 
-  const getCycleModeLabel = () => {
-    if (cycleMode === 'delrosario') return '4-Way Dual-Protected (Del Rosario Standard)';
-    if (cycleMode === 'clark') return 'T-Intersection Concurrent (Clark x Friendship Standard)';
-    if (cycleMode === 'custom') return `Custom Manual Override (${customCycleLength}s)`;
-    return 'Auto-Detect Phasing (Dynamic)';
-  };
+  const getDirAbbr = (dir) => dir.substring(0, 2).toUpperCase();
 
   const handleSave = () => {
     saveCurrentSimulation();
@@ -27,7 +22,9 @@ export default function Results() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Cycle Results Summary</h1>
-          <p className="text-gray-500">Calculated cycle data for <strong>{roadName}</strong></p>
+          <p className="text-gray-500">
+            Calculated cycle data for <strong>{roadName || 'Intersection'}</strong>
+          </p>
         </div>
         <div className="flex gap-3 w-full sm:w-auto">
           <Button onClick={() => navigate('/editor')} variant="outline" className="flex-1 sm:flex-none">
@@ -51,12 +48,9 @@ export default function Results() {
           <div className="text-6xl font-black text-gray-900 mb-6">{results.maxCycle}<span className="text-2xl text-gray-400 font-bold ml-1">s</span></div>
           
           <div className="w-full bg-gray-50 rounded-lg p-4 border border-gray-100 text-left space-y-1.5">
-            <div className="text-xs text-gray-500 uppercase font-bold mb-1">Intersection Setup & Phasing</div>
-            <div className="font-medium text-gray-800 text-sm">{Object.keys(directions).filter(d => directions[d]).length} Directions Active • {results.stats.length} Lanes</div>
-            <div className="text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-100 p-2 rounded mt-2">
-              <span className="block font-bold uppercase tracking-wider text-[10px] text-blue-500">Phasing Mode</span>
-              {getCycleModeLabel()}
-            </div>
+            <div className="text-xs text-gray-500 uppercase font-bold mb-1">Intersection Setup</div>
+            <div className="font-medium text-gray-800 text-sm">{Object.keys(directions).filter(d => directions[d]).length} Directions Active</div>
+            <div className="font-medium text-gray-800 text-sm">{results.stats.length} Lanes Configured</div>
           </div>
         </div>
 
@@ -70,15 +64,29 @@ export default function Results() {
                 <div className="flex justify-between items-end mb-3">
                   <div>
                     <div className="font-bold text-gray-800">{stat.label}</div>
-                    <div className="text-sm text-gray-500">Wait time (Total Red Stop): <span className="font-bold text-red-500">{stat.stop}s</span></div>
+                    <div className="text-xs text-gray-500 mt-0.5">
+                      Wait time (Total Red Stop): <span className="font-bold text-red-500">{stat.stop}s</span>
+                    </div>
                   </div>
                 </div>
-                
-                {/* Visual Bar */}
-                <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden flex shadow-inner">
-                  <div className="bg-green-500 h-full" style={{ width: `${stat.goPct}%` }} title={`Go: ${stat.goPct.toFixed(0)}%`}></div>
-                  <div className="bg-yellow-400 h-full" style={{ width: `${stat.amPct}%` }} title={`Amber: ${stat.amPct.toFixed(0)}%`}></div>
-                  <div className="bg-red-500 h-full" style={{ width: `${stat.rePct}%` }} title={`Red: ${stat.rePct.toFixed(0)}%`}></div>
+                  
+                  {/* Visual Bar matching reference design: Green | Amber | Red */}
+                  <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden flex shadow-inner">
+                    <div 
+                      className="bg-green-500 h-full transition-all cursor-pointer hover:opacity-90" 
+                      style={{ width: `${stat.goPct}%` }} 
+                      title={`Go Time: ${stat.go}s (${stat.goPct.toFixed(1)}%)`}
+                    ></div>
+                    <div 
+                      className="bg-yellow-400 h-full transition-all cursor-pointer hover:opacity-90" 
+                      style={{ width: `${stat.amPct}%` }} 
+                      title={`Amber Caution Time: ${stat.amber}s (${stat.amPct.toFixed(1)}%)`}
+                    ></div>
+                    <div 
+                      className="bg-red-500 h-full transition-all cursor-pointer hover:opacity-90" 
+                      style={{ width: `${stat.rePct}%` }} 
+                      title={`Red Stop Time: ${stat.stop}s (${stat.rePct.toFixed(1)}%)`}
+                    ></div>
                 </div>
               </div>
             ))}
