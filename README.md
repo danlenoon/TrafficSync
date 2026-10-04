@@ -27,7 +27,7 @@ npm install
 ```
 
 **Step 3: Environment and configuration**
-Currently, the app runs entirely on the client side using React state, but the server is protected by HTTP Basic Auth. You will need a `.env` file in the `server` directory.
+Currently, the app runs entirely on the client side using React state, but the Express server is protected by HTTP Basic Auth. You will need a `.env` file in the `server` directory.
 Example `.env`:
 ```env
 DATABASE_URL=postgres://user:password@localhost:5432/trafficsync
@@ -48,12 +48,12 @@ Open your browser and navigate to `http://localhost:5173`. You should see the **
 
 ## 4. Features and usage
 
-TrafficSync follows a strict 5-step primary flow:
-1. **Dashboard:** View past simulations or click "New Simulation" to start.
-2. **Intersection Setup:** Enter the road name and select active directions (e.g., Northbound, Southbound).
-3. **Lane Customization:** Add lanes to your active directions and assign their types (e.g., Left Turn, Straight).
-4. **Phase Timings Calculator:** Input the clearance intervals (Go, Amber, Red) in seconds for each specific lane.
-5. **Cycle Results Summary:** Click "Calculate Cycle" to view a detailed breakdown, including the total cycle length and wait times per lane visualized with percentage bars.
+TrafficSync follows a strict primary flow:
+1. **Dashboard:** View saved simulations or click "New Simulation" to configure a clean intersection.
+2. **Intersection Setup:** Enter the road name, select active directions (Northbound, Southbound, Eastbound, Westbound), and pick your preferred Cycle Calculation & Signal Phasing Mode (Auto-Detect, 4-Way Dual-Protected Del Rosario, T-Intersection Concurrent Clark x Friendship, or Custom Manual Cycle Length).
+3. **Lane Customization:** Add or remove lanes for active directions, select from 12 movement lane types (including U-Turn combinations), and toggle direction-level Pedestrian crossing options.
+4. **Phase Timings Calculator:** Input clearance intervals (Go, Amber, Red Clearance) in seconds for each specific lane and pedestrian crossing.
+5. **Cycle Results Summary:** View a detailed breakdown including total cycle length, per-lane stop seconds (wait time), and visual phase percentage bars.
 
 ## 5. Project structure
 
@@ -64,62 +64,63 @@ TrafficSync/
 │   ├── package.json        # Frontend dependencies (lucide-react, react, react-router-dom)
 │   └── src/
 │       ├── components/     # Atomic Design structure
-│       │   ├── atoms/      # Reusable UI elements (e.g., Buttons, Inputs)
-│       │   ├── molecules/  # Compound UI elements (e.g., SimulationCard)
-│       │   └── organisms/  # Complex UI sections (e.g., SetupSection, Navbar)
-│       ├── pages/          # React Router pages (Dashboard, SimulationEditor, Results)
-│       ├── SimulationContext.jsx # Global state management for simulation data
+│       │   ├── atoms/      # Reusable UI elements (Button.jsx)
+│       │   ├── molecules/  # Compound UI elements (SimulationCard.jsx)
+│       │   └── organisms/  # Complex UI sections (SetupSection.jsx, LanesSection.jsx, TimingsSection.jsx, Navbar.jsx)
+│       ├── pages/          # React Router pages (Dashboard.jsx, SimulationEditor.jsx, Results.jsx)
+│       ├── SimulationContext.jsx # Global state management & calculation engine
 │       ├── App.jsx         # React Router configuration
 │       ├── main.jsx        # React DOM rendering entry point
 │       └── styles.css      # Custom styling overrides
 ├── server/                 # Backend Node.js/Express App
-│   ├── db/                 # Database connection and queries
+│   ├── db/                 # Database connection and queries (pool.js, schema.sql, seed.sql)
 │   └── server.js           # Express server with HTTP Basic Auth
-├── docs/                   # Documentation assets and screenshots
-├── AI-USAGE.md             # Required AI usage documentation
-├── REPORT.md               # Weekly increment reports
-└── README.md               # This documentation file
+├── docs/                   # Documentation assets, weekly reports, and proposal documents
+├── journal/                # Reflection journal entries (week-1.md)
+├── AI-USAGE.md             # Required AI usage documentation and commit history links
+├── REPORT.md               # Weekly increment reports (Week 1 and Week 2)
+└── README.md               # Project documentation and security checklist
 ```
 
 ## 6. Screenshots
 
 ![Dashboard Screenshot](./docs/dashboard.png)
-*(Note: Please replace `./docs/dashboard.png` with an actual screenshot of your running Dashboard)*
+*(Note: Replace `./docs/dashboard.png` with an actual screenshot of your running Dashboard)*
 
 ![Results Screenshot](./docs/results.png)
-*(Note: Please replace `./docs/results.png` with an actual screenshot of your Results Summary screen)*
+*(Note: Replace `./docs/results.png` with an actual screenshot of your Results Summary screen)*
 
 ## 7. Security and privacy checklist
 
-- [x] **.gitignore includes .env**: Yes, `.env` and `.env.*` are ignored.
-- [x] **No sensitive files committed**: Yes, `git ls-files` shows no `.pem`, `id_rsa`, or `.env` files.
-- [x] **.env.example has placeholders**: Yes, both root and server `.env.example` files contain only placeholder strings.
-- [x] **No connection string, key or password hardcoded**: Yes, all DB credentials and API keys are read from `process.env`.
-- [x] **No student.json / personal student data**: Yes, handle `danlenoon` and names were scrubbed from documentation.
-- [x] **SQL queries parameterised**: Yes, `server/sightingsRepo.js` uses `$1, $2` for all `pg` queries.
-- [x] **Input validated on server**: Yes, `server.js` contains a `validate()` function before queries.
-- [x] **CORS origins defined**: Yes, `server.js` reads `CORS_ORIGINS` from the environment.
-- [x] **NODE_ENV=production and no stack traces**: Yes, `server.js` catches all errors and returns a generic JSON message.
-- [N/A] **helmet installed**: N/A, helmet will be installed when the backend is fully developed for production.
-- [N/A] **Rate limiting**: N/A, the application currently does not charge money or process external accounts.
-- [N/A] **Passwords hashed with bcrypt**: N/A, HTTP Basic Auth is used for the app gateway, no user accounts exist yet.
-- [N/A] **Ownership checks in queries**: N/A, there are no user-specific records in the database.
-- [N/A] **npm audit run**: N/A, full audit will be run prior to production server deployment.
-- [x] **No real classmates' data**: Yes, seed data is completely fictional generic campus locations.
+- [x] **.gitignore includes .env**: Yes, `.env` and `.env.*` are explicitly listed in `.gitignore` and verified clean.
+- [x] **No sensitive files committed**: Yes, running `git ls-files` prints no `.pem`, `id_rsa`, or `.env` files.
+- [x] **.env.example has placeholders**: Yes, both root and server `.env.example` files contain only `<your-password>` placeholder strings.
+- [x] **No connection string, key or password hardcoded**: Yes, all database URLs and credentials are read strictly from `process.env`.
+- [x] **No student.json / personal student data**: Yes, personal student handles, emails, and names were scrubbed from all public markdown documentation.
+- [x] **SQL queries parameterised**: Yes, all database queries in `server/sightingsRepo.js` use parameterised placeholders (`$1, $2`).
+- [x] **Input validated on server**: Yes, Express `server.js` validates all payload parameters before database execution.
+- [x] **CORS origins defined**: Yes, `server.js` restricts origin access via `process.env.CORS_ORIGINS`.
+- [x] **NODE_ENV=production and no stack traces**: Yes, `server.js` catches all uncaught errors and returns a generic `{ error: 'Something went wrong on the server' }` JSON response.
+- [N/A] **helmet installed**: N/A, Helmet middleware will be installed when the Express server is fully deployed to production hosting in a future milestone.
+- [N/A] **Rate limiting**: N/A, the application currently does not charge money or process external user authentication accounts.
+- [N/A] **Passwords hashed with bcrypt**: N/A, HTTP Basic Authentication is used for application gateway access, no persistent user account tables exist yet.
+- [N/A] **Ownership checks in queries**: N/A, there are no user-specific account records in the database.
+- [N/A] **npm audit run**: N/A, a full dependency vulnerability audit will be run prior to production deployment.
+- [x] **No real classmates' data**: Yes, all sample intersection names and timings are completely fictional or domain-generic.
 - [x] **Seed data is invented**: Yes, simulated traffic intersections only.
-- [N/A] **Test data deleted**: N/A, no real people have tested the application yet.
-- [x] **App says what it collects**: Yes, the app collects only anonymous lane simulation counts.
-- [N/A] **Any face in screenshot is stock**: N/A, no faces are present in the UI screenshots.
+- [N/A] **Test data deleted**: N/A, no real external subjects tested the application.
+- [x] **App says what it collects**: Yes, the application processes anonymous lane configuration timings locally in state.
+- [N/A] **Any face in screenshot is stock**: N/A, no human faces are present in the application UI or screenshots.
 
 ## 8. Known issues and next steps
 
 **Known Issues:**
-- **No Persistence:** If you refresh the page, all your configured lanes and timings are lost because the frontend is not yet fully wired to the backend database.
-- **Tailwind CDN:** Relying on the Tailwind CDN in `index.html` is great for quick prototyping but not optimal for production builds.
+- **Full Persistence Wiring:** Simulation data currently persists locally via `SimulationContext.jsx` and `localStorage`; full REST API wiring to the Express/PostgreSQL backend is planned for the next backend milestone.
+- **Tailwind CDN:** Frontend relies on Tailwind CDN in `index.html` for rapid prototyping; PostCSS production setup is planned for future optimization.
 
 **Next Steps:**
-- Fully wire the React frontend to the Node.js/PostgreSQL backend in the `server/` folder to enable saving and loading simulation reports.
-- Implement the exact civil engineering formulas for stop time calculations.
+- Implement Express REST API endpoints (`/api/simulations`) connected to PostgreSQL in `server/db/schema.sql`.
+- Convert Tailwind CDN to PostCSS build setup in Vite.
 
 ## AI Usage
 This project was built with AI assistance. See [AI-USAGE.md](./AI-USAGE.md) for a detailed record of how AI was used, where it made mistakes, and who authored which parts of the project.
