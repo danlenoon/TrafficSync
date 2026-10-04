@@ -29,7 +29,7 @@ export default function TimingsSection() {
                   return (
                     <tr key={key} className="hover:bg-gray-50/50 transition-colors">
                       <td className="p-4">
-                        <div className="font-bold text-gray-800">{dir.substring(0, 2).toUpperCase()} Lane {lane.id}</div>
+                        <div className="font-bold text-gray-800">{dir.charAt(0)} Lane {lane.id}</div>
                         <div className="text-xs font-medium text-gray-500 bg-gray-100 inline-block px-2 py-0.5 rounded mt-1">{lane.type}</div>
                       </td>
                       <td className="p-4 border-l border-gray-100 bg-green-50/20">
@@ -54,11 +54,11 @@ export default function TimingsSection() {
                   );
                 })}
 
-                {/* Pedestrian row: only shown if pedestrian option is Yes for this direction */}
+                {/* Pedestrian row — stop seconds = go + red (total pedestrian active time added to lane stop) */}
                 {pedestrians[dir] === 'Yes' && (
                   <tr className="bg-blue-50/30 hover:bg-blue-50/50 transition-colors">
                     <td className="p-4">
-                      <div className="font-bold text-blue-900">{dir.substring(0, 2).toUpperCase()} Pedestrian</div>
+                      <div className="font-bold text-blue-900">{dir.charAt(0)} Pedestrian</div>
                       <div className="text-xs font-semibold text-blue-700 bg-blue-100 inline-block px-2 py-0.5 rounded mt-1">Pedestrian Crossing</div>
                     </td>
                     <td className="p-4 border-l border-gray-100 bg-green-50/20">
