@@ -6,7 +6,126 @@
     <title>TrafficSync</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      body { background-color: #f3f4f6; }
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #e8eff5 0%, #d2dbe5 100%);
+        min-height: 100vh;
+        color: #1f2937;
+        transition: background 0.3s ease, color 0.3s ease;
+      }
+      * {
+        font-family: Arial, sans-serif;
+      }
+      input, select, button {
+        font-family: Arial, sans-serif;
+      }
+      /* Custom modern wider scrollbars with transparent track (no darkened background) */
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 9999px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(37, 99, 235, 0.45);
+        border-radius: 9999px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(37, 99, 235, 0.75);
+      }
+      /* Custom Dropdown Reset & Styling with Down Chevron */
+      .custom-dropdown {
+        position: relative;
+        display: block;
+        width: 100%;
+      }
+      .custom-dropdown select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        outline: none;
+        width: 100%;
+      }
+      .custom-dropdown::after {
+        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 0;
+      }
+      /* Custom modern fatter rounded oval range slider thumb with drag animations */
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        background: rgba(209, 213, 219, 0.7);
+        border-radius: 9999px;
+        outline: none;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 32px;
+        height: 18px;
+        border-radius: 9999px; /* fatter rounded oval */
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.5);
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.25s ease;
+      }
+      input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.2) translateY(-1px);
+        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.7);
+      }
+      input[type="range"]::-webkit-slider-thumb:active {
+        transform: scale(1.15) translateY(0px);
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.6);
+      }
+      /* Custom modern checkboxes with fully rounded corners */
+      input[type="checkbox"] {
+        -webkit-appearance: none;
+        appearance: none;
+        background-color: rgba(255, 255, 255, 0.9);
+        margin: 0;
+        font: inherit;
+        color: currentColor;
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid rgba(209, 213, 219, 0.9);
+        border-radius: 0.75rem;
+        display: grid;
+        place-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+      }
+      input[type="checkbox"]::before {
+        content: "";
+        width: 0.65rem;
+        height: 0.65rem;
+        transform: scale(0);
+        transition: 120ms transform ease-in-out;
+        box-shadow: inset 1em 1em #ffffff;
+        transform-origin: center;
+        clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 18%, 80% 0%, 43% 62%);
+      }
+      input[type="checkbox"]:checked {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        box-shadow: 0 3px 8px rgba(37, 99, 235, 0.4);
+      }
+      input[type="checkbox"]:checked::before {
+        transform: scale(1);
+      }
+      input[type="checkbox"]:hover {
+        border-color: #2563eb;
+      }
     </style>
   </head>
   <body>
