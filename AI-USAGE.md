@@ -169,6 +169,58 @@ looks exactly like what it is.
 - **Commit:** https://github.com/danlenoon/TrafficSync/commit/1e8e0d4d5c1e15b4a8895c0e10cefffab4ffcdd1
 - **What it does and why it is built this way:** Wired Express REST API endpoints (`/api/simulations`) protected by HTTP Basic Authentication middleware to interact with the simulations repository. Built this way to secure backend simulation persistence endpoints against unauthorized access.
 
+- **File:** `server/db/seed.sql`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/c32a192fadcfc6124165aba2fd978df0792fbc92
+- **What it does and why it is built this way:** Refactored terminology to remove legacy benchmark intersection references (`refactor(terminology): remove legacy benchmark intersection references`), ensuring clean seed data alignment.
+
+- **File:** `client/index.html`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/42cacbeea6b074caeae19f0b84b3190e812e1667
+- **What it does and why it is built this way:** Implemented translucent panel design system with dynamic clarity control (`style(ui): implement translucent panel design system with dynamic clarity control`) for a polished modern UI.
+
+- **File:** `client/src/SimulationContext.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/bc3e160269b78eeb924f381c3e6b268cf648fe2a
+- **What it does and why it is built this way:** Updated cycle computations based on user inputs with 2s red clearance intervals (`feat(calculations): update cycle computations based on user inputs with 2s red clearance intervals`).
+
+- **File:** `client/src/components/atoms/Button.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/4dd77e1ff1e7f38e780caa17953a9832ac3ba58f
+- **What it does and why it is built this way:** Standardized buttons, inputs, dropdowns, and checkboxes to fully rounded pill geometry (`style(geometry): standardize buttons, inputs, dropdowns, and checkboxes to fully rounded pill geometry`).
+
+- **File:** `client/src/components/molecules/SimulationCard.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/cb7cb56aee09c1d990da6ec3e1c9675108777043
+- **What it does and why it is built this way:** Implemented confirmation dialogs and unsaved changes navigation warnings (`feat(modals): implement confirmation dialogs and unsaved changes navigation warnings`).
+
+- **File:** `client/src/components/organisms/LanesSection.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/25198d68fbea66cc451dc0cc7daf6a26514f3301
+- **What it does and why it is built this way:** Implemented custom appearance reset with vertically centered chevron indicator (`feat(dropdowns): implement custom appearance reset with vertically centered chevron indicator`).
+
+- **File:** `client/src/components/organisms/Navbar.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/5cdef2da72f4f09474a551abbf4f0092173eafeb
+- **What it does and why it is built this way:** Added interactive clarity slider with visual endpoints (`feat(slider): add interactive clarity slider with visual endpoints`).
+
+- **File:** `client/src/components/organisms/PhaseBuilderSection.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/7b2aaa86652558d4daca96b450ebc93f7955fc3e
+- **What it does and why it is built this way:** Integrated interactive traffic light phase builder and single-line directional arrow badges (`feat(builder): integrate interactive traffic light phase builder and single-line directional arrow badges`).
+
+- **File:** `client/src/components/organisms/SetupSection.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/005c0e39931a4bd30f4ee2f8af9ad53055eb2dfc
+- **What it does and why it is built this way:** Removed default saved simulations and initialized clean initial state (`feat(editor): remove default saved simulations and initialize clean initial state`).
+
+- **File:** `client/src/components/organisms/TimingsSection.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/f18da86dfbd2eea97473873ab93b86fe48b32bec
+- **What it does and why it is built this way:** Enforced strict prerequisites on calculation and minimum go timing (`feat(validation): enforce strict prerequisites on calculation and minimum go timing`).
+
+- **File:** `client/src/pages/Dashboard.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/50e910daa2d42abed91ba91736a41bd8cc4c6579
+- **What it does and why it is built this way:** Implemented confirmation dialogs and unsaved changes navigation warnings (`feat(modals): implement confirmation dialogs and unsaved changes navigation warnings`).
+
+- **File:** `client/src/pages/Results.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/bc3e160269b78eeb924f381c3e6b268cf648fe2a
+- **What it does and why it is built this way:** Updated cycle computations based on user inputs with 2s red clearance intervals (`feat(calculations): update cycle computations based on user inputs with 2s red clearance intervals`).
+
+- **File:** `client/src/pages/SimulationEditor.jsx`
+- **Commit:** https://github.com/danlenoon/TrafficSync/commit/c811e4c5c8e84d1302ec96b6b576d8ab3c8dc4be
+- **What it does and why it is built this way:** Enforced strict prerequisites on calculation and minimum go timing (`feat(validation): enforce strict prerequisites on calculation and minimum go timing`).
+
 ### The AI-written part I understand best
 
 - **File:** `client/src/App.jsx`
