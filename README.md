@@ -1,20 +1,20 @@
 # TrafficSync
 
 **Live site:** https://danlenoon.github.io/TrafficSync/  
-**API:** http://localhost:3000/api/simulations *(Express & PostgreSQL backend)*  
+**API:** https://trafficsync.onrender.com/
 **Demo video:** (link)
 
 This deployment is running in demo mode. The interface is real; the backend is simulated in your browser so the site works without a server. See Demo mode below.
 
 ---
 
-## 1. Overview
+## Overview
 
 TrafficSync is an interactive, web-based traffic signal timing computation engine, lane customization tool, and signal phasing simulation platform built for civil engineering students and traffic planners. It provides fast, accurate cycle calculations, lane-by-lane signal customization, and pedestrian safety timing calculations without requiring manual cycle math or expensive proprietary software.
 
 ---
 
-## 2. Setup and Installation
+## Setup and Installation
 
 ### Prerequisites
 - **Node.js** (v18 or newer)
@@ -69,7 +69,7 @@ To run the Express REST API and PostgreSQL database locally:
 
 ---
 
-## 3. How to Run & Use the Application
+## How to Run & Use the Application
 
 1. **Dashboard:** View saved intersection simulations or click **"New Simulation"** to start fresh.
 2. **Intersection Setup & Interactive Phase Builder:**
@@ -84,7 +84,7 @@ To run the Express REST API and PostgreSQL database locally:
 
 ---
 
-## 4. Demo Mode
+## Demo Mode
 
 This repository can run two ways, chosen by one environment variable at build time.
 
@@ -106,7 +106,7 @@ GitHub Pages serves files and cannot run Node, so the API and the database can n
 
 ---
 
-## 5. Running It Yourself
+## Running It Yourself
 
 ### The client only, in demo mode. No database needed.
 ```bash
@@ -146,7 +146,7 @@ curl http://localhost:3000/api/simulations
 
 ---
 
-## 6. Environment Variables
+## Environment Variables
 
 None of these are committed. `.env.example` in each folder lists them with placeholder values.
 
@@ -163,7 +163,7 @@ Every `VITE_` value is compiled into the built JavaScript and is public. Never p
 
 ---
 
-## 7. Deploying
+## Deploying
 
 ### Client, to GitHub Pages
 Already wired up in `.github/workflows/deploy-pages.yml`. Two one-time steps:
@@ -177,7 +177,7 @@ Not automated here, because most hosts deploy straight from your repository with
 
 ---
 
-## 8. Project Structure
+## Project Structure
 
 ```text
 TrafficSync/
@@ -207,13 +207,13 @@ TrafficSync/
 
 ---
 
-## 9. Architecture
+## Architecture
 
 TrafficSync uses a decoupled three-tier client-server architecture. The React frontend (`client/`) runs statically on GitHub Pages in demo mode (`localStorage`) or communicates via HTTP REST API calls to the Node.js Express backend (`server/`). The backend connects securely via connection pooling (`pg`) to a PostgreSQL database holding simulation snapshots and intersection configurations.
 
 ---
 
-## 10. What I Would Do Next
+## What I Would Do Next
 
 1. **Automated CI/CD for Backend:** Set up GitHub Actions workflows to automatically deploy the Express server and run database migrations on Render/Railway upon merging to `main`.
 2. **User Authentication & Roles:** Implement JWT-based user authentication so multiple traffic engineers can manage and share private intersection portfolios securely.
@@ -221,14 +221,14 @@ TrafficSync uses a decoupled three-tier client-server architecture. The React fr
 
 ---
 
-## 11. Author
+## Author
 
 GitHub: [https://github.com/danlenoon](https://github.com/danlenoon)
 Course and Section: BS Computer Science CS-401
 
 ---
 
-## 12. Security and Privacy Checklist
+## Security and Privacy Checklist
 
 - [x] **.gitignore includes .env**: Yes, `.env` and `.env.*` are explicitly listed in `.gitignore` and verified clean.
 - [x] **No sensitive files committed**: Yes, running `git ls-files` prints no `.pem`, `id_rsa`, or `.env` files.
@@ -251,7 +251,7 @@ Course and Section: BS Computer Science CS-401
 
 ---
 
-## 13. AI Use
+## AI Use
 This project was built with AI assistance. Honest disclosure is the standard in this course and increasingly outside it, and reporting heavy use accurately costs you nothing.
 
 - **Built with AI assistance**
@@ -261,5 +261,5 @@ This project was built with AI assistance. Honest disclosure is the standard in 
 
 ---
 
-## 14. Licence
+## Licence
 MIT, see [LICENSE](./LICENSE).
