@@ -1,4 +1,4 @@
-import React, { createContext, useState, useMemo } from 'react';
+import React, { createContext, useState, useMemo, useEffect } from 'react';
 
 export const SimulationContext = createContext(null);
 
@@ -22,20 +22,35 @@ export function SimulationProvider({ children }) {
   });
 
   const [pedestrianTimings, setPedestrianTimings] = useState({
-    Northbound: { go: 1, red: 3 },
-    Southbound: { go: 1, red: 3 },
-    Eastbound: { go: 1, red: 3 },
-    Westbound: { go: 1, red: 3 }
+    Northbound: { go: 1, red: 2 },
+    Southbound: { go: 1, red: 2 },
+    Eastbound: { go: 1, red: 2 },
+    Westbound: { go: 1, red: 2 }
   });
 
-  const [cycleMode, setCycleMode] = useState('delrosario');
-  const [customCycleLength, setCustomCycleLength] = useState(300);
+  // Phases state for Interactive Phase Builder (starts empty/unconfigured)
+  const [phases, setPhases] = useState([]);
 
-  // Phases state for Interactive Phase Builder
-  const [phases, setPhases] = useState([
-    { id: 1, duration: 30, lights: {} },
-    { id: 2, duration: 30, lights: {} }
-  ]);
+  // iOS 27 Liquid Glass slider state (default 50% = 0.5)
+  const [glassClarity, setGlassClarity] = useState(0.5);
+
+  // Dynamically update root CSS custom properties for crystal clear vs tinted adaptation
+  useEffect(() => {
+    const root = document.documentElement;
+    const alpha = 0.1 + glassClarity * 0.85;
+    const blur = glassClarity * 24;
+    const borderAlpha = 0.15 + glassClarity * 0.65;
+    const cardAlpha = 0.08 + glassClarity * 0.8; // Ultra clear is near transparent crystal clear (no fixed gray/white)
+    const inputAlpha = 0.15 + glassClarity * 0.75;
+
+    root.style.setProperty('--glass-alpha', alpha);
+    root.style.setProperty('--glass-blur', `${blur}px`);
+    root.style.setProperty('--glass-border', `rgba(255, 255, 255, ${borderAlpha})`);
+    root.style.setProperty('--card-bg', `rgba(255, 255, 255, ${cardAlpha})`);
+    root.style.setProperty('--input-bg', `rgba(255, 255, 255, ${inputAlpha})`);
+    document.body.style.background = 'linear-gradient(135deg, #e8eff5 0%, #d2dbe5 100%)';
+    document.body.style.color = '#1f2937';
+  }, [glassClarity]);
 
   const [savedSimulations, setSavedSimulations] = useState(() => {
     try {
@@ -57,7 +72,7 @@ export function SimulationProvider({ children }) {
   const updatePedestrianTiming = (dir, field, value) => {
     setPedestrianTimings(prev => ({
       ...prev,
-      [dir]: { ...prev[dir], [field]: Number(value) }
+      [dir]: { ...prev[dir], [field]: field === 'go' ? Math.max(1, Number(value) || 1) : Math.max(0, Number(value) || 0) }
     }));
   };
 
@@ -66,10 +81,10 @@ export function SimulationProvider({ children }) {
       const current = prev[dir] || [];
       const nextId = current.length > 0 ? Math.max(...current.map(l => l.id)) + 1 : 1;
       
-      // Set default timings for new lane: Go=1, Amber=3, Red=3
+      // Default timings: Go=1 (minimum 1), Amber=3, Red Clearance=2
       setPhaseTimings(prevTimings => ({
         ...prevTimings,
-        [`${dir}-${nextId}`]: { go: 1, amber: 3, red: 3 }
+        [`${dir}-${nextId}`]: { go: 1, amber: 3, red: 2 }
       }));
 
       return { ...prev, [dir]: [...current, { id: nextId, type: 'Straight' }] };
@@ -97,10 +112,11 @@ export function SimulationProvider({ children }) {
 
   const updateTiming = (key, field, value) => {
     setPhaseTimings(prev => {
-      const current = prev[key] || { go: 0, amber: 0, red: 0 };
+      const current = prev[key] || { go: 1, amber: 3, red: 2 };
+      const numVal = field === 'go' ? Math.max(1, Number(value) || 1) : Math.max(0, Number(value) || 0);
       return {
         ...prev,
-        [key]: { ...current, [field]: Number(value) }
+        [key]: { ...current, [field]: numVal }
       };
     });
   };
@@ -118,7 +134,7 @@ export function SimulationProvider({ children }) {
   };
 
   const removePhase = (id) => {
-    setPhases(prev => prev.length > 1 ? prev.filter(p => p.id !== id) : prev);
+    setPhases(prev => prev.filter(p => p.id !== id));
   };
 
   const updatePhaseDuration = (id, duration) => {
@@ -143,13 +159,13 @@ export function SimulationProvider({ children }) {
     setLaneConfigs({ Northbound: [], Southbound: [], Eastbound: [], Westbound: [] });
     setPhaseTimings({});
     setPedestrians({ Northbound: 'No', Southbound: 'No', Eastbound: 'No', Westbound: 'No' });
-    setPedestrianTimings({ Northbound: { go: 1, red: 3 }, Southbound: { go: 1, red: 3 }, Eastbound: { go: 1, red: 3 }, Westbound: { go: 1, red: 3 } });
-    setCycleMode('delrosario');
-    setCustomCycleLength(300);
-    setPhases([
-      { id: 1, duration: 30, lights: {} },
-      { id: 2, duration: 30, lights: {} }
-    ]);
+    setPedestrianTimings({
+      Northbound: { go: 1, red: 2 },
+      Southbound: { go: 1, red: 2 },
+      Eastbound: { go: 1, red: 2 },
+      Westbound: { go: 1, red: 2 }
+    });
+    setPhases([]);
   };
 
   const loadSimulation = (sim) => {
@@ -159,9 +175,12 @@ export function SimulationProvider({ children }) {
     setLaneConfigs(sim.laneConfigs || { Northbound: [], Southbound: [], Eastbound: [], Westbound: [] });
     setPhaseTimings(sim.phaseTimings || {});
     setPedestrians(sim.pedestrians || { Northbound: 'No', Southbound: 'No', Eastbound: 'No', Westbound: 'No' });
-    setPedestrianTimings(sim.pedestrianTimings || { Northbound: { go: 1, red: 3 }, Southbound: { go: 1, red: 3 }, Eastbound: { go: 1, red: 3 }, Westbound: { go: 1, red: 3 } });
-    setCycleMode(sim.cycleMode || 'delrosario');
-    setCustomCycleLength(sim.customCycleLength || 300);
+    setPedestrianTimings(sim.pedestrianTimings || {
+      Northbound: { go: 1, red: 2 },
+      Southbound: { go: 1, red: 2 },
+      Eastbound: { go: 1, red: 2 },
+      Westbound: { go: 1, red: 2 }
+    });
     if (sim.phases) setPhases(sim.phases);
   };
 
@@ -190,12 +209,10 @@ export function SimulationProvider({ children }) {
       phaseTimings: JSON.parse(JSON.stringify(phaseTimings)),
       pedestrians: { ...pedestrians },
       pedestrianTimings: JSON.parse(JSON.stringify(pedestrianTimings)),
-      cycleMode,
-      customCycleLength,
       phases: JSON.parse(JSON.stringify(phases)),
       lanesCount: activeLanesCount,
       cycleLength,
-      savedAt: new Date().toLocaleDateString()
+      savedAt: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })
     };
 
     setSavedSimulations(prev => {
@@ -209,54 +226,58 @@ export function SimulationProvider({ children }) {
     return newSim;
   };
 
-  // Derived results
+  // Derived results based purely on user input data
   const results = useMemo(() => {
-    // Calculate total intersection cycle length across all active lanes / phases
-    let totalCycle = 0;
+    let intersectionCycle = 0;
 
-    if (cycleMode === 'phases') {
-      totalCycle = phases.reduce((acc, p) => acc + (Number(p.duration) || 0), 0);
-    }
-    
-    // Check if phaseTimings has explicit user-configured go, amber, red values
-    let maxPhaseSum = 0;
-    Object.keys(directions).filter(d => directions[d]).forEach(dir => {
-      (laneConfigs[dir] || []).forEach(lane => {
-        const key = `${dir}-${lane.id}`;
-        const t = phaseTimings[key];
-        if (t && (t.go || t.amber || t.red)) {
-          const sum = (Number(t.go) || 0) + (Number(t.amber) || 0) + (Number(t.red) || 0);
-          if (sum > maxPhaseSum) maxPhaseSum = sum;
+    if (phases.length > 0) {
+      intersectionCycle = phases.reduce((acc, p) => acc + Math.max(0, Number(p.duration) || 0), 0);
+    } else {
+      Object.keys(directions).filter(d => directions[d]).forEach(dir => {
+        (laneConfigs[dir] || []).forEach(lane => {
+          const key = `${dir}-${lane.id}`;
+          const t = phaseTimings[key] || { go: 1, amber: 3, red: 2 };
+          const goSec = Math.max(1, Number(t.go) || 1);
+          const amberSec = Math.max(0, Number(t.amber) || 3);
+          const stopSec = Math.max(0, Number(t.red) !== undefined ? Number(t.red) : 2);
+          const laneCycle = goSec + amberSec + stopSec;
+          if (laneCycle > intersectionCycle) {
+            intersectionCycle = laneCycle;
+          }
+        });
+        if (pedestrians[dir] === 'Yes') {
+          const p = pedestrianTimings[dir] || { go: 1, red: 2 };
+          const pedGo = Math.max(1, Number(p.go) || 1);
+          const pedRed = Math.max(0, Number(p.red) !== undefined ? Number(p.red) : 2);
+          const pedCycle = pedGo + pedRed;
+          if (pedCycle > intersectionCycle) {
+            intersectionCycle = pedCycle;
+          }
         }
       });
-    });
-
-    if (maxPhaseSum > 0) {
-      totalCycle = maxPhaseSum;
-    } else if (totalCycle === 0) {
-      totalCycle = Number(customCycleLength) || 300;
     }
 
     const stats = [];
     Object.keys(directions).filter(d => directions[d]).forEach(dir => {
       (laneConfigs[dir] || []).forEach(lane => {
         const key = `${dir}-${lane.id}`;
-        const t = phaseTimings[key] || { go: 0, amber: 0, red: 0 };
+        const t = phaseTimings[key] || { go: 1, amber: 3, red: 2 };
         
-        let goSec = t ? Number(t.go) || 0 : 0;
-        let amberSec = t ? Number(t.amber) || 0 : 0;
-        let stopSec = t ? Number(t.red) || 0 : 0;
+        let goSec = 0;
+        let amberSec = 3;
+        let stopSec = 2;
 
-        if (cycleMode === 'phases' && (!t || (!t.go && !t.red))) {
-          const greenDuration = phases.reduce((acc, p) => {
-            const lightState = p.lights[key] ?? (p.id === 1 ? 'green' : 'red');
-            return lightState === 'green' ? acc + (Number(p.duration) || 0) : acc;
+        if (phases.length > 0) {
+          goSec = phases.reduce((acc, p) => {
+            const lightState = p.lights[key] || 'red';
+            return lightState === 'green' ? acc + Math.max(0, Number(p.duration) || 0) : acc;
           }, 0);
-          goSec = greenDuration;
-          amberSec = 3;
-          stopSec = Math.max(0, totalCycle - goSec - amberSec);
-        } else if (!stopSec && totalCycle) {
-          stopSec = Math.max(0, totalCycle - goSec - amberSec);
+          amberSec = Math.max(0, Number(t.amber) || 3);
+          stopSec = Math.max(0, intersectionCycle - goSec - amberSec);
+        } else {
+          goSec = Math.max(1, Number(t.go) || 1);
+          amberSec = Math.max(0, Number(t.amber) || 3);
+          stopSec = Math.max(0, Number(t.red) !== undefined ? Number(t.red) : 2);
         }
 
         stats.push({
@@ -265,17 +286,17 @@ export function SimulationProvider({ children }) {
           go: goSec,
           amber: amberSec,
           stop: stopSec,
-          cycleLength: totalCycle,
-          goPct: totalCycle ? (goSec / totalCycle) * 100 : 0,
-          amPct: totalCycle ? (amberSec / totalCycle) * 100 : 0,
-          rePct: totalCycle ? (stopSec / totalCycle) * 100 : 0,
+          cycleLength: intersectionCycle,
+          goPct: intersectionCycle ? (goSec / intersectionCycle) * 100 : 0,
+          amPct: intersectionCycle ? (amberSec / intersectionCycle) * 100 : 0,
+          rePct: intersectionCycle ? (stopSec / intersectionCycle) * 100 : 0,
         });
       });
 
       if (pedestrians[dir] === 'Yes') {
-        const p = pedestrianTimings[dir] || { go: 0, red: 0 };
-        const pedGo = Number(p.go) || 0;
-        const pedRed = Math.max(0, totalCycle - pedGo);
+        const p = pedestrianTimings[dir] || { go: 1, red: 2 };
+        const pedGo = Math.max(1, Number(p.go) || 1);
+        const pedRed = Math.max(0, Number(p.red) !== undefined ? Number(p.red) : 2);
 
         stats.push({
           key: `${dir}-pedestrian`,
@@ -283,16 +304,16 @@ export function SimulationProvider({ children }) {
           go: pedGo,
           amber: 0,
           stop: pedRed,
-          cycleLength: totalCycle,
-          goPct: totalCycle ? (pedGo / totalCycle) * 100 : 0,
+          cycleLength: intersectionCycle,
+          goPct: intersectionCycle ? (pedGo / intersectionCycle) * 100 : 0,
           amPct: 0,
-          rePct: totalCycle ? (pedRed / totalCycle) * 100 : 0,
+          rePct: intersectionCycle ? (pedRed / intersectionCycle) * 100 : 0,
         });
       }
     });
 
-    return { maxCycle: totalCycle, stats };
-  }, [directions, laneConfigs, phaseTimings, pedestrians, pedestrianTimings, cycleMode, customCycleLength, phases]);
+    return { maxCycle: intersectionCycle, stats };
+  }, [directions, laneConfigs, phaseTimings, pedestrians, pedestrianTimings, phases]);
 
   return (
     <SimulationContext.Provider value={{
@@ -302,15 +323,14 @@ export function SimulationProvider({ children }) {
       phaseTimings, updateTiming,
       pedestrians, setPedestrian,
       pedestrianTimings, updatePedestrianTiming,
-      cycleMode, setCycleMode,
-      customCycleLength, setCustomCycleLength,
       phases, addPhase, removePhase, updatePhaseDuration, togglePhaseLight,
       results,
       savedSimulations,
       saveCurrentSimulation,
       deleteSimulation,
       loadSimulation,
-      resetSimulation
+      resetSimulation,
+      glassClarity, setGlassClarity
     }}>
       {children}
     </SimulationContext.Provider>
