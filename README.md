@@ -1,10 +1,8 @@
 # TrafficSync
 
 **Live site:** https://danlenoon.github.io/TrafficSync/  
-**API:** https://trafficsync.onrender.com/
+**API:** https://trafficsync.onrender.com *(Express & PostgreSQL backend)*  
 **Demo video:** (link)
-
-This deployment is running in demo mode. The interface is real; the backend is simulated in your browser so the site works without a server. See Demo mode below.
 
 ---
 
@@ -55,17 +53,22 @@ To run the Express REST API and PostgreSQL database locally:
    Create a `.env` file in the `server/` directory:
    ```env
    PORT=3000
-   CORS_ORIGINS=http://localhost:5173
+   CORS_ORIGINS=http://localhost:5173,https://danlenoon.github.io
    DATABASE_URL=postgres://user:password@localhost:5432/trafficsync
    APP_USERNAME=admin
    APP_PASSWORD=your_password
+   NODE_ENV=development
    ```
 
-3. **Start the Express API Server:**
+3. **Initialize Database Schema & Seed Data:**
+   ```bash
+   npm run db:reset
+   ```
+
+4. **Start the Express API Server:**
    ```bash
    npm start
    ```
-   *Note: If PostgreSQL is not connected locally, the client will fall back to using browser localStorage seamlessly for saved simulations.*
 
 ---
 
@@ -86,23 +89,12 @@ To run the Express REST API and PostgreSQL database locally:
 
 ## Demo Mode
 
-This repository can run two ways, chosen by one environment variable at build time.
-
-Demo mode is the default. Only the exact string `false` turns it off, so a forgotten or mistyped variable leaves you on the simulated backend with a visible notice rather than on a silently broken build.
+This repository can run two ways, chosen by one environment variable at build time (`VITE_USE_MOCK_API`).
 
 | `VITE_USE_MOCK_API` | What happens |
 | --- | --- |
-| unset, or `true` | The client answers its own requests from `localStorage`. No server, no database, nothing shared between visitors. This is what the template ships with, so the GitHub Pages link works on day one. |
-| `false` | The client calls the Express API at `VITE_API_BASE_URL`, which reads and writes real PostgreSQL. |
-
-Demo mode is a starting point and a fallback, not a finished project. Your finals submission is all three pieces deployed and talking to each other. Demo mode is there so you can build the interface in week one before the API exists, and so you have something to show if a free tier is asleep during your demo.
-
-GitHub Pages serves files and cannot run Node, so the API and the database can never live there. They go somewhere else:
-
-| Piece | Options |
-| --- | --- |
-| API | Render, Railway, Fly.io, Koyeb, a VPS, or self-hosted behind a tunnel |
-| Database | Neon, Supabase, Railway, Aiven, or your own PostgreSQL |
+| unset, or `true` | The client answers its own requests from `localStorage`. No server, no database, nothing shared between visitors. |
+| `false` | The client calls the Express API at `VITE_API_BASE_URL` (`https://trafficsync.onrender.com`), which reads and writes real PostgreSQL (Neon). |
 
 ---
 
@@ -116,32 +108,28 @@ cp .env.example .env        # VITE_USE_MOCK_API stays true
 npm run dev                 # http://localhost:5173
 ```
 
-### The whole stack. Needs PostgreSQL, either local or hosted.
+### The whole stack. Needs PostgreSQL (Neon or local).
 ```bash
-# 1. the database
-docker run --name my-pg -e POSTGRES_PASSWORD=devpassword \
-  -e POSTGRES_DB=trafficsync -p 5432:5432 -d postgres:17
-
-# 2. the API
+# 1. the API
 cd server
 npm install
-cp .env.example .env        # check DATABASE_URL
-npm run db:reset            # creates the tables and adds sample rows
-npm run dev                 # http://localhost:3000
+cp .env.example .env        # set DATABASE_URL (Neon) and APP_PASSWORD
+npm run db:reset            # creates the tables and adds seed records
+npm start                   # http://localhost:3000
 
-# 3. the client, in another terminal
+# 2. the client, in another terminal
 cd client
 npm install
 cp .env.example .env
-# set VITE_USE_MOCK_API=false
+# set VITE_USE_MOCK_API=false and VITE_API_BASE_URL=http://localhost:3000
 npm run dev
 ```
 
-Check the API on its own before you blame the client:
+Check the API on its own:
 ```bash
-curl http://localhost:3000/healthz     # is the process alive
-curl http://localhost:3000/readyz      # is the database reachable
-curl http://localhost:3000/api/simulations
+curl https://trafficsync.onrender.com/healthz     # is the process alive
+curl https://trafficsync.onrender.com/readyz      # is the database reachable
+curl -u admin:password https://trafficsync.onrender.com/api/simulations
 ```
 
 ---
@@ -152,28 +140,25 @@ None of these are committed. `.env.example` in each folder lists them with place
 
 | Name | Where | What it is |
 | --- | --- | --- |
-| `DATABASE_URL` | server | PostgreSQL connection string. Contains a password |
-| `CORS_ORIGINS` | server | comma-separated origins allowed to call the API |
-| `NODE_ENV` | server | production on your host |
+| `DATABASE_URL` | server (.env / Render) | PostgreSQL connection string (Neon) |
+| `CORS_ORIGINS` | server (.env / Render) | comma-separated origins allowed to call the API (`https://danlenoon.github.io`) |
+| `NODE_ENV` | server (.env / Render) | `development` locally, `production` on host |
 | `PORT` | server | set by the host, do not set it yourself |
-| `VITE_USE_MOCK_API` | client, at build time | only false turns demo mode off; unset means on |
-| `VITE_API_BASE_URL` | client, at build time | your API's public URL, no trailing slash |
-
-Every `VITE_` value is compiled into the built JavaScript and is public. Never put a key, a password or a connection string in one.
+| `VITE_USE_MOCK_API` | client (GitHub Actions Variable) | `false` to connect to Render API, unset for demo mode |
+| `VITE_API_BASE_URL` | client (GitHub Actions Variable) | `https://trafficsync.onrender.com` |
 
 ---
 
 ## Deploying
 
 ### Client, to GitHub Pages
-Already wired up in `.github/workflows/deploy-pages.yml`. Two one-time steps:
-1. Settings > Pages > Build and deployment > Source: GitHub Actions. Without this the workflow goes green and publishes nothing.
-2. Nothing else, until your API is live. Demo mode is the default, so the first deploy works on its own. When the API is up, add `VITE_USE_MOCK_API = false` and `VITE_API_BASE_URL` under Settings > Secrets and variables > Actions > Variables, then re-run the workflow.
+Wired up in `.github/workflows/deploy-pages.yml`.
+1. Settings > Pages > Build and deployment > Source: **GitHub Actions**.
+2. Settings > Secrets and variables > Actions > Variables: Set `VITE_USE_MOCK_API = false` and `VITE_API_BASE_URL = https://trafficsync.onrender.com`.
 
-The repository must be public for Pages to serve it on a free account.
-
-### API and database
-Not automated here, because most hosts deploy straight from your repository with no workflow at all. Point your host at the `server/` folder, set the environment variables in its dashboard, and run `server/db/schema.sql` once against the hosted database.
+### API and Database
+- **Database:** Hosted on **Neon** (Neon.tech) with pooled connection strings.
+- **API:** Hosted on **Render** with root directory set to `server`, build command `npm install`, and environment variables configured in dashboard.
 
 ---
 
@@ -199,7 +184,6 @@ TrafficSync/
 │   ├── db/                 # Database schema, seed data, and connection pool (pool.js, schema.sql, seed.sql)
 │   ├── simulationsRepo.js  # Parameterized SQL database queries for simulations
 │   └── server.js           # Express server with HTTP Basic Auth middleware
-├── compose.yml             # Only if self-hosting
 ├── docs/                   # Planning documents and weekly reports
 ├── AI-USAGE.md             # Required AI usage documentation and commit history links
 └── README.md               # Project documentation and security checklist
@@ -209,22 +193,23 @@ TrafficSync/
 
 ## Architecture
 
-TrafficSync uses a decoupled three-tier client-server architecture. The React frontend (`client/`) runs statically on GitHub Pages in demo mode (`localStorage`) or communicates via HTTP REST API calls to the Node.js Express backend (`server/`). The backend connects securely via connection pooling (`pg`) to a PostgreSQL database holding simulation snapshots and intersection configurations.
+TrafficSync uses a decoupled three-tier client-server architecture. The React frontend (`client/`) runs statically on GitHub Pages or communicates via HTTP REST API calls to the Node.js Express backend hosted on Render (`https://trafficsync.onrender.com`). The backend connects securely via connection pooling (`pg`) to a PostgreSQL database hosted on Neon holding simulation snapshots and intersection configurations.
 
 ---
 
 ## What I Would Do Next
 
-1. **Automated CI/CD for Backend:** Set up GitHub Actions workflows to automatically deploy the Express server and run database migrations on Render/Railway upon merging to `main`.
+1. **Automated CI/CD for Backend:** Set up GitHub Actions workflows to automatically deploy the Express server and run database migrations on Render upon merging to `main`.
 2. **User Authentication & Roles:** Implement JWT-based user authentication so multiple traffic engineers can manage and share private intersection portfolios securely.
 3. **Advanced Optimization Algorithms:** Integrate genetic algorithms or actuated green-wave offset computations for multi-intersection arterial synchronization.
 
 ---
 
 ## Author
-
+ 
 GitHub: [https://github.com/danlenoon](https://github.com/danlenoon)
-Course and Section: BS Computer Science CS-401
+Course: BS Computer Science
+Section: CS-401
 
 ---
 
