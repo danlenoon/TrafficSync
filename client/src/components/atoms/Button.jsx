@@ -7,6 +7,7 @@ export default function Button({ children, onClick, variant = 'primary', classNa
   
   const variants = {
     primary: "bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-700 hover:to-blue-600 shadow-blue-500/25",
+    danger: "bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-700 hover:to-red-600 shadow-red-500/25",
     accent: "bg-gradient-to-r from-green-600 to-green-500 text-white hover:from-green-700 hover:to-green-600 shadow-green-500/25",
     secondary: "bg-gray-900 text-white hover:bg-black shadow-gray-900/25",
     outline: "border text-gray-800 hover:bg-white/90 shadow-md",
