@@ -35,7 +35,7 @@ export default function Navbar() {
         >
           <Sliders size={16} className="text-blue-600 shrink-0" />
           <div className="flex items-center gap-3.5">
-            <span className="text-sm font-extrabold text-gray-400 select-none hover:text-gray-700 transition-colors" title="Ultra Clear">○</span>
+            <span className="text-sm font-extrabold text-gray-400 select-none hover:text-gray-700 transition-colors">○</span>
             <input 
               type="range" 
               min="0" 
@@ -44,9 +44,8 @@ export default function Navbar() {
               value={glassClarity} 
               onChange={(e) => setGlassClarity(Number(e.target.value))}
               className="w-44 sm:w-60 cursor-pointer h-2 bg-gray-200/80 rounded-full shadow-inner border border-white/90 transition-all"
-              title="Adjust Liquid Glass clarity and tint"
             />
-            <span className="text-sm font-extrabold text-blue-600 select-none hover:text-blue-700 transition-colors" title="Ultra Tinted">✦</span>
+            <span className="text-sm font-extrabold text-blue-600 select-none hover:text-blue-700 transition-colors">✦</span>
           </div>
         </div>
       </div>
