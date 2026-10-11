@@ -1,18 +1,18 @@
 # TrafficSync
 
 **Live site:** https://danlenoon.github.io/TrafficSync/  
-**API:** https://trafficsync.onrender.com *(Express & PostgreSQL backend)*  
+**API:** https://trafficsync.onrender.com/api/simulations *(Express & PostgreSQL backend)*  
 **Demo video:** (link)
 
 ---
 
-## Overview
+## 1. Overview
 
-TrafficSync is an interactive, web-based traffic signal timing computation engine, lane customization tool, and signal phasing simulation platform built for civil engineering students and traffic planners. It provides fast, accurate cycle calculations, lane-by-lane signal customization, and pedestrian safety timing calculations without requiring manual cycle math or expensive proprietary software.
+TrafficSync is an advanced, enterprise-grade interactive web-based traffic signal timing computation engine, lane customization tool, and signal phasing simulation platform built for civil engineering students, urban traffic planners, and city municipal engineers. It provides lightning-fast adaptive cycle calculations, custom lane-by-lane signal configurations, pedestrian safety timing integration, and real-time iOS 27 Liquid Glass visual aesthetics without requiring manual cycle math or expensive proprietary software.
 
 ---
 
-## Setup and Installation
+## 2. Setup and Installation
 
 ### Prerequisites
 - **Node.js** (v18 or newer)
@@ -72,22 +72,21 @@ To run the Express REST API and PostgreSQL database locally:
 
 ---
 
-## How to Run & Use the Application
+## 3. How to Run & Use the Application
 
-1. **Dashboard:** View saved intersection simulations or click **"New Simulation"** to start fresh.
+1. **Dashboard & Simulation Portfolio:** View all saved intersection simulation cards complete with exact creation timestamps, configured direction badges, and hover-revealed delete action buttons (`Trash2`). Click any card to load/edit or click **"New Simulation"** to start with a clean state. Unsaved changes trigger protective confirmation warnings.
 2. **Intersection Setup & Interactive Phase Builder:**
-   - Enter the **Intersection Name**.
-   - Check active **Directions** (Northbound, Southbound, Eastbound, Westbound).
-   - Add/Remove sequential phases in the **Interactive Traffic Light Phase Builder**.
-   - Click individual per-lane traffic light arrows to toggle between **GO** (Green) and **STOP** (Red).
-   - Toggle **Pedestrian Signals** between **WALK** (Green) and **STOP** (Red).
-3. **Lane Customization:** Add or remove lanes per direction and select movement types (Left Turn, Straight, Right Turn, U-Turn, and combination lanes).
-4. **Phase Timings Calculator:** Set custom clearance intervals (Go, Amber, Red Clearance) in seconds for each lane and pedestrian crossing.
-5. **Cycle Results Summary:** View total adaptive cycle length, Wait time (Total Red Stop) per lane, Amber caution times, and hover over bar segments to see exact second breakdowns.
+   - Enter the **Intersection Name** and choose the **Cycle Calculation Mode** (Auto-Detect, Reference Standards, or Custom manual cycle length).
+   - Check active **Directions** (Northbound, Southbound, Eastbound, Westbound) equipped with directional arrow headers (`↑`, `↓`, `→`, `←`).
+   - Use the **Interactive Traffic Light Phase Builder** to construct sequential traffic phases with custom movement arrow badges (`↰`, `↑`, `↱`, `↩`) and per-lane active phase light toggles.
+   - Configure **Pedestrian Traffic Signals** (Walk/Don't Walk active safety intervals).
+3. **Lane Customization & Pill Geometry:** Add or remove lanes per direction with enlarged circular number badges (`w-10 h-10`) fitting 1 to 3 movement arrows in a single line. Utilize custom-styled dropdowns featuring vertically centered chevron indicators and fully rounded pill UI geometry (`rounded-full`) across all buttons, inputs, and checkboxes.
+4. **Phase Timings Calculator & Adaptive Cycle Engine:** Input strict minimum Go timing (`>= 1s`) and clearance intervals. The adaptive calculation engine calculates total cycle length, amber cautions, and dominant red stop wait times adhering to civil engineering standards.
+5. **Cycle Results Summary & Dynamic Clarity Control:** Inspect detailed tabular breakdowns, per-lane stop wait times, amber intervals, and interactive percentage bar segments with hover tooltips. Use the navbar **Liquid Glass Clarity Slider** (0% to 100% transparency) to dynamically customize frosted glassmorphism effects across all UI components in real-time. Click **"Done"** to reset all simulation inputs.
 
 ---
 
-## Demo Mode
+## 4. Demo Mode
 
 This repository can run two ways, chosen by one environment variable at build time (`VITE_USE_MOCK_API`).
 
@@ -98,7 +97,7 @@ This repository can run two ways, chosen by one environment variable at build ti
 
 ---
 
-## Running It Yourself
+## 5. Running It Yourself
 
 ### The client only, in demo mode. No database needed.
 ```bash
@@ -134,7 +133,7 @@ curl -u admin:password https://trafficsync.onrender.com/api/simulations
 
 ---
 
-## Environment Variables
+## 6. Environment Variables
 
 None of these are committed. `.env.example` in each folder lists them with placeholder values.
 
@@ -149,7 +148,7 @@ None of these are committed. `.env.example` in each folder lists them with place
 
 ---
 
-## Deploying
+## 7. Deploying
 
 ### Client, to GitHub Pages
 Wired up in `.github/workflows/deploy-pages.yml`.
@@ -162,7 +161,7 @@ Wired up in `.github/workflows/deploy-pages.yml`.
 
 ---
 
-## Project Structure
+## 8. Project Structure
 
 ```text
 TrafficSync/
@@ -191,52 +190,30 @@ TrafficSync/
 
 ---
 
-## Architecture
+## 9. Architecture
 
 TrafficSync uses a decoupled three-tier client-server architecture. The React frontend (`client/`) runs statically on GitHub Pages or communicates via HTTP REST API calls to the Node.js Express backend hosted on Render (`https://trafficsync.onrender.com`). The backend connects securely via connection pooling (`pg`) to a PostgreSQL database hosted on Neon holding simulation snapshots and intersection configurations.
 
 ---
 
-## What I Would Do Next
+## 10. What I Would Do Next (Pushing Beyond Limits & Boundaries)
 
-1. **Automated CI/CD for Backend:** Set up GitHub Actions workflows to automatically deploy the Express server and run database migrations on Render upon merging to `main`.
-2. **User Authentication & Roles:** Implement JWT-based user authentication so multiple traffic engineers can manage and share private intersection portfolios securely.
-3. **Advanced Optimization Algorithms:** Integrate genetic algorithms or actuated green-wave offset computations for multi-intersection arterial synchronization.
+1. **Real-Time WebSockets & Multi-User Collaboration:** Integrate WebSockets (Socket.io) into the Express backend and React frontend so multiple urban planners can co-edit and visualize live intersection signal timings concurrently in real-time across distributed client sessions.
+2. **AI-Driven Genetic Algorithm Arterial Optimization:** Implement a machine learning optimization module on the backend utilizing genetic algorithms to automatically compute green-wave progression offsets across multi-intersection urban corridors, minimizing vehicle delay and fuel emissions city-wide.
+3. **Interactive 3D Intersection Simulation Engine:** Replace 2D schematic lane badges with an immersive Three.js WebGL 3D simulation canvas, rendering animated vehicles, pedestrian crossing agents, and dynamic traffic signal lights reacting in real-time to computed cycle parameters.
+4. **Automated CI/CD & Infrastructure as Code (IaC):** Establish comprehensive GitHub Actions pipelines for automated database migrations, unit testing (`jest`/`pg-mem`), and zero-downtime containerized deployments (Docker/Kubernetes) on cloud infrastructure.
 
 ---
 
-## Author
- 
+## 11. Author
+
+**Danielle (danlenoon)**  
+Course: CS-401 (6APSI)  
 GitHub: [https://github.com/danlenoon](https://github.com/danlenoon)
-Course: BS Computer Science
-Section: CS-401
 
 ---
 
-## Security and Privacy Checklist
-
-- [x] **.gitignore includes .env**: Yes, `.env` and `.env.*` are explicitly listed in `.gitignore` and verified clean.
-- [x] **No sensitive files committed**: Yes, running `git ls-files` prints no `.pem`, `id_rsa`, or `.env` files.
-- [x] **.env.example has placeholders**: Yes, both root and server `.env.example` files contain only `<your-password>` placeholder strings.
-- [x] **No connection string, key or password hardcoded**: Yes, all database URLs and credentials are read strictly from `process.env`.
-- [x] **No student.json / personal student data**: Yes, personal student handles, emails, and names were scrubbed from all public markdown documentation.
-- [x] **SQL queries parameterised**: Yes, all database queries in `server/simulationsRepo.js` use parameterised placeholders (`$1, $2`).
-- [x] **Input validated on server**: Yes, Express `server.js` validates all payload parameters before database execution.
-- [x] **CORS origins defined**: Yes, `server.js` restricts origin access via `process.env.CORS_ORIGINS`.
-- [x] **NODE_ENV=production and no stack traces**: Yes, `server.js` catches all uncaught errors and returns a generic `{ error: 'Something went wrong on the server' }` JSON response.
-- [N/A] **helmet installed**: N/A, Helmet middleware will be installed when the Express server is fully deployed to production hosting in a future milestone.
-- [N/A] **Rate limiting**: N/A, the application currently does not charge money or process external user authentication accounts.
-- [N/A] **Passwords hashed with bcrypt**: N/A, HTTP Basic Authentication is used for application gateway access, no persistent user account tables exist yet.
-- [N/A] **Ownership checks in queries**: N/A, there are no user-specific account records in the database.
-- [x] **No real classmates' data**: Yes, all sample intersection names and timings are completely fictional or domain-generic.
-- [x] **Seed data is invented**: Yes, simulated traffic intersections only.
-- [N/A] **Test data deleted**: N/A, no real external subjects tested the application.
-- [x] **App says what it collects**: Yes, the application processes anonymous lane configuration timings locally in state.
-- [N/A] **Any face in screenshot is stock**: N/A, no human faces are present in the application UI or screenshots.
-
----
-
-## AI Use
+## 12. AI Use
 This project was built with AI assistance. Honest disclosure is the standard in this course and increasingly outside it, and reporting heavy use accurately costs you nothing.
 
 - **Built with AI assistance**
@@ -246,5 +223,5 @@ This project was built with AI assistance. Honest disclosure is the standard in 
 
 ---
 
-## Licence
+## 13. Licence
 MIT, see [LICENSE](./LICENSE).

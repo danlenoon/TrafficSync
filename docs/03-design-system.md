@@ -1,33 +1,27 @@
-# Design system
+# Design system: TrafficSync
 
-The rules your interface follows, written down, so that screen four looks like
-screen one.
+The rules and visual standards TrafficSync follows to maintain a polished, modern interface across all pages and components.
 
-**Part of this is a visual document**, submitted as a PDF or images. Swatches,
-type samples and component states, not paragraphs describing them.
+## Colour & Liquid Glass Aesthetics
+TrafficSync implements the **iOS 27 Liquid Glass** design standard, utilizing frosted translucent glassmorphism (`backdrop-filter: blur`, specular borders, ambient shadows) that dynamically adapts based on the user's preference.
+- **Glass Panel Background:** `--card-bg` / `--glass-bg` (translucent white/dark layers with dynamic opacity).
+- **Glass Border:** `--glass-border` (subtle light-reflective border).
+- **Text Primary:** `--text-main` (sharp, high-contrast dark text).
+- **Text Muted:** `--text-muted` (subtle secondary text).
 
-## What to record
+## Typography
+- **Font Family:** `Arial, sans-serif` standardized globally.
+- **Sizes:** 
+  - Heading Large: `24px` / `text-2xl` bold.
+  - Heading Medium: `18px` / `text-lg` bold.
+  - Body Text: `14px` / `text-sm` medium.
+  - Caption / Badges: `12px` / `text-xs`.
 
-**Colour.** Every colour, with its hex value and the name you use for it in code.
-Check text against its background for contrast; the WCAG minimum is 4.5 to 1 for
-normal text, and it is checked.
+## Geometry & Spacing
+- **Pill-Shaped Geometry:** All interactive controls — buttons, input fields, dropdown menus, checkboxes, and badge containers — feature fully rounded pill corners (`rounded-full`).
+- **Spacing Scale:** Consistent Tailwind spacing scales (`p-4`, `p-6`, `space-y-4`, `gap-3`) ensuring rhythmic layout alignment.
 
-**Type.** The family, and the sizes you actually use, each with a name. Three or
-four sizes is plenty.
-
-**Spacing.** One scale, and stick to it. Numbers chosen at random per component
-is the single most common reason a student project looks unfinished.
-
-**Components.** For each reusable piece: what it looks like normally, on hover,
-focused, disabled, and while loading. **Focus states are not optional**: removing
-an outline without replacing it makes your app unusable with a keyboard.
-
-**States.** Loading, empty, error and data are four different screens. Decide what
-each looks like once, here, rather than improvising per page.
-
-## In code
-
-Say where these live: CSS custom properties, a Tailwind config, a theme object, a
-component library you configured. The template starts with custom properties in
-`client/src/styles.css`. Module 3 covered the alternatives; use the one you can
-defend.
+## Components & Interactive States
+- **Liquid Glass Navbar Slider:** An interactive slider ranging from 0% (ultra clear) to 100% (ultra tinted) with `○` and `✦` endpoints and a fatter rounded oval thumb.
+- **Custom Dropdowns:** Styled via `-webkit-appearance: none; appearance: none;` with a vertically centered SVG down chevron indicator and embedded movement arrows (`↰`, `↱`, `↑`, `↩`).
+- **Modals & Dialogs:** Frosted glass confirmation popups for deletion and unsaved changes navigation warnings.
