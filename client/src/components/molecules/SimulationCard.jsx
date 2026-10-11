@@ -18,15 +18,15 @@ export default function SimulationCard({ title, lanesCount, cycleLength, savedAt
         color: 'var(--text-main)'
       }}
     >
-      {/* Trash delete button enclosed in a circle button */}
+      {/* Trash delete button enclosed in a circle button with interactive hover */}
       <div className="absolute top-4 right-4 z-20">
         <button
           onClick={(e) => { e.stopPropagation(); onDelete && onDelete(); }}
-          className="p-2.5 rounded-full text-gray-500 hover:text-red-600 bg-white/95 hover:bg-red-50 transition-all shadow-sm border border-gray-200"
+          className="p-2.5 rounded-full text-gray-400 hover:text-red-600 bg-white/95 hover:bg-red-50 transition-all duration-300 shadow-sm border border-gray-200 hover:scale-110 hover:border-red-300 active:scale-95 group/cardtrash"
           style={{ fontFamily: 'Arial, sans-serif' }}
           title="Delete simulation"
         >
-          <Trash2 size={16} />
+          <Trash2 size={16} className="transition-transform group-hover/cardtrash:rotate-12" />
         </button>
       </div>
 
