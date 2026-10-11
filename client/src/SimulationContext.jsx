@@ -31,8 +31,31 @@ export function SimulationProvider({ children }) {
   // Phases state for Interactive Phase Builder (starts empty/unconfigured)
   const [phases, setPhases] = useState([]);
 
-  // iOS 27 Liquid Glass slider state (default 50% = 0.5)
-  const [glassClarity, setGlassClarity] = useState(0.5);
+  // iOS 27 Liquid Glass slider state (persisted in localStorage)
+  const [glassClarity, setGlassClarity] = useState(() => {
+    try {
+      const saved = localStorage.getItem('trafficsync_glass_clarity');
+      return saved !== null ? Number(saved) : 0.5;
+    } catch (e) {
+      return 0.5;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('trafficsync_glass_clarity', glassClarity);
+    } catch (e) {}
+  }, [glassClarity]);
+
+  const resetAll = () => {
+    try {
+      localStorage.removeItem('trafficsync_saved_simulations');
+      localStorage.removeItem('trafficsync_glass_clarity');
+    } catch (e) {}
+    setSavedSimulations([]);
+    setGlassClarity(0.5);
+    resetSimulation();
+  };
 
   // Dynamically update root CSS custom properties for crystal clear vs tinted adaptation
   useEffect(() => {
@@ -60,6 +83,8 @@ export function SimulationProvider({ children }) {
       return [];
     }
   });
+
+  const [hasBeenSaved, setHasBeenSaved] = useState(false);
 
   const toggleDirection = (dir) => {
     setDirections(prev => ({ ...prev, [dir]: !prev[dir] }));
@@ -144,11 +169,18 @@ export function SimulationProvider({ children }) {
   const togglePhaseLight = (phaseId, lightKey) => {
     setPhases(prev => prev.map(p => {
       if (p.id !== phaseId) return p;
-      const currentLight = p.lights[lightKey] || 'red';
-      const nextLight = currentLight === 'green' ? 'red' : 'green';
+      const current = p.lights[lightKey];
+      // When unconfigured/off, first click toggles to green.
+      // Next click toggles to red. Next click toggles to off/green.
+      let next;
+      if (!current || current === 'off') next = 'green';
+      else if (current === 'green') next = 'red';
+      else if (current === 'red') next = 'green';
+      else next = 'green';
+
       return {
         ...p,
-        lights: { ...p.lights, [lightKey]: nextLight }
+        lights: { ...p.lights, [lightKey]: next }
       };
     }));
   };
@@ -166,6 +198,7 @@ export function SimulationProvider({ children }) {
       Westbound: { go: 1, red: 2 }
     });
     setPhases([]);
+    setHasBeenSaved(false);
   };
 
   const loadSimulation = (sim) => {
@@ -182,6 +215,7 @@ export function SimulationProvider({ children }) {
       Westbound: { go: 1, red: 2 }
     });
     if (sim.phases) setPhases(sim.phases);
+    setHasBeenSaved(true);
   };
 
   const deleteSimulation = (id) => {
@@ -212,7 +246,7 @@ export function SimulationProvider({ children }) {
       phases: JSON.parse(JSON.stringify(phases)),
       lanesCount: activeLanesCount,
       cycleLength,
-      savedAt: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })
+      savedAt: `${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })} at ${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true })}`
     };
 
     setSavedSimulations(prev => {
@@ -223,6 +257,7 @@ export function SimulationProvider({ children }) {
       return updated;
     });
 
+    setHasBeenSaved(true);
     return newSim;
   };
 
@@ -231,8 +266,45 @@ export function SimulationProvider({ children }) {
     let intersectionCycle = 0;
 
     if (phases.length > 0) {
-      intersectionCycle = phases.reduce((acc, p) => acc + Math.max(0, Number(p.duration) || 0), 0);
+      // Each phase runs for its active duration, plus the clearance interval (Amber + Red Clearance)
+      // For each phase, compute the maximum clearance required by active/clearing movements in that phase
+      let sumPhaseCycle = 0;
+      phases.forEach(p => {
+        let maxPhaseGo = 0;
+        let maxPhaseAmber = 3;
+        let maxPhaseRed = 2;
+        let hasActiveMovement = false;
+
+        Object.keys(directions).filter(d => directions[d]).forEach(dir => {
+          (laneConfigs[dir] || []).forEach(lane => {
+            const key = `${dir}-${lane.id}`;
+            const isGreen = p.lights[key] === 'green';
+            const t = phaseTimings[key] || { go: 1, amber: 3, red: 2 };
+            if (isGreen) {
+              hasActiveMovement = true;
+              maxPhaseGo = Math.max(maxPhaseGo, Math.max(1, Number(t.go) || 1));
+              maxPhaseAmber = Math.max(maxPhaseAmber, Math.max(0, Number(t.amber) || 3));
+              maxPhaseRed = Math.max(maxPhaseRed, Math.max(0, Number(t.red) !== undefined ? Number(t.red) : 2));
+            }
+          });
+          if (pedestrians[dir] === 'Yes' && p.lights[`${dir}_pedestrian`] === 'green') {
+            hasActiveMovement = true;
+            const pt = pedestrianTimings[dir] || { go: 1, red: 2 };
+            maxPhaseGo = Math.max(maxPhaseGo, Math.max(1, Number(pt.go) || 1));
+            maxPhaseRed = Math.max(maxPhaseRed, Math.max(0, Number(pt.red) !== undefined ? Number(pt.red) : 2));
+          }
+        });
+
+        if (hasActiveMovement) {
+          sumPhaseCycle += (maxPhaseGo + maxPhaseAmber + maxPhaseRed);
+        } else {
+          // If no lights were marked green in this phase, default phase duration
+          sumPhaseCycle += Math.max(1, Number(p.duration) || 6);
+        }
+      });
+      intersectionCycle = sumPhaseCycle;
     } else {
+      let totalSum = 0;
       Object.keys(directions).filter(d => directions[d]).forEach(dir => {
         (laneConfigs[dir] || []).forEach(lane => {
           const key = `${dir}-${lane.id}`;
@@ -240,21 +312,16 @@ export function SimulationProvider({ children }) {
           const goSec = Math.max(1, Number(t.go) || 1);
           const amberSec = Math.max(0, Number(t.amber) || 3);
           const stopSec = Math.max(0, Number(t.red) !== undefined ? Number(t.red) : 2);
-          const laneCycle = goSec + amberSec + stopSec;
-          if (laneCycle > intersectionCycle) {
-            intersectionCycle = laneCycle;
-          }
+          totalSum += (goSec + amberSec + stopSec);
         });
         if (pedestrians[dir] === 'Yes') {
           const p = pedestrianTimings[dir] || { go: 1, red: 2 };
           const pedGo = Math.max(1, Number(p.go) || 1);
           const pedRed = Math.max(0, Number(p.red) !== undefined ? Number(p.red) : 2);
-          const pedCycle = pedGo + pedRed;
-          if (pedCycle > intersectionCycle) {
-            intersectionCycle = pedCycle;
-          }
+          totalSum += (pedGo + pedRed);
         }
       });
+      intersectionCycle = totalSum;
     }
 
     const stats = [];
@@ -263,26 +330,13 @@ export function SimulationProvider({ children }) {
         const key = `${dir}-${lane.id}`;
         const t = phaseTimings[key] || { go: 1, amber: 3, red: 2 };
         
-        let goSec = 0;
-        let amberSec = 3;
-        let stopSec = 2;
-
-        if (phases.length > 0) {
-          goSec = phases.reduce((acc, p) => {
-            const lightState = p.lights[key] || 'red';
-            return lightState === 'green' ? acc + Math.max(0, Number(p.duration) || 0) : acc;
-          }, 0);
-          amberSec = Math.max(0, Number(t.amber) || 3);
-          stopSec = Math.max(0, intersectionCycle - goSec - amberSec);
-        } else {
-          goSec = Math.max(1, Number(t.go) || 1);
-          amberSec = Math.max(0, Number(t.amber) || 3);
-          stopSec = Math.max(0, Number(t.red) !== undefined ? Number(t.red) : 2);
-        }
+        const goSec = Math.max(1, Number(t.go) || 1);
+        const amberSec = Math.max(0, Number(t.amber) || 3);
+        const stopSec = Math.max(0, intersectionCycle - goSec - amberSec);
 
         stats.push({
           key,
-          label: `${dir.charAt(0)} Lane ${lane.id} (${lane.type})`,
+          label: `${dir} Lane ${lane.id} (${lane.type})`,
           go: goSec,
           amber: amberSec,
           stop: stopSec,
@@ -296,18 +350,18 @@ export function SimulationProvider({ children }) {
       if (pedestrians[dir] === 'Yes') {
         const p = pedestrianTimings[dir] || { go: 1, red: 2 };
         const pedGo = Math.max(1, Number(p.go) || 1);
-        const pedRed = Math.max(0, Number(p.red) !== undefined ? Number(p.red) : 2);
+        const pedStop = Math.max(0, intersectionCycle - pedGo);
 
         stats.push({
           key: `${dir}-pedestrian`,
-          label: `${dir.charAt(0)} Pedestrian (Crossing)`,
+          label: `${dir} Pedestrian (Crossing)`,
           go: pedGo,
           amber: 0,
-          stop: pedRed,
+          stop: pedStop,
           cycleLength: intersectionCycle,
           goPct: intersectionCycle ? (pedGo / intersectionCycle) * 100 : 0,
           amPct: 0,
-          rePct: intersectionCycle ? (pedRed / intersectionCycle) * 100 : 0,
+          rePct: intersectionCycle ? (pedStop / intersectionCycle) * 100 : 0,
         });
       }
     });
@@ -330,7 +384,9 @@ export function SimulationProvider({ children }) {
       deleteSimulation,
       loadSimulation,
       resetSimulation,
-      glassClarity, setGlassClarity
+      resetAll,
+      glassClarity, setGlassClarity,
+      hasBeenSaved
     }}>
       {children}
     </SimulationContext.Provider>
