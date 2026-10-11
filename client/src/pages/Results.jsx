@@ -1,14 +1,15 @@
 import React, { useContext, useState } from 'react';
-import { Save, BarChart3, Check } from 'lucide-react';
+import { Save, BarChart3, Check, ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/atoms/Button';
 import { SimulationContext } from '../SimulationContext';
 
 export default function Results() {
   const navigate = useNavigate();
-  const { roadName, directions, results, saveCurrentSimulation, resetSimulation, glassClarity } = useContext(SimulationContext);
+  const { roadName, directions, results, saveCurrentSimulation, resetSimulation, glassClarity, hasBeenSaved } = useContext(SimulationContext);
   const [saved, setSaved] = useState(false);
   const [hoverData, setHoverData] = useState(null); // { text, x, y }
+  const [showBackDialog, setShowBackDialog] = useState(false);
 
   const handleSave = () => {
     saveCurrentSimulation();
@@ -16,9 +17,13 @@ export default function Results() {
     setTimeout(() => setSaved(false), 2000);
   };
 
-  const handleDone = () => {
-    resetSimulation();
-    navigate('/');
+  const handleBackToDashboard = () => {
+    if (!hasBeenSaved) {
+      setShowBackDialog(true);
+    } else {
+      resetSimulation();
+      navigate('/');
+    }
   };
 
   const glassStyle = {
@@ -29,18 +34,94 @@ export default function Results() {
     fontFamily: 'Arial, sans-serif'
   };
 
+  // Light appearance for popups when in ultra clear Liquid Glass (matching Dashboard & Editor modals)
+  const popupBg = glassClarity < 0.3 ? 'rgba(255, 255, 255, 0.95)' : 'var(--card-bg)';
+  const popupTextColor = glassClarity < 0.3 ? '#1f2937' : 'var(--text-main)';
+
+  const popupStyle = {
+    backgroundColor: popupBg,
+    backdropFilter: `blur(${glassClarity * 16}px)`,
+    borderColor: glassClarity < 0.3 ? 'rgba(209, 213, 219, 0.8)' : 'var(--glass-border)',
+    color: popupTextColor
+  };
+
   return (
     <div className="h-full flex flex-col animate-in fade-in relative" style={{ fontFamily: 'Arial, sans-serif' }}>
-      {/* Tiny circular bar popup displayed directly above where the user hovers/clicks the green, amber, or red line */}
+      {/* Unsaved Changes Warning Modal unified with Delete & Reset All modal color appearance */}
+      {showBackDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 animate-in fade-in" style={{ backdropFilter: `blur(${glassClarity * 12}px)` }}>
+          <div 
+            className="max-w-md w-full p-8 rounded-3xl border shadow-2xl space-y-6 animate-in zoom-in-95"
+            style={popupStyle}
+          >
+            <h3 className="text-xl font-black">Unsaved Changes</h3>
+            <p className="text-sm font-medium opacity-85">You have unsaved changes in your simulation. Are you sure you want to leave without saving?</p>
+            <div className="flex gap-3 justify-end pt-2">
+              <Button onClick={() => setShowBackDialog(false)} variant="outline" className="rounded-full">
+                Cancel
+              </Button>
+              <Button onClick={() => { resetSimulation(); navigate('/'); }} variant="danger" className="rounded-full">
+                Leave without saving
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Dynamic circular bar popup displayed directly above or below where the user hovers/clicks */}
       {hoverData && (
         <div 
-          className="fixed z-50 bg-blue-600 text-white text-xs font-extrabold px-4 py-1.5 rounded-full shadow-2xl pointer-events-none transform -translate-x-1/2 -translate-y-full border border-blue-400/50 flex items-center gap-2 backdrop-blur-xl animate-in fade-in zoom-in-95"
-          style={{ left: hoverData.x, top: hoverData.y }}
+          className="fixed z-50 bg-blue-600 text-white text-xs font-extrabold px-4 py-1.5 rounded-full shadow-2xl pointer-events-none border border-blue-400/50 flex items-center gap-2 backdrop-blur-xl animate-in fade-in zoom-in-95"
+          style={{ 
+            left: hoverData.x, 
+            top: hoverData.y > 160 ? hoverData.y - 12 : hoverData.y + 24,
+            transform: hoverData.y > 160 ? 'translate(-50%, -100%)' : 'translate(-50%, 0)'
+          }}
         >
           <span className="w-2 h-2 rounded-full bg-white animate-ping"></span>
           <span>{hoverData.text}</span>
         </div>
       )}
+
+      {/* Top Navigation Row: Back to Simulation Editor (Left) | Dashboard (Center) | Save (Right) */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-4 mb-6">
+        <div className="flex justify-start">
+          <button 
+            onClick={() => navigate('/editor')} 
+            className="px-5 py-2.5 rounded-full border shadow-sm flex items-center gap-2.5 font-bold text-gray-800 transition-all duration-300 hover:scale-[1.03] active:scale-95 group"
+            style={{
+              backgroundColor: 'var(--input-bg)',
+              backdropFilter: 'blur(var(--glass-blur))',
+              borderColor: 'var(--glass-border)',
+              fontFamily: 'Arial, sans-serif'
+            }}
+          >
+            <ChevronLeft size={16} className="text-blue-600 transition-transform group-hover:-translate-x-1" />
+            <span>Back to Simulation Editor</span>
+          </button>
+        </div>
+
+        <div className="flex justify-center">
+          <button 
+            onClick={handleBackToDashboard} 
+            className="px-5 py-2.5 rounded-full border shadow-sm flex items-center gap-2.5 font-bold text-gray-800 transition-all duration-300 hover:scale-[1.03] active:scale-95 group"
+            style={{
+              backgroundColor: 'var(--input-bg)',
+              backdropFilter: 'blur(var(--glass-blur))',
+              borderColor: 'var(--glass-border)',
+              fontFamily: 'Arial, sans-serif'
+            }}
+          >
+            <span>Dashboard</span>
+          </button>
+        </div>
+
+        <div className="flex justify-end">
+          <Button onClick={handleSave} variant="primary" className="rounded-full shadow-md">
+            {saved ? <><Check size={18} /> Saved!</> : <><Save size={18} /> Save</>}
+          </Button>
+        </div>
+      </div>
 
       <div 
         className="p-8 rounded-3xl border mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition-all"
@@ -51,17 +132,6 @@ export default function Results() {
           <p className="text-gray-600 font-medium">
             Detailed signal timing evaluation and phase breakdown for <strong className="text-gray-900">{roadName || 'Intersection'}</strong>. Review green go durations, caution intervals, and total stop clearances where red dominates.
           </p>
-        </div>
-        <div className="flex gap-3 w-full sm:w-auto">
-          <Button onClick={() => navigate('/editor')} variant="outline" className="flex-1 sm:flex-none">
-            Edit
-          </Button>
-          <Button onClick={handleSave} variant="outline" className="flex-1 sm:flex-none">
-            {saved ? <><Check size={18} /> Saved!</> : <><Save size={18} /> Save</>}
-          </Button>
-          <Button onClick={handleDone} variant="primary" className="flex-1 sm:flex-none">
-            Done
-          </Button>
         </div>
       </div>
       
@@ -100,7 +170,7 @@ export default function Results() {
           style={glassStyle}
         >
           <div className="flex justify-between items-center mb-6">
-            <h3 className="font-extrabold text-gray-900 text-xl" style={{ fontFamily: 'Arial, sans-serif' }}>Lane Phase Breakdown (Dominant Red Stop)</h3>
+            <h3 className="font-extrabold text-gray-900 text-xl" style={{ fontFamily: 'Arial, sans-serif' }}>Lane Phase Breakdown</h3>
           </div>
           
           <div className="overflow-y-auto space-y-4 flex-1 pr-2">
@@ -113,7 +183,7 @@ export default function Results() {
                   <div>
                     <div className="font-black text-gray-900 text-base" style={{ fontFamily: 'Arial, sans-serif' }}>{stat.label}</div>
                     <div className="text-xs text-gray-600 mt-0.5 font-medium">
-                      Total Stop: <span className="font-extrabold text-red-600">{stat.stop}s</span> ({stat.rePct.toFixed(1)}%)
+                      Total Stop: <span className="font-extrabold text-red-600">{stat.stop}s</span> ({stat.rePct.toFixed(2)}%)
                     </div>
                   </div>
                 </div>
@@ -127,18 +197,18 @@ export default function Results() {
                         onMouseMove={(e) => {
                           const rect = e.currentTarget.getBoundingClientRect();
                           setHoverData({
-                            text: `Go Time: ${stat.go}s (${stat.goPct.toFixed(1)}%)`,
+                            text: `Total Go: ${stat.go}s (${stat.goPct.toFixed(2)}%)`,
                             x: rect.left + rect.width / 2,
-                            y: rect.top - 10
+                            y: rect.top
                           });
                         }}
                         onMouseLeave={() => setHoverData(null)}
                         onClick={(e) => {
                           const rect = e.currentTarget.getBoundingClientRect();
                           setHoverData({
-                            text: `Go Time: ${stat.go}s (${stat.goPct.toFixed(1)}%)`,
+                            text: `Total Go: ${stat.go}s (${stat.goPct.toFixed(2)}%)`,
                             x: rect.left + rect.width / 2,
-                            y: rect.top - 10
+                            y: rect.top
                           });
                         }}
                       ></div>
@@ -150,18 +220,18 @@ export default function Results() {
                         onMouseMove={(e) => {
                           const rect = e.currentTarget.getBoundingClientRect();
                           setHoverData({
-                            text: `Amber Caution: ${stat.amber}s (${stat.amPct.toFixed(1)}%)`,
+                            text: `Total Caution: ${stat.amber}s (${stat.amPct.toFixed(2)}%)`,
                             x: rect.left + rect.width / 2,
-                            y: rect.top - 10
+                            y: rect.top
                           });
                         }}
                         onMouseLeave={() => setHoverData(null)}
                         onClick={(e) => {
                           const rect = e.currentTarget.getBoundingClientRect();
                           setHoverData({
-                            text: `Amber Caution: ${stat.amber}s (${stat.amPct.toFixed(1)}%)`,
+                            text: `Total Caution: ${stat.amber}s (${stat.amPct.toFixed(2)}%)`,
                             x: rect.left + rect.width / 2,
-                            y: rect.top - 10
+                            y: rect.top
                           });
                         }}
                       ></div>
@@ -173,18 +243,18 @@ export default function Results() {
                         onMouseMove={(e) => {
                           const rect = e.currentTarget.getBoundingClientRect();
                           setHoverData({
-                            text: `Total Stop: ${stat.stop}s (${stat.rePct.toFixed(1)}%)`,
+                            text: `Total Stop: ${stat.stop}s (${stat.rePct.toFixed(2)}%)`,
                             x: rect.left + rect.width / 2,
-                            y: rect.top - 10
+                            y: rect.top
                           });
                         }}
                         onMouseLeave={() => setHoverData(null)}
                         onClick={(e) => {
                           const rect = e.currentTarget.getBoundingClientRect();
                           setHoverData({
-                            text: `Total Stop: ${stat.stop}s (${stat.rePct.toFixed(1)}%)`,
+                            text: `Total Stop: ${stat.stop}s (${stat.rePct.toFixed(2)}%)`,
                             x: rect.left + rect.width / 2,
-                            y: rect.top - 10
+                            y: rect.top
                           });
                         }}
                       ></div>
