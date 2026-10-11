@@ -1,7 +1,5 @@
 # Weekly reports
 
-Five minutes a week. Add a new section at the top; never edit an old one.
-
 ---
 
 ## Week of 2026-10-05
