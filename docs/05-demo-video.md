@@ -1,7 +1,5 @@
 # Demo video
 
-Three to five minutes, screen recorded, your own voice. Nobody watches ten.
-
 **Link:** (paste it here, and in the main README)
 
 ## The structure that always works
