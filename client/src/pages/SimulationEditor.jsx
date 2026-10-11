@@ -10,7 +10,7 @@ import { SimulationContext } from '../SimulationContext';
 
 export default function SimulationEditor() {
   const navigate = useNavigate();
-  const { roadName, directions, laneConfigs, pedestrians, phases, saveCurrentSimulation, glassClarity } = useContext(SimulationContext);
+  const { roadName, directions, laneConfigs, pedestrians, phases, saveCurrentSimulation, glassClarity, hasBeenSaved } = useContext(SimulationContext);
   const [saved, setSaved] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [showBackDialog, setShowBackDialog] = useState(false);
@@ -18,7 +18,7 @@ export default function SimulationEditor() {
   const hasUnsavedChanges = roadName.trim().length > 0 || Object.values(directions).some(Boolean);
 
   const handleBackClick = () => {
-    if (hasUnsavedChanges && !saved) {
+    if (hasUnsavedChanges && !hasBeenSaved) {
       setShowBackDialog(true);
     } else {
       navigate('/');
@@ -28,10 +28,11 @@ export default function SimulationEditor() {
   const handleSave = () => {
     const hasIntersectionName = roadName.trim().length > 0;
     const hasActiveDir = Object.values(directions).some(Boolean);
-    const hasLanesOrPed = Object.keys(directions).some(d => directions[d] && ((laneConfigs[d] || []).length > 0 || pedestrians[d] === 'Yes'));
-    if (!hasIntersectionName || !hasActiveDir || !hasLanesOrPed) {
-      setErrorMsg('Please provide an intersection name, select at least 1 direction, and add at least 1 lane or pedestrian crossing.');
-      setTimeout(() => setErrorMsg(''), 4000);
+    const totalLanesCount = Object.keys(directions).reduce((acc, dir) => acc + (laneConfigs[dir] || []).length, 0);
+
+    if (!hasIntersectionName || !hasActiveDir || totalLanesCount === 0) {
+      setErrorMsg('Validation Error: You must provide an intersection name, select at least 1 direction, and configure at least 1 lane.');
+      setTimeout(() => setErrorMsg(''), 7000);
       return;
     }
     saveCurrentSimulation();
@@ -42,33 +43,26 @@ export default function SimulationEditor() {
   const handleCalculate = () => {
     const hasIntersectionName = roadName.trim().length > 0;
     const hasActiveDir = Object.values(directions).some(Boolean);
-    const hasLanesOrPed = Object.keys(directions).some(d => directions[d] && ((laneConfigs[d] || []).length > 0 || pedestrians[d] === 'Yes'));
-    const hasAtLeastTwoPhases = phases.length >= 2;
-    const allPhasesHaveGo = phases.length >= 2 && phases.every(p => Object.values(p.lights).some(l => l === 'green'));
+    const totalLanesCount = Object.keys(directions).reduce((acc, dir) => acc + (laneConfigs[dir] || []).length, 0);
 
     if (!hasIntersectionName) {
       setErrorMsg('Validation Error: Please provide an intersection name.');
-      setTimeout(() => setErrorMsg(''), 4000);
+      setTimeout(() => setErrorMsg(''), 7000);
       return;
     }
     if (!hasActiveDir) {
       setErrorMsg('Validation Error: Please select at least 1 direction.');
-      setTimeout(() => setErrorMsg(''), 4000);
+      setTimeout(() => setErrorMsg(''), 7000);
       return;
     }
-    if (!hasLanesOrPed) {
-      setErrorMsg('Validation Error: Please add at least 1 lane (or select pedestrian crossing).');
-      setTimeout(() => setErrorMsg(''), 4000);
+    if (totalLanesCount === 0) {
+      setErrorMsg('Validation Error: You must configure at least one lane in Lane Customization.');
+      setTimeout(() => setErrorMsg(''), 7000);
       return;
     }
-    if (!hasAtLeastTwoPhases) {
+    if (phases.length < 2) {
       setErrorMsg('Validation Error: There must be at least 2 phases configured in the Interactive Traffic Light Phase Builder.');
-      setTimeout(() => setErrorMsg(''), 4000);
-      return;
-    }
-    if (!allPhasesHaveGo) {
-      setErrorMsg('Validation Error: At least each phase must have a green go signal configured.');
-      setTimeout(() => setErrorMsg(''), 4000);
+      setTimeout(() => setErrorMsg(''), 7000);
       return;
     }
 
@@ -83,22 +77,33 @@ export default function SimulationEditor() {
     fontFamily: 'Arial, sans-serif'
   };
 
+  // Light appearance for popups when in ultra clear Liquid Glass (matching Dashboard modals)
+  const popupBg = glassClarity < 0.3 ? 'rgba(255, 255, 255, 0.95)' : 'var(--card-bg)';
+  const popupTextColor = glassClarity < 0.3 ? '#1f2937' : 'var(--text-main)';
+
+  const popupStyle = {
+    backgroundColor: popupBg,
+    backdropFilter: `blur(${glassClarity * 16}px)`,
+    borderColor: glassClarity < 0.3 ? 'rgba(209, 213, 219, 0.8)' : 'var(--glass-border)',
+    color: popupTextColor
+  };
+
   return (
     <div className="h-full flex flex-col animate-in slide-in-from-right-4 relative" style={{ fontFamily: 'Arial, sans-serif' }}>
-      {/* Unsaved Changes Warning Modal dynamically adapting to Liquid Glass blur */}
+      {/* Unsaved Changes Warning Modal unified with Delete & Reset All modal color appearance */}
       {showBackDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 animate-in fade-in" style={{ backdropFilter: `blur(${glassClarity * 12}px)` }}>
           <div 
             className="max-w-md w-full p-8 rounded-3xl border shadow-2xl space-y-6 animate-in zoom-in-95"
-            style={glassStyle}
+            style={popupStyle}
           >
             <h3 className="text-xl font-black">Unsaved Changes</h3>
-            <p className="text-sm font-medium text-gray-600">You have unsaved changes in your simulation. Are you sure you want to leave without saving?</p>
+            <p className="text-sm font-medium opacity-85">You have unsaved changes in your simulation. Are you sure you want to leave without saving?</p>
             <div className="flex gap-3 justify-end pt-2">
               <Button onClick={() => setShowBackDialog(false)} variant="outline" className="rounded-full">
                 Cancel
               </Button>
-              <Button onClick={() => navigate('/')} variant="primary" className="rounded-full bg-red-600 hover:bg-red-700 shadow-red-500/25">
+              <Button onClick={() => navigate('/')} variant="danger" className="rounded-full">
                 Leave without saving
               </Button>
             </div>
@@ -106,11 +111,14 @@ export default function SimulationEditor() {
         </div>
       )}
 
-      {/* Custom Notification Friendly Popup Pill dynamically adapting to Liquid Glass blur */}
+      {/* Custom Notification Friendly Popup Pill (Stays 7s, clickable to dismiss without hover title) */}
       {errorMsg && (
-        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-top-4">
+        <div 
+          onClick={() => setErrorMsg('')}
+          className="fixed top-24 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-top-4 cursor-pointer group"
+        >
           <div 
-            className="px-8 py-3.5 rounded-full shadow-2xl font-extrabold text-sm border flex items-center gap-3 backdrop-blur-xl"
+            className="px-8 py-3.5 rounded-full shadow-2xl font-extrabold text-sm border flex items-center gap-3 backdrop-blur-xl transition-all group-hover:scale-[1.02]"
             style={{
               backgroundColor: 'var(--card-bg)',
               backdropFilter: 'blur(var(--glass-blur))',
@@ -145,8 +153,8 @@ export default function SimulationEditor() {
         style={glassStyle}
       >
         <div>
-          <h1 className="text-3xl font-black text-gray-900 mb-1" style={{ fontFamily: 'Arial, sans-serif' }}>Simulation Editor</h1>
-          <p className="text-gray-600 font-medium">Configure your intersection geometry, lanes, and phase timings.</p>
+          <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'Arial, sans-serif', color: 'var(--text-main)' }}>Simulation Editor</h1>
+          <p className="font-medium" style={{ color: 'var(--text-muted)' }}>Configure your intersection geometry, lanes, and phase timings.</p>
         </div>
         <div className="flex gap-3 w-full sm:w-auto">
           <Button onClick={handleSave} variant="outline" className="flex-1 sm:flex-none">
