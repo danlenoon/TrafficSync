@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, RotateCcw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/atoms/Button';
 import SimulationCard from '../components/molecules/SimulationCard';
@@ -7,8 +7,9 @@ import { SimulationContext } from '../SimulationContext';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { savedSimulations, deleteSimulation, loadSimulation, glassClarity } = useContext(SimulationContext);
+  const { savedSimulations, deleteSimulation, loadSimulation, resetSimulation, resetAll, glassClarity } = useContext(SimulationContext);
   const [deleteDialogId, setDeleteDialogId] = useState(null);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const handleLoad = (sim) => {
     loadSimulation(sim);
@@ -54,10 +55,38 @@ export default function Dashboard() {
                   deleteSimulation(deleteDialogId);
                   setDeleteDialogId(null);
                 }} 
-                variant="primary" 
-                className="rounded-full bg-red-600 hover:bg-red-700 shadow-red-500/25"
+                variant="danger" 
+                className="rounded-full"
               >
                 Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reset All Confirmation Modal */}
+      {showResetConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 animate-in fade-in" style={{ backdropFilter: `blur(${glassClarity * 12}px)` }}>
+          <div 
+            className="max-w-md w-full p-8 rounded-3xl border shadow-2xl space-y-6 animate-in zoom-in-95"
+            style={popupStyle}
+          >
+            <h3 className="text-xl font-black">Reset All Data & Settings?</h3>
+            <p className="text-sm font-medium opacity-85">Are you sure you want to reset all data, saved simulations, and restore default Liquid Glass clarity settings? This action cannot be undone.</p>
+            <div className="flex gap-3 justify-end pt-2">
+              <Button onClick={() => setShowResetConfirm(false)} variant="outline" className="rounded-full">
+                Cancel
+              </Button>
+              <Button 
+                onClick={() => {
+                  resetAll();
+                  setShowResetConfirm(false);
+                }} 
+                variant="danger" 
+                className="rounded-full"
+              >
+                Reset All
               </Button>
             </div>
           </div>
@@ -72,7 +101,7 @@ export default function Dashboard() {
           <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'Arial, sans-serif', color: 'var(--text-main)' }}>Welcome back!</h1>
           <p className="font-medium" style={{ color: 'var(--text-muted)' }}>Design, calculate, and evaluate professional traffic intersection signal timings with precision.</p>
         </div>
-        <Button onClick={() => navigate('/editor')} variant="primary">
+        <Button onClick={() => { resetSimulation(); navigate('/editor'); }} variant="primary">
           <Plus size={18} /> New Simulation
         </Button>
       </div>
@@ -89,12 +118,12 @@ export default function Dashboard() {
           </div>
           <h3 className="font-bold text-xl mb-1" style={{ fontFamily: 'Arial, sans-serif', color: 'var(--text-main)' }}>No Saved Simulations</h3>
           <p className="text-sm max-w-md mb-6 font-medium" style={{ color: 'var(--text-muted)' }}>You haven't created any simulations yet. Click below to start configuring intersection lanes and cycle timings.</p>
-          <Button onClick={() => navigate('/editor')} variant="primary">
+          <Button onClick={() => { resetSimulation(); navigate('/editor'); }} variant="primary">
             <Plus size={18} /> Create First Simulation
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {savedSimulations.map((sim) => {
             const dirCount = sim.directions ? Object.values(sim.directions).filter(Boolean).length : 0;
             return (
@@ -112,6 +141,13 @@ export default function Dashboard() {
           })}
         </div>
       )}
+
+      {/* Reset All Button below Saved Simulations */}
+      <div className="mt-12 pt-6 border-t flex justify-end" style={{ borderColor: 'var(--glass-border)' }}>
+        <Button onClick={() => setShowResetConfirm(true)} variant="outline" className="rounded-full text-red-600 hover:text-red-700 hover:bg-red-50/50 border-red-200">
+          <RotateCcw size={16} /> Reset All Data & Settings
+        </Button>
+      </div>
     </div>
   );
 }
