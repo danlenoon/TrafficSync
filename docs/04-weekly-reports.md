@@ -18,22 +18,22 @@ Five minutes a week. Add a new section at the top; never edit an old one.
 
 ## Week of 2026-09-28
 
-**Done.** Built the 5-screen UI prototype in React, implemented Atomic Design directory structure (`atoms/`, `molecules/`, `organisms/`, `pages/`), added the Interactive Traffic Light Phase Builder and Phase Timings Calculator, and configured `SimulationContext` state management with `localStorage` fallback persistence.
+**Done.** Dismantled the monolithic `App.jsx` into strict Atomic Design components (`atoms/`, `molecules/`, `organisms/`, `pages/`). Created `SimulationContext.jsx` to manage application state globally without prop-drilling, and integrated `react-router-dom` for route-based navigation. Refactored signal timing formulas to treat Red inputs as clearance intervals and created an adaptive calculation engine supporting 4-way intersections and T-intersections. Added Express HTTP Basic Authentication middleware to `server/server.js`, pinned GitHub Actions dependencies in `.github/workflows/deploy-pages.yml` to commit SHAs (with a `@v4` fallback for `actions/deploy-pages`), added context files to `.gitignore`, and scrubbed all student PII from public documentation.
 
-**Stuck.** Navigating Vite build output prefixing for GitHub Pages project subpaths before establishing dynamic `base` and `basename` handling.
+**Stuck.** Balancing protected left-turn calculation logic for 4-way intersections versus T-intersections required refining conflict-detection algorithms. Fixed a GitHub Actions 404 build failure caused by an unresolvable commit SHA by reverting to the stable `@v4` tag for `actions/deploy-pages`.
 
 **Hours.** 14 hours.
 
-**Next.** Connect Express backend repository and Neon PostgreSQL cloud database, wire up production environment variables, and secure API endpoints with HTTP Basic Authentication.
+**Next.** Wire React context actions (`saveSimulation`, `deleteSimulation`) to Express/PostgreSQL database endpoints (`/api/simulations`) and establish production PostCSS build setup.
 
 ---
 
 ## Week of 2026-09-21
 
-**Done.** Scaffolded the React application using Vite, established initial project repository structure, injected Tailwind CSS styling, and initialized documentation proposal and mockup files.
+**Done.** Scaffolded the base React application using Vite inside the template's `client` folder. Generated a low-fidelity interactive HTML wireframe mapped directly from M6A0/M6A1 designs and built a functional prototype in `App.jsx` containing 5 primary navigation screens (Dashboard, Intersection Setup, Lane Customization, Phase Timings Calculator, and Cycle Results Summary). Integrated Tailwind CSS (via CDN) for rapid UI styling and installed `lucide-react` for iconography. Implemented unified React state (`useState`) to track simulation data across configuration screens and added dynamic calculation logic to generate percentage breakdowns based on user inputs.
 
-**Stuck.** Initial Vite scaffolding initialized outside target repository folder; resolved by restructuring into course template `client/` and `server/` directories.
+**Stuck.** Initially ran setup and scaffolding outside of the designated project template folder (`final-project-2203-danlenoon`), resulting in `ENOENT` errors when attempting to run `npm install` from the root directory; resolved by manually migrating files into the `client` directory of the proper template repository.
 
-**Hours.** 8 hours.
+**Hours.** 10 hours.
 
-**Next.** Implement core UI screens, state management context, and simulation calculation engine.
+**Next.** Refactor monolithic `App.jsx` into a strict Atomic Design architecture and extract global state management into `SimulationContext.jsx`.
