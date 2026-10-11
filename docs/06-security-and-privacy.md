@@ -1,11 +1,5 @@
 # Security and privacy checklist
 
-Work through this ** before your first push **, and again before you submit.It is
-short, none of it is exotic, and a grader can check most of it in two minutes.
-
-Your repository is public, in your own account, and permanent.That is the point
-of it, and it is also why this file exists.
-
 ## Before the first push
 
 - [x] `.gitignore` includes `.env`, and `git check-ignore -v .env` confirms it
