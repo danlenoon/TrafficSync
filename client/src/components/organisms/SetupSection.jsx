@@ -17,7 +17,7 @@ export default function SetupSection() {
   };
 
   return (
-    <section className="border p-8 rounded-3xl shadow-sm space-y-6 transition-all" style={glassStyle}>
+    <section className="border p-4 sm:p-8 rounded-3xl shadow-sm space-y-6 transition-all" style={glassStyle}>
       <div>
         <h2 className="text-xl font-black text-gray-900 flex items-center gap-3" style={{ fontFamily: 'Arial, sans-serif' }}>
           <span className="bg-gradient-to-tr from-blue-600 to-blue-500 text-white w-8 h-8 rounded-2xl flex items-center justify-center text-sm shadow-md shadow-blue-500/20">1</span>
@@ -35,30 +35,39 @@ export default function SetupSection() {
             value={roadName}
             onChange={e => setRoadName(e.target.value)}
             placeholder="Enter intersection name..."
-            className="w-full border border-gray-300/80 rounded-full px-6 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/90 backdrop-blur-md text-gray-900 font-bold shadow-md transition-all"
+            className="w-full border border-gray-300/80 rounded-full px-5 py-3 sm:px-6 sm:py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/90 backdrop-blur-md text-gray-900 font-bold shadow-md transition-all text-sm sm:text-base"
             style={{ fontFamily: 'Arial, sans-serif' }}
           />
         </div>
 
         <div>
           <label className="block text-xs font-extrabold text-gray-700 mb-2 uppercase tracking-wider">Directions</label>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-3">
             {Object.keys(directions).map(dir => (
               <label 
                 key={dir} 
-                className={`flex items-center gap-3 p-3.5 border rounded-full cursor-pointer transition-all duration-300 shadow-2xs hover:scale-[1.02] ${
+                className={`flex items-center gap-3 p-3 sm:p-3.5 border rounded-full cursor-pointer transition-all duration-300 shadow-2xs hover:scale-[1.02] ${
                   directions[dir] 
-                    ? 'border-blue-500 bg-blue-50/90 backdrop-blur-md text-blue-900 shadow-blue-500/15' 
-                    : 'border-gray-200/80 bg-white/70 hover:bg-white/90 text-gray-700'
+                    ? 'bg-blue-50/90 border-blue-400 text-blue-900 shadow-blue-500/10' 
+                    : 'bg-white/90 border-gray-200 text-gray-600 hover:border-gray-300'
                 }`}
               >
+                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                  directions[dir] ? 'border-blue-600 bg-blue-600' : 'border-gray-300 bg-white'
+                }`}>
+                  {directions[dir] && (
+                    <svg className="w-3 h-3 text-white fill-current" viewBox="0 0 20 20">
+                      <path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/>
+                    </svg>
+                  )}
+                </div>
                 <input 
                   type="checkbox" 
-                  checked={directions[dir]}
+                  checked={directions[dir]} 
                   onChange={() => toggleDirection(dir)}
-                  className="w-5 h-5 rounded-full border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                  className="hidden"
                 />
-                <span className="font-bold text-sm" style={{ fontFamily: 'Arial, sans-serif' }}>{dir}</span>
+                <span className="text-xs sm:text-sm font-extrabold select-none truncate">{dir}</span>
               </label>
             ))}
           </div>
