@@ -31,7 +31,14 @@ export default function SetupSection() {
           <label className="block text-xs font-extrabold text-gray-700 mb-2 uppercase tracking-wider">Intersection Name</label>
           <input 
             type="text" 
+            name="intersection_road_title"
+            id="intersection_road_title"
             autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
+            data-lpignore="true"
+            data-form-type="other"
             value={roadName}
             onChange={e => setRoadName(e.target.value)}
             placeholder="Enter intersection name..."
@@ -52,7 +59,7 @@ export default function SetupSection() {
                     : 'bg-white/90 border-gray-200 text-gray-600 hover:border-gray-300'
                 }`}
               >
-                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all shrink-0 ${
                   directions[dir] ? 'border-blue-600 bg-blue-600' : 'border-gray-300 bg-white'
                 }`}>
                   {directions[dir] && (
@@ -65,7 +72,7 @@ export default function SetupSection() {
                   type="checkbox" 
                   checked={directions[dir]} 
                   onChange={() => toggleDirection(dir)}
-                  className="hidden"
+                  style={{ display: 'none' }}
                 />
                 <span className="text-xs sm:text-sm font-extrabold select-none truncate">{dir}</span>
               </label>
