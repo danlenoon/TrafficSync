@@ -1,6 +1,175 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useRef, useEffect, useCallback, memo } from 'react';
 import { User, ChevronUp, ChevronDown } from 'lucide-react';
 import { SimulationContext } from '../../SimulationContext';
+
+// Top-level memoized OvalNumberPicker to prevent component recreation and focus loss
+const OvalNumberPicker = memo(function OvalNumberPicker({ value, min = 0, max = 9999, onChange, colorScheme = 'green' }) {
+  const num = Number(value) || 0;
+  const [localStr, setLocalStr] = useState(String(value ?? ''));
+  const isFocusedRef = useRef(false);
+
+  const timerRef = useRef(null);
+  const speedTimerRef = useRef(null);
+  const isChangingRef = useRef(false);
+
+  // Keep localStr in sync when value changes externally and input is NOT focused
+  useEffect(() => {
+    if (!isFocusedRef.current) {
+      setLocalStr(String(value ?? ''));
+    }
+  }, [value]);
+
+  const stopChange = useCallback(() => {
+    isChangingRef.current = false;
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    if (speedTimerRef.current) {
+      clearInterval(speedTimerRef.current);
+      speedTimerRef.current = null;
+    }
+  }, []);
+
+  const startChange = (delta) => {
+    stopChange(); // Clear any existing timers first
+    isChangingRef.current = true;
+    let currentVal = Math.min(max, Math.max(min, num + delta));
+    setLocalStr(String(currentVal));
+    onChange(currentVal);
+    
+    // Delay before rapid continuous change starts
+    timerRef.current = setTimeout(() => {
+      if (!isChangingRef.current) return;
+      speedTimerRef.current = setInterval(() => {
+        if (!isChangingRef.current) {
+          stopChange();
+          return;
+        }
+        currentVal = Math.min(max, Math.max(min, currentVal + delta));
+        setLocalStr(String(currentVal));
+        onChange(currentVal);
+      }, 80); // Quick tick every 80ms while held
+    }, 350);
+  };
+
+  // Global mouseup/touchend listener to guarantee numbers STOP incrementing/decrementing immediately upon release anywhere
+  useEffect(() => {
+    const handleGlobalRelease = () => {
+      if (isChangingRef.current) {
+        stopChange();
+      }
+    };
+    window.addEventListener('mouseup', handleGlobalRelease);
+    window.addEventListener('touchend', handleGlobalRelease);
+    window.addEventListener('touchcancel', handleGlobalRelease);
+    return () => {
+      stopChange();
+      window.removeEventListener('mouseup', handleGlobalRelease);
+      window.removeEventListener('touchend', handleGlobalRelease);
+      window.removeEventListener('touchcancel', handleGlobalRelease);
+    };
+  }, [stopChange]);
+
+  const handleInputChange = (e) => {
+    const raw = e.target.value;
+    // Allow only digits
+    const digitsOnly = raw.replace(/[^0-9]/g, '');
+    if (digitsOnly === '') {
+      setLocalStr('');
+      return;
+    }
+    const parsed = parseInt(digitsOnly, 10);
+    if (parsed > max) {
+      setLocalStr(String(max));
+      onChange(max);
+    } else {
+      setLocalStr(digitsOnly);
+      onChange(parsed);
+    }
+  };
+
+  const handleBlur = () => {
+    isFocusedRef.current = false;
+    if (localStr === '') {
+      setLocalStr(String(min));
+      onChange(min);
+    } else {
+      const parsed = parseInt(localStr, 10);
+      const clamped = isNaN(parsed) ? min : Math.min(max, Math.max(min, parsed));
+      setLocalStr(String(clamped));
+      onChange(clamped);
+    }
+  };
+
+  const colors = {
+    green: {
+      text: 'text-green-700',
+      bg: 'bg-green-50/50 hover:bg-green-50',
+      focus: 'focus-within:ring-green-400',
+      btnHover: 'hover:bg-green-100 hover:text-green-800'
+    },
+    yellow: {
+      text: 'text-yellow-600',
+      bg: 'bg-yellow-50/50 hover:bg-yellow-50',
+      focus: 'focus-within:ring-yellow-400',
+      btnHover: 'hover:bg-yellow-100 hover:text-yellow-800'
+    },
+    red: {
+      text: 'text-red-600',
+      bg: 'bg-red-50/50 hover:bg-red-50',
+      focus: 'focus-within:ring-red-400',
+      btnHover: 'hover:bg-red-100 hover:text-red-800'
+    }
+  }[colorScheme] || {
+    text: 'text-gray-800',
+    bg: 'bg-gray-50',
+    focus: 'focus-within:ring-blue-400',
+    btnHover: 'hover:bg-gray-200'
+  };
+
+  return (
+    <div 
+      className={`w-36 h-12 rounded-full border border-gray-300/80 bg-white/95 px-3 flex items-center justify-between mx-auto shadow-sm transition-all duration-200 hover:shadow-md hover:border-gray-400 ${colors.focus}`}
+      style={{ fontFamily: 'Arial, sans-serif' }}
+    >
+      <button
+        type="button"
+        onMouseDown={() => startChange(-1)}
+        onMouseUp={stopChange}
+        onMouseLeave={stopChange}
+        onTouchStart={() => startChange(-1)}
+        onTouchEnd={stopChange}
+        className={`w-7 h-7 rounded-full flex items-center justify-center text-gray-500 transition-all duration-300 hover:scale-110 active:scale-95 select-none ${colors.btnHover}`}
+      >
+        <ChevronDown size={18} className="transition-transform group-hover:scale-110" />
+      </button>
+
+      <input
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
+        value={localStr}
+        onFocus={() => { isFocusedRef.current = true; }}
+        onChange={handleInputChange}
+        onBlur={handleBlur}
+        className={`w-14 text-center font-black text-lg bg-transparent focus:outline-none ${colors.text}`}
+      />
+
+      <button
+        type="button"
+        onMouseDown={() => startChange(1)}
+        onMouseUp={stopChange}
+        onMouseLeave={stopChange}
+        onTouchStart={() => startChange(1)}
+        onTouchEnd={stopChange}
+        className={`w-7 h-7 rounded-full flex items-center justify-center text-gray-500 transition-all duration-300 hover:scale-110 active:scale-95 select-none ${colors.btnHover}`}
+      >
+        <ChevronUp size={18} className="transition-transform group-hover:scale-110" />
+      </button>
+    </div>
+  );
+});
 
 export default function TimingsSection() {
   const { directions, laneConfigs, phaseTimings, updateTiming, pedestrians, pedestrianTimings, updatePedestrianTiming, glassClarity } = useContext(SimulationContext);
@@ -36,177 +205,6 @@ export default function TimingsSection() {
     backdropFilter: 'blur(var(--glass-blur))',
     borderColor: 'var(--glass-border)',
     fontFamily: 'Arial, sans-serif'
-  };
-
-  // Helper custom oval up/down picker component with press-and-hold auto increment/decrement and continuous typing
-  const OvalNumberPicker = ({ value, min = 0, max = 9999, onChange, colorScheme = 'green' }) => {
-    const num = Number(value) || 0;
-    const [localStr, setLocalStr] = React.useState(String(value ?? ''));
-    const isFocusedRef = React.useRef(false);
-
-    const timerRef = React.useRef(null);
-    const speedTimerRef = React.useRef(null);
-    const isChangingRef = React.useRef(false);
-
-    // Keep localStr in sync when value changes externally and input is NOT focused
-    React.useEffect(() => {
-      if (!isFocusedRef.current) {
-        setLocalStr(String(value ?? ''));
-      }
-    }, [value]);
-
-    const stopChange = React.useCallback(() => {
-      isChangingRef.current = false;
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
-      if (speedTimerRef.current) {
-        clearInterval(speedTimerRef.current);
-        speedTimerRef.current = null;
-      }
-    }, []);
-
-    const startChange = (delta) => {
-      stopChange(); // Clear any existing timers first
-      isChangingRef.current = true;
-      let currentVal = Math.min(max, Math.max(min, num + delta));
-      setLocalStr(String(currentVal));
-      onChange(currentVal);
-      
-      // Delay before rapid continuous change starts
-      timerRef.current = setTimeout(() => {
-        if (!isChangingRef.current) return;
-        speedTimerRef.current = setInterval(() => {
-          if (!isChangingRef.current) {
-            stopChange();
-            return;
-          }
-          currentVal = Math.min(max, Math.max(min, currentVal + delta));
-          setLocalStr(String(currentVal));
-          onChange(currentVal);
-        }, 80); // Quick tick every 80ms while held
-      }, 350);
-    };
-
-    // Global mouseup/touchend listener to guarantee numbers STOP incrementing/decrementing immediately upon release anywhere
-    React.useEffect(() => {
-      const handleGlobalRelease = () => {
-        if (isChangingRef.current) {
-          stopChange();
-        }
-      };
-      window.addEventListener('mouseup', handleGlobalRelease);
-      window.addEventListener('touchend', handleGlobalRelease);
-      window.addEventListener('touchcancel', handleGlobalRelease);
-      return () => {
-        stopChange();
-        window.removeEventListener('mouseup', handleGlobalRelease);
-        window.removeEventListener('touchend', handleGlobalRelease);
-        window.removeEventListener('touchcancel', handleGlobalRelease);
-      };
-    }, [stopChange]);
-
-    const handleInputChange = (e) => {
-      const raw = e.target.value;
-      // Allow only digits
-      const digitsOnly = raw.replace(/[^0-9]/g, '');
-      if (digitsOnly === '') {
-        setLocalStr('');
-        return;
-      }
-      const parsed = parseInt(digitsOnly, 10);
-      if (parsed > max) {
-        setLocalStr(String(max));
-        onChange(max);
-      } else {
-        setLocalStr(String(parsed));
-        onChange(parsed);
-      }
-    };
-
-    const handleBlur = () => {
-      isFocusedRef.current = false;
-      if (localStr === '') {
-        setLocalStr(String(min));
-        onChange(min);
-      } else {
-        const parsed = parseInt(localStr, 10);
-        const clamped = isNaN(parsed) ? min : Math.min(max, Math.max(min, parsed));
-        setLocalStr(String(clamped));
-        onChange(clamped);
-      }
-    };
-
-    const colors = {
-      green: {
-        text: 'text-green-700',
-        bg: 'bg-green-50/50 hover:bg-green-50',
-        focus: 'focus-within:ring-green-400',
-        btnHover: 'hover:bg-green-100 hover:text-green-800'
-      },
-      yellow: {
-        text: 'text-yellow-600',
-        bg: 'bg-yellow-50/50 hover:bg-yellow-50',
-        focus: 'focus-within:ring-yellow-400',
-        btnHover: 'hover:bg-yellow-100 hover:text-yellow-800'
-      },
-      red: {
-        text: 'text-red-600',
-        bg: 'bg-red-50/50 hover:bg-red-50',
-        focus: 'focus-within:ring-red-400',
-        btnHover: 'hover:bg-red-100 hover:text-red-800'
-      }
-    }[colorScheme] || {
-      text: 'text-gray-800',
-      bg: 'bg-gray-50',
-      focus: 'focus-within:ring-blue-400',
-      btnHover: 'hover:bg-gray-200'
-    };
-
-    return (
-      <div 
-        className={`w-36 h-12 rounded-full border border-gray-300/80 bg-white/95 px-3 flex items-center justify-between mx-auto shadow-sm transition-all duration-200 hover:shadow-md hover:border-gray-400 ${colors.focus}`}
-        style={{ fontFamily: 'Arial, sans-serif' }}
-      >
-        <button
-          type="button"
-          onMouseDown={() => startChange(-1)}
-          onMouseUp={stopChange}
-          onMouseLeave={stopChange}
-          onTouchStart={() => startChange(-1)}
-          onTouchEnd={stopChange}
-          className={`w-7 h-7 rounded-full flex items-center justify-center text-gray-500 transition-all duration-300 hover:scale-110 active:scale-95 select-none ${colors.btnHover}`}
-          title="Decrease (Click or press & hold)"
-        >
-          <ChevronDown size={18} className="transition-transform group-hover:scale-110" />
-        </button>
-
-        <input
-          type="text"
-          inputMode="numeric"
-          pattern="[0-9]*"
-          value={localStr}
-          onFocus={() => { isFocusedRef.current = true; }}
-          onChange={handleInputChange}
-          onBlur={handleBlur}
-          className={`w-14 text-center font-black text-lg bg-transparent focus:outline-none ${colors.text}`}
-        />
-
-        <button
-          type="button"
-          onMouseDown={() => startChange(1)}
-          onMouseUp={stopChange}
-          onMouseLeave={stopChange}
-          onTouchStart={() => startChange(1)}
-          onTouchEnd={stopChange}
-          className={`w-7 h-7 rounded-full flex items-center justify-center text-gray-500 transition-all duration-300 hover:scale-110 active:scale-95 select-none ${colors.btnHover}`}
-          title="Increase (Click or press & hold)"
-        >
-          <ChevronUp size={18} className="transition-transform group-hover:scale-110" />
-        </button>
-      </div>
-    );
   };
 
   return (
@@ -285,7 +283,7 @@ export default function TimingsSection() {
                 {pedestrians[dir] === 'Yes' && (() => {
                   const p = pedestrianTimings[dir] || { go: 1, red: 2 };
                   return (
-                    <tr className="bg-blue-50/30 hover:bg-blue-50/60 transition-colors">
+                    <tr key={`${dir}-pedestrian`} className="bg-blue-50/30 hover:bg-blue-50/60 transition-colors">
                       <td className="p-4">
                         <div className="font-extrabold text-blue-900 flex items-center gap-2" style={{ fontFamily: 'Arial, sans-serif' }}>
                           <span>{dir} Pedestrian</span>
