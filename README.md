@@ -1,227 +1,352 @@
-# TrafficSync
+# 🚦 TrafficSync
+
+<p align="center">
+  <img src="https://img.shields.io/badge/status-active-success.svg" alt="Status">
+  <img src="https://img.shields.io/badge/React-18.3-blue.svg" alt="React">
+  <img src="https://img.shields.io/badge/Node.js-Express-green.svg" alt="Express">
+  <img src="https://img.shields.io/badge/PostgreSQL-Neon-blueviolet.svg" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/Made%20with-AI%20Assistance-blue.svg" alt="AI Assisted">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
+</p>
+
+<p align="center">
+  <strong>An intuitive, state-of-the-art interactive traffic signal timing computation engine, lane turning geometry customizer, and signal phasing simulation suite for civil engineering students, urban planners, and municipal traffic authorities.</strong>
+</p>
 
 **Live site:** https://danlenoon.github.io/TrafficSync/  
-**API:** https://trafficsync.onrender.com/api/simulations *(Express & PostgreSQL backend)*  
-**Demo video:** (link)
+**API:** https://trafficsync.onrender.com/api/simulations  
+**Demo video:** [Watch Video Presentation]()
+
+[![A screenshot of the main screen](docs/assets/dashboard.jpg)](https://danlenoon.github.io/TrafficSync/)
 
 ---
 
-## 1. Overview
+## What it does
 
-TrafficSync is an advanced, enterprise-grade interactive web-based traffic signal timing computation engine, lane customization tool, and signal phasing simulation platform built for civil engineering students, urban traffic planners, and city municipal engineers. It provides lightning-fast adaptive cycle calculations, custom lane-by-lane signal configurations, pedestrian safety timing integration, and real-time iOS 27 Liquid Glass visual aesthetics without requiring manual cycle math or expensive proprietary software.
+Traffic signal timing is the science of programming the green, yellow, and red lights at road intersections so that vehicles and pedestrians can move smoothly without crashing or waiting unnecessarily long. In traditional municipal planning and academic coursework, civil engineering students and transportation engineers are forced to either calculate complex phase clearance times by hand using tedious spreadsheets or license expensive, complex proprietary desktop suites.
+
+**TrafficSync** transforms this workflow into an accessible, responsive, error-free web experience:
+* **Interactive Intersection Setup:** Name your intersection and pick from four active approaches: **Northbound (N)**, **Southbound (S)**, **Eastbound (E)**, and **Westbound (W)**.
+* **Lane Turning Customization:** Dynamically configure individual lanes per approach with single-line movement arrows (`↰` Left Turn, `↑` Straight, `↱` Right Turn, `↩` U-Turn, and combinations like `↰ ↑ ↱`). Configure dedicated pedestrian crossing safety walk signals per approach.
+* **Interactive Phase Light Builder:** Add sequential signal phases with realistic 3-lens traffic signal heads. When a new phase is added, signals default to an unconfigured "off" state (`CLICK TO SET`), prompting deliberate configuration (`Off` ➔ `Green` ➔ `Red`) to prevent accidental conflicting greens.
+* **Adaptive Cycle Timings Calculator:** Set minimum Go time ($\ge 1\text{s}$), Caution amber intervals, and Red Clearance intervals using ergonomic press-and-hold up/down pickers that halt immediately upon release.
+* **Cycle Results & Dominant Stop Time Engine:** Computes the total cycle duration, individual phase allocations, and total red stop wait times. For example, in a two-phase intersection where Phase 1 serves North/South and Phase 2 serves East/West with 1s Go, 3s Amber, and 2s Red Clearance, TrafficSync computes exactly **$8\text{s}$ Total Stop** and a balanced **$12\text{s}$ Total Cycle**.
+* **Liquid Glass UI & Dynamic Clarity Slider:** Features an interactive slider in the navigation bar that dynamically adjusts the application's Liquid Glass opacity, backdrop blur, and border contrast in real-time.
+* **Cloud Simulation Portfolio & Persistence:** Save completed intersections to a cloud-backed PostgreSQL database, reload them anytime for further analysis, or delete old experiments with protective confirmation modals.
 
 ---
 
-## 2. Setup and Installation
+## Built with
+
+TrafficSync is engineered using a modern, decoupled full-stack JavaScript architecture:
+
+* **Frontend:**
+  * **React 18.3** — Functional components with hooks (`useState`, `useContext`, `useMemo`, `useRef`, `useEffect`).
+  * **Vite 6** — Lightning-fast development server, module bundler, and production build optimization.
+  * **Tailwind CSS & CSS Custom Properties** — Utility-first responsive design coupled with dynamic CSS variables for real-time Liquid Glass clarity manipulation.
+  * **Lucide React** — Crisp, clean iconography across controls, actions, and directional indicators.
+  * **React Router DOM 7** — Client-side SPA routing (`/`, `/editor`, `/results`) with GitHub Pages subpath support.
+* **Backend:**
+  * **Node.js & Express 4** — Fast, lightweight RESTful API gateway handling simulation CRUD operations.
+  * **HTTP Basic Authentication** — Built-in security middleware safeguarding database endpoints against unauthorized mutation.
+  * **CORS (Cross-Origin Resource Sharing)** — Strict origin-whitelisting preventing cross-site tampering.
+* **Database & Hosting:**
+  * **PostgreSQL on Neon (Serverless)** — Cloud database with connection pooling (`pg` pool) and JSONB support for rich intersection snapshots.
+  * **GitHub Pages** — Automated continuous deployment (CI/CD) for the production client application.
+  * **Render** — Cloud web service hosting the Express API gateway.
+
+---
+
+## Demo mode
+
+TrafficSync features a built-in **Dual-Mode Architecture** controlled by an environment flag:
+
+| Mode | Configuration | How It Works | Best For |
+| :--- | :--- | :--- | :--- |
+| **Offline Demo Mode** *(Default)* | `VITE_USE_MOCK_API=true` | The React client intercepts all API calls and reads/writes simulation snapshots directly to browser `localStorage`. No server or database required! | Instant local evaluations, classroom demos, zero-setup testing, and offline presentations. |
+| **Live Database Mode** | `VITE_USE_MOCK_API=false` | The client communicates over HTTPS with the Express REST API and writes snapshots to Neon PostgreSQL. | Multi-device cloud sync, persistence, and real production environments. |
+
+---
+
+## API Endpoints
+
+The Express server exposes clean, RESTful endpoints under `/api/simulations`. All mutating routes require HTTP Basic Authentication headers.
+
+| Method | Endpoint | Description | Status Codes | Auth Required? |
+| :--- | :--- | :--- | :--- | :---: |
+| `GET` | `/api/simulations` | Retrieve all saved intersection simulations (ordered newest first) | `200 OK`, `500 Server Error` | Yes |
+| `GET` | `/api/simulations/:id` | Retrieve a single simulation by its numerical ID | `200 OK`, `404 Not Found` | Yes |
+| `POST` | `/api/simulations` | Create and save a new simulation snapshot | `201 Created`, `400 Bad Request` | Yes |
+| `PUT` | `/api/simulations/:id` | Update an existing simulation snapshot | `200 OK`, `400 Bad Request`, `404 Not Found` | Yes |
+| `DELETE` | `/api/simulations/:id` | Delete a saved simulation snapshot | `200 OK`, `404 Not Found` | Yes |
+
+---
+
+## Running it yourself
+
+Follow these step-by-step instructions to run TrafficSync on your local computer.
 
 ### Prerequisites
-- **Node.js** (v18 or newer)
-- **npm** (Node Package Manager)
-- **PostgreSQL** (Optional, for running backend server database features locally)
+* **Node.js** (v18.0.0 or higher installed)
+* **npm** (bundled with Node.js)
+* **Git** installed on your terminal
 
 ---
 
-### Step 1: Clone the Repository
+### Step 1: Clone the repository
+Open your command terminal (PowerShell, Bash, or Command Prompt) and clone the repository:
+
 ```bash
+# Clone the repository from GitHub
 git clone https://github.com/danlenoon/TrafficSync.git
+
+# Move into the project directory
 cd TrafficSync
 ```
 
 ---
 
-### Step 2: Install Dependencies & Run Frontend (Client)
-The primary React application lives inside the `client` directory:
+### Step 2: Install and run the Frontend (Client)
+
+The frontend runs in Offline Demo Mode out-of-the-box, meaning you can test all features immediately without configuring a database!
+
 ```bash
+# Move into the client directory
 cd client
+
+# Install frontend dependencies (React, Vite, Lucide, Tailwind)
 npm install
+
+# Start the local Vite development server
 npm run dev
 ```
-Open your browser and navigate to `http://localhost:5173`. You will land on the **TrafficSync Dashboard**.
+
+After running the command, open your web browser and visit:
+👉 **`http://localhost:5173`**
+
+You can build, test, and save traffic light simulations immediately in your browser.
 
 ---
 
-### Step 3: Run Backend Server & Database (Optional)
-To run the Express REST API and PostgreSQL database locally:
+### Step 3: Install and run the Backend Server (Optional)
 
-1. **Install Server Dependencies:**
-   ```bash
-   cd ../server
-   npm install
-   ```
+If you want to test the full-stack architecture with the live Express server and local/cloud PostgreSQL database:
 
-2. **Configure Environment Variables:**
-   Create a `.env` file in the `server/` directory:
-   ```env
-   PORT=3000
-   CORS_ORIGINS=http://localhost:5173,https://danlenoon.github.io
-   DATABASE_URL=postgres://user:password@localhost:5432/trafficsync
-   APP_USERNAME=admin
-   APP_PASSWORD=your_password
-   NODE_ENV=development
-   ```
-
-3. **Initialize Database Schema & Seed Data:**
-   ```bash
-   npm run db:reset
-   ```
-
-4. **Start the Express API Server:**
-   ```bash
-   npm start
-   ```
-
----
-
-## 3. How to Run & Use the Application
-
-1. **Dashboard & Simulation Portfolio:** View all saved intersection simulation cards complete with exact creation timestamps, configured direction badges, and hover-revealed delete action buttons (`Trash2`). Click any card to load/edit or click **"New Simulation"** to start with a clean state. Unsaved changes trigger protective confirmation warnings.
-2. **Intersection Setup & Interactive Phase Builder:**
-   - Enter the **Intersection Name** and choose the **Cycle Calculation Mode** (Auto-Detect, Reference Standards, or Custom manual cycle length).
-   - Check active **Directions** (Northbound, Southbound, Eastbound, Westbound) equipped with directional arrow headers (`↑`, `↓`, `→`, `←`).
-   - Use the **Interactive Traffic Light Phase Builder** to construct sequential traffic phases with custom movement arrow badges (`↰`, `↑`, `↱`, `↩`) and per-lane active phase light toggles.
-   - Configure **Pedestrian Traffic Signals** (Walk/Don't Walk active safety intervals).
-3. **Lane Customization & Pill Geometry:** Add or remove lanes per direction with enlarged circular number badges (`w-10 h-10`) fitting 1 to 3 movement arrows in a single line. Utilize custom-styled dropdowns featuring vertically centered chevron indicators and fully rounded pill UI geometry (`rounded-full`) across all buttons, inputs, and checkboxes.
-4. **Phase Timings Calculator & Adaptive Cycle Engine:** Input strict minimum Go timing (`>= 1s`) and clearance intervals. The adaptive calculation engine calculates total cycle length, amber cautions, and dominant red stop wait times adhering to civil engineering standards.
-5. **Cycle Results Summary & Dynamic Clarity Control:** Inspect detailed tabular breakdowns, per-lane stop wait times, amber intervals, and interactive percentage bar segments with hover tooltips. Use the navbar **Liquid Glass Clarity Slider** (0% to 100% transparency) to dynamically customize frosted glassmorphism effects across all UI components in real-time. Click **"Done"** to reset all simulation inputs.
-
----
-
-## 4. Demo Mode
-
-This repository can run two ways, chosen by one environment variable at build time (`VITE_USE_MOCK_API`).
-
-| `VITE_USE_MOCK_API` | What happens |
-| --- | --- |
-| unset, or `true` | The client answers its own requests from `localStorage`. No server, no database, nothing shared between visitors. |
-| `false` | The client calls the Express API at `VITE_API_BASE_URL` (`https://trafficsync.onrender.com`), which reads and writes real PostgreSQL (Neon). |
-
----
-
-## 5. Running It Yourself
-
-### The client only, in demo mode. No database needed.
 ```bash
-cd client
-npm install
-cp .env.example .env        # VITE_USE_MOCK_API stays true
-npm run dev                 # http://localhost:5173
-```
+# From the project root, navigate into the server directory
+cd ../server
 
-### The whole stack. Needs PostgreSQL (Neon or local).
-```bash
-# 1. the API
-cd server
+# Install backend dependencies (Express, pg, cors, dotenv)
 npm install
-cp .env.example .env        # set DATABASE_URL (Neon) and APP_PASSWORD
-npm run db:reset            # creates the tables and adds seed records
-npm start                   # http://localhost:3000
 
-# 2. the client, in another terminal
-cd client
-npm install
+# Create your local environment configuration file from the template
 cp .env.example .env
-# set VITE_USE_MOCK_API=false and VITE_API_BASE_URL=http://localhost:3000
-npm run dev
 ```
 
-Check the API on its own:
+Open `server/.env` in your text editor and fill in your database credentials:
+```env
+PORT=3000
+DATABASE_URL=postgres://your_user:your_password@localhost:5432/trafficsync
+CORS_ORIGINS=http://localhost:5173,https://danlenoon.github.io
+APP_USERNAME=admin
+APP_PASSWORD=your_secure_password
+NODE_ENV=development
+```
+
+Run database schema setup and launch the server:
 ```bash
-curl https://trafficsync.onrender.com/healthz     # is the process alive
-curl https://trafficsync.onrender.com/readyz      # is the database reachable
-curl -u admin:password https://trafficsync.onrender.com/api/simulations
+# Initialize the database table and seed realistic intersection records
+npm run db:reset
+
+# Start the Express REST API server
+npm start
 ```
 
----
-
-## 6. Environment Variables
-
-None of these are committed. `.env.example` in each folder lists them with placeholder values.
-
-| Name | Where | What it is |
-| --- | --- | --- |
-| `DATABASE_URL` | server (.env / Render) | PostgreSQL connection string (Neon) |
-| `CORS_ORIGINS` | server (.env / Render) | comma-separated origins allowed to call the API (`https://danlenoon.github.io`) |
-| `NODE_ENV` | server (.env / Render) | `development` locally, `production` on host |
-| `PORT` | server | set by the host, do not set it yourself |
-| `VITE_USE_MOCK_API` | client (GitHub Actions Variable) | `false` to connect to Render API, unset for demo mode |
-| `VITE_API_BASE_URL` | client (GitHub Actions Variable) | `https://trafficsync.onrender.com` |
+Your API is now listening at **`http://localhost:3000`**!
 
 ---
 
-## 7. Deploying
+## Environment variables
 
-### Client, to GitHub Pages
-Wired up in `.github/workflows/deploy-pages.yml`.
-1. Settings > Pages > Build and deployment > Source: **GitHub Actions**.
-2. Settings > Secrets and variables > Actions > Variables: Set `VITE_USE_MOCK_API = false` and `VITE_API_BASE_URL = https://trafficsync.onrender.com`.
+### Frontend (`client/`)
+Configure these in `client/.env` or in your hosting build settings:
 
-### API and Database
-- **Database:** Hosted on **Neon** (Neon.tech) with pooled connection strings.
-- **API:** Hosted on **Render** with root directory set to `server`, build command `npm install`, and environment variables configured in dashboard.
+| Variable | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `VITE_USE_MOCK_API` | Boolean | `true` | When `true`, saves to browser `localStorage`. When `false`, connects to the backend API. |
+| `VITE_API_BASE_URL` | URL | `https://trafficsync.onrender.com` | Base URL of the live Express REST API backend. |
+| `VITE_API_USERNAME` | String | `admin` | HTTP Basic Auth username for authenticated backend requests. |
+| `VITE_API_PASSWORD` | String | *(configured)* | HTTP Basic Auth password for authenticated backend requests. |
+
+### Backend (`server/`)
+Configure these in `server/.env` or in your Render dashboard:
+
+| Variable | Required? | Example Value | Description |
+| :--- | :---: | :--- | :--- |
+| `DATABASE_URL` | **Yes** | `postgresql://user:pass@host/db?sslmode=require` | PostgreSQL database connection string (Neon or local). |
+| `PORT` | No | `3000` | Port on which the Express server listens. |
+| `CORS_ORIGINS` | **Yes** | `http://localhost:5173,https://danlenoon.github.io` | Comma-separated list of allowed web origins. |
+| `APP_USERNAME` | **Yes** | `admin` | Gateway username required for Basic Auth. |
+| `APP_PASSWORD` | **Yes** | `supersecretpassword` | Gateway password required for Basic Auth. |
+| `NODE_ENV` | No | `production` | Environment mode (`development` or `production`). |
 
 ---
 
-## 8. Project Structure
+## Deploying
+
+TrafficSync is production-deployed using modern automated cloud infrastructure:
+
+### 1. Frontend to GitHub Pages (Automated CI/CD)
+The client builds via GitHub Actions on every push to `main` using `.github/workflows/deploy-pages.yml`:
+* Checks out the repository.
+* Installs Node.js dependencies using `npm ci`.
+* Runs `npm run build` compiling Vite assets to `client/dist`.
+* Uploads build artifacts and publishes seamlessly to **GitHub Pages**.
+
+### 2. Backend to Render Web Services
+* Connect the GitHub repository to [Render](https://dashboard.render.com/).
+* Select **Web Service**, set **Root Directory** to `server`.
+* Set **Build Command** to `npm install` and **Start Command** to `npm start`.
+* Add environment variables (`DATABASE_URL`, `CORS_ORIGINS`, `APP_USERNAME`, `APP_PASSWORD`, `NODE_ENV=production`).
+
+### 3. Database to Neon Serverless PostgreSQL
+* Create a project at [Neon](https://neon.tech/).
+* Copy the pooled connection string (`postgres://...sslmode=require`).
+* Paste the connection string into Render's `DATABASE_URL`.
+
+---
+
+## Project structure
+
+TrafficSync follows strict Atomic Design principles on the client and modular repository patterns on the server:
 
 ```text
 TrafficSync/
-├── client/                 # Frontend React Application (Vite)
-│   ├── index.html          # HTML entry point (loads Tailwind CSS via CDN)
-│   ├── package.json        # Frontend dependencies (lucide-react, react, react-router-dom)
+├── client/                           # Frontend React 18 Application (Vite SPA)
+│   ├── index.html                    # Single-page application entry point & styles
+│   ├── package.json                  # Client dependencies (React, Vite, Lucide)
+│   ├── vite.config.js                # Vite build settings & subpath base config
 │   └── src/
-│       ├── api/            # ONE interface (httpApi.js, mockApi.js), chosen by VITE_USE_MOCK_API
-│       ├── components/     # Atomic Design structure
-│       │   ├── atoms/      # Reusable UI elements (Button.jsx)
-│       │   ├── molecules/  # Compound UI elements (SimulationCard.jsx)
-│       │   └── organisms/  # Complex UI sections (SetupSection.jsx, LanesSection.jsx, TimingsSection.jsx, Navbar.jsx)
-│       ├── pages/          # React Router pages (Dashboard.jsx, SimulationEditor.jsx, Results.jsx)
-│       ├── SimulationContext.jsx # Global state, adaptive cycle math & phase logic
-│       ├── App.jsx         # React Router configuration
-│       ├── main.jsx        # React DOM rendering entry point
-│       └── styles.css      # Custom styling overrides
-├── server/                 # Express API & PostgreSQL
-│   ├── db/                 # Database schema, seed data, and connection pool (pool.js, schema.sql, seed.sql)
-│   ├── simulationsRepo.js  # Parameterized SQL database queries for simulations
-│   └── server.js           # Express server with HTTP Basic Auth middleware
-├── docs/                   # Planning documents and weekly reports
-├── AI-USAGE.md             # Required AI usage documentation and commit history links
-└── README.md               # Project documentation and security checklist
+│       ├── api/                      # Dual-mode API abstraction
+│       │   ├── httpApi.js            # Live Fetch client with HTTP Basic Auth
+│       │   └── mockApi.js            # Offline localStorage mock client
+│       ├── components/               # Atomic Design architecture
+│       │   ├── atoms/                # Fundamental elements (Button, Input, Badge)
+│       │   ├── molecules/            # Compound UI cards (SimulationCard)
+│       │   └── organisms/            # Core sections (Navbar, Setup, Lanes, Timings, PhaseBuilder)
+│       ├── pages/                    # Routed screen views
+│       │   ├── Dashboard.jsx         # Saved simulations portfolio & project launcher
+│       │   ├── SimulationEditor.jsx  # Multi-step intersection timing & lane editor
+│       │   └── Results.jsx           # Phasing breakdown, bar charts & cycle metrics
+│       ├── SimulationContext.jsx     # Global simulation state & adaptive math engine
+│       ├── App.jsx                   # React Router routes and layout wrapper
+│       ├── main.jsx                  # React DOM mount point
+│       └── index.css                 # Global styles & custom-dropdown-scrollbar
+├── server/                           # Backend Node.js Express REST API
+│   ├── db/                           # Database layer
+│   │   ├── pool.js                   # PostgreSQL connection pool with SSL
+│   │   ├── schema.sql                # Relational table schema with JSONB support
+│   │   ├── seed.sql                  # Ground-truth seed intersections
+│   │   └── run.js                    # Database migration & seed CLI runner
+│   ├── package.json                  # Server dependencies (express, pg, cors, dotenv)
+│   ├── server.js                     # Express app, auth middleware & route handlers
+│   └── simulationsRepo.js            # Parameterized SQL database queries
+├── docs/                             # Technical documentation & design deliverables
+│   ├── assets/                       # Real screenshots, logos, and visual assets
+│   ├── 01-proposal.md                # Revised project proposal & objectives
+│   ├── 02-mockup.md                  # Responsive wireframe specifications
+│   ├── 03-design-system.md           # Tokens, Norman Window architecture & typography
+│   ├── 04-weekly-reports.md          # Chronological development reports
+│   ├── 05-demo-video.md              # Video presentation guide & 3-5 min script
+│   ├── 06-security-and-privacy.md    # Security audit, secrets scrubbing & CORS
+│   ├── slides.html                   # Ready-to-present 16:9 interactive HTML slides
+│   └── README.md                     # Documentation index & status summary
+├── SECURITY-CHECKLIST.md             # Security verification checklist with evidence
+├── AI-USAGE.md                       # Comprehensive AI assistance & commit attribution log
+└── README.md                         # Main comprehensive repository guide
 ```
 
 ---
 
-## 9. Architecture
+## Architecture
 
-TrafficSync uses a decoupled three-tier client-server architecture. The React frontend (`client/`) runs statically on GitHub Pages or communicates via HTTP REST API calls to the Node.js Express backend hosted on Render (`https://trafficsync.onrender.com`). The backend connects securely via connection pooling (`pg`) to a PostgreSQL database hosted on Neon holding simulation snapshots and intersection configurations.
+TrafficSync separates responsibilities across three discrete layers to ensure reliability, high performance, and rapid testing:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                              CLIENT LAYER (React 18 SPA)                               │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│  Dashboard View   │  Setup & Lanes Editor  │  Phase Builder  │  Cycle Results Summary  │
+│  [SimulationCard] │  [NormanWindowDropdown]│  [SignalHeads]  │  [Visual Phase Breakdown]│
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│                          SimulationContext (State & Math Engine)                       │
+│  • Cycle calculations (1s Go, 3s Amber, 2s RC)  • Liquid Glass CSS variable controller  │
+│  • Unconfigured light verification              • hasBeenSaved session navigation guard│
+└───────────────────────────────────────────┬────────────────────────────────────────────┘
+                                            │
+                     ┌──────────────────────┴──────────────────────┐
+                     ▼                                             ▼
+        [Offline Demo Mode: LocalStorage]             [Live Mode: REST API Client]
+        Instant, self-contained client state          HTTPS Basic Auth JSON Requests
+                                                                   │
+┌──────────────────────────────────────────────────────────────────┴─────────────────────┐
+│                              SERVER LAYER (Express REST API)                            │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│  • Security Gate: HTTP Basic Authentication middleware                                  │
+│  • CORS Whitelist origin validation                                                    │
+│  • Payload Boundary Validation (strings, numbers, direction constraints)               │
+│  • Parameterized SQL Repository (simulationsRepo.js)                                   │
+└───────────────────────────────────────────┬────────────────────────────────────────────┘
+                                            │
+                                            ▼
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                             DATABASE LAYER (Neon PostgreSQL)                            │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│  • Relational `simulations` table with JSONB simulation data payloads                  │
+│  • Automated timestamp tracking (`created_at`, `updated_at`)                           │
+│  • Encrypted SSL Connection Pooling (sslmode=require)                                  │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## 10. What I Would Do Next (Pushing Beyond Limits & Boundaries)
+## Screenshots
 
-1. **Real-Time WebSockets & Multi-User Collaboration:** Integrate WebSockets (Socket.io) into the Express backend and React frontend so multiple urban planners can co-edit and visualize live intersection signal timings concurrently in real-time across distributed client sessions.
-2. **AI-Driven Genetic Algorithm Arterial Optimization:** Implement a machine learning optimization module on the backend utilizing genetic algorithms to automatically compute green-wave progression offsets across multi-intersection urban corridors, minimizing vehicle delay and fuel emissions city-wide.
-3. **Interactive 3D Intersection Simulation Engine:** Replace 2D schematic lane badges with an immersive Three.js WebGL 3D simulation canvas, rendering animated vehicles, pedestrian crossing agents, and dynamic traffic signal lights reacting in real-time to computed cycle parameters.
-4. **Automated CI/CD & Infrastructure as Code (IaC):** Establish comprehensive GitHub Actions pipelines for automated database migrations, unit testing (`jest`/`pg-mem`), and zero-downtime containerized deployments (Docker/Kubernetes) on cloud infrastructure.
-
----
-
-## 11. Author
-
-**Danielle (danlenoon)**  
-Course: CS-401 (6APSI)  
-GitHub: [https://github.com/danlenoon](https://github.com/danlenoon)
+| Application Screen | Interface Preview & Layout Description |
+| :---: | :--- |
+| **Home Dashboard** | <img src="docs/assets/dashboard.jpg" alt="TrafficSync Dashboard" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br><strong>Caption:</strong> <em>The TrafficSync Dashboard displaying saved simulation portfolio cards with directional badges, timestamps, deletion controls, and the "+ New Simulation" action.</em> |
+| **Cycle Results & Analysis** | <img src="docs/assets/results.jpg" alt="TrafficSync Cycle Results Summary" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br><strong>Caption:</strong> <em>The Cycle Results Summary screen presenting calculated red stop durations, total cycle lengths, interactive percentage timing bars, and the Liquid Glass clarity slider.</em> |
 
 ---
 
-## 12. AI Use
-This project was built with AI assistance. Honest disclosure is the standard in this course and increasingly outside it, and reporting heavy use accurately costs you nothing.
+## What I would do next
 
-- **Built with AI assistance**
-- **Assistant:** Google Antigravity (Gemini)
-- **Scope:** Touched scaffolding, architectural refactoring, component structuring, and algorithmic calculation logic.
-- **Full record:** See [AI-USAGE.md](./AI-USAGE.md).
+While TrafficSync achieves all its initial objectives, real-world transportation systems present exciting opportunities for future iterations:
+
+* **Automated Dual-Ring NEMA Phase Conflict Detection:** Replace manual light assignment with an automatic conflict matrix algorithm that algorithmically disallows concurrent green signals on conflicting vehicular paths.
+* **Dynamic Webster's Optimum Cycle Formula:** Integrate real-time traffic volume input fields (vehicles per hour per lane) to compute mathematically optimal cycle lengths based on saturation flows.
+* **Interactive 3D WebGL Intersection Canvas:** Render real-time 3D vehicles and animated pedestrian crossing agents moving across the intersection in synchronization with active signal lights using Three.js.
 
 ---
 
-## 13. Licence
-MIT, see [LICENSE](./LICENSE).
+## Author
+
+**Designed and developed for TrafficSync**  
+**Built by [@danlenoon](https://github.com/danlenoon)**  
+**BS Computer Science | CS-401**  
+
+---
+
+## AI use
+
+This project was built with **AI Assistance**. In accordance with modern engineering standards and academic transparency, we disclose the role of AI in our development lifecycle:
+
+* **AI Assistant:** Google Gemini (Antigravity CLI Agent)
+* **Scope of Assistance:** Component refactoring into Atomic Design, mathematical cycle engine validation, Norman Window fixed-coordinate popover implementation, press-and-hold interval timer debouncing, and comprehensive rubric audit compliance.
+* **Full Transparency Log:** For complete prompt transcripts, error corrections, and commit-by-commit attributions, see [AI-USAGE.md](AI-USAGE.md).
+
+---
+
+## Licence
+
+This project is open-source software licensed under the **[MIT License](LICENSE)**.
