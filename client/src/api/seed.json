@@ -1,8 +1,74 @@
 [
-  { "id": "seed-1", "place": "Library, third floor", "description": "Chairs rearranged overnight, every time. The night guard says he locks the room himself.", "spookiness": 3, "reported_at": "2026-08-01T14:20:00.000Z" },
-  { "id": "seed-2", "place": "Old gym", "description": "Lights flicker in a fixed pattern after 9pm, always three short and one long.", "spookiness": 4, "reported_at": "2026-08-03T11:05:00.000Z" },
-  { "id": "seed-3", "place": "Parking basement", "description": "Footsteps with no one there. Reported separately by three different people in one week, which is what makes this one hard to dismiss. Two of them were alone at the time and did not know about the others. This entry is deliberately long, because a seed row of four words hides every text-wrapping bug you have.", "spookiness": 5, "reported_at": "2026-08-05T22:40:00.000Z" },
-  { "id": "seed-4", "place": "Canteen", "description": "A cold spot near the back door, every morning before seven.", "spookiness": 1, "reported_at": "2026-08-06T07:15:00.000Z" },
-  { "id": "seed-5", "place": "AB Building stairwell", "description": "", "spookiness": 2, "reported_at": "2026-08-08T18:30:00.000Z" },
-  { "id": "seed-6", "place": "Chapel garden", "description": "Someone humming. Stops the moment you turn around.", "spookiness": 3, "reported_at": "2026-08-10T05:50:00.000Z" }
+  {
+    "id": "1",
+    "title": "MacArthur x Del Rosario Intersection",
+    "road_name": "MacArthur Highway / Brgy. Del Rosario Road",
+    "data": {
+      "roadName": "Del Rosario Intersection",
+      "directions": {
+        "Northbound": true,
+        "Southbound": true,
+        "Eastbound": true,
+        "Westbound": true
+      },
+      "laneConfigs": {
+        "Northbound": [{ "id": 1, "type": "Through & Left" }],
+        "Southbound": [{ "id": 1, "type": "Through & Left" }],
+        "Eastbound": [{ "id": 1, "type": "Straight" }],
+        "Westbound": [{ "id": 1, "type": "Straight" }]
+      },
+      "phaseTimings": {
+        "Northbound-1": { "go": 45, "amber": 4, "red": 2 },
+        "Southbound-1": { "go": 45, "amber": 4, "red": 2 },
+        "Eastbound-1": { "go": 40, "amber": 4, "red": 2 },
+        "Westbound-1": { "go": 40, "amber": 4, "red": 2 }
+      },
+      "pedestrians": {
+        "Northbound": "No",
+        "Southbound": "No",
+        "Eastbound": "No",
+        "Westbound": "No"
+      },
+      "lanesCount": 4,
+      "cycleLength": 182
+    },
+    "created_at": "2026-10-04T12:00:00.000Z",
+    "updated_at": "2026-10-24T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "title": "Clark x Friendship Intersection",
+    "road_name": "Fil-Am Friendship Highway / Clark Main Gate",
+    "data": {
+      "roadName": "Clark x Friendship Intersection",
+      "directions": {
+        "Northbound": true,
+        "Southbound": true,
+        "Eastbound": true,
+        "Westbound": true
+      },
+      "laneConfigs": {
+        "Northbound": [{ "id": 1, "type": "Straight" }],
+        "Southbound": [{ "id": 1, "type": "Straight" }],
+        "Eastbound": [{ "id": 1, "type": "Through & Left" }],
+        "Westbound": [{ "id": 1, "type": "Through & Left" }]
+      },
+      "phaseTimings": {
+        "Northbound-1": { "go": 30, "amber": 3, "red": 2 },
+        "Southbound-1": { "go": 30, "amber": 3, "red": 2 },
+        "Eastbound-1": { "go": 35, "amber": 3, "red": 2 },
+        "Westbound-1": { "go": 35, "amber": 3, "red": 2 }
+      },
+      "pedestrians": {
+        "Northbound": "No",
+        "Southbound": "No",
+        "Eastbound": "No",
+        "Westbound": "No"
+      },
+      "lanesCount": 4,
+      "cycleLength": 140
+    },
+    "created_at": "2026-10-04T12:30:00.000Z",
+    "updated_at": "2026-10-24T00:00:00.000Z"
+  }
 ]
