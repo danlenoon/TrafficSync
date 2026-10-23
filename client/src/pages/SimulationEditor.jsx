@@ -26,15 +26,7 @@ export default function SimulationEditor() {
   };
 
   const handleSave = () => {
-    const hasIntersectionName = roadName.trim().length > 0;
-    const hasActiveDir = Object.values(directions).some(Boolean);
-    const totalLanesCount = Object.keys(directions).reduce((acc, dir) => acc + (laneConfigs[dir] || []).length, 0);
-
-    if (!hasIntersectionName || !hasActiveDir || totalLanesCount === 0) {
-      setErrorMsg('Validation Error: You must provide an intersection name, select at least 1 direction, and configure at least 1 lane.');
-      setTimeout(() => setErrorMsg(''), 7000);
-      return;
-    }
+    // Save button works unconditionally regardless of any validation status
     saveCurrentSimulation();
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -151,7 +143,7 @@ export default function SimulationEditor() {
       
       {/* Simulation Editor Card with Back button inside on the left and Right-Aligned Title & Subtitle */}
       <div 
-        className="p-6 sm:p-8 rounded-3xl border mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 transition-all"
+        className="p-6 sm:p-8 rounded-3xl border mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 transition-all overflow-hidden"
         style={glassStyle}
       >
         {/* Back to Dashboard Button inside the card on the left */}
@@ -179,17 +171,17 @@ export default function SimulationEditor() {
 
         {/* Action Controls located directly below the Phase Timings Calculator */}
         <div 
-          className="p-6 rounded-3xl border flex flex-col sm:flex-row justify-between items-center gap-4 transition-all shadow-md"
+          className="p-6 rounded-3xl border flex flex-col md:flex-row justify-between items-center gap-4 transition-all shadow-md overflow-hidden box-border"
           style={glassStyle}
         >
-          <div className="text-sm font-semibold text-center sm:text-left" style={{ color: 'var(--text-muted)' }}>
+          <div className="text-sm font-semibold text-center md:text-left flex-1" style={{ color: 'var(--text-muted)' }}>
             Review your configurations above before saving or calculating cycle timings.
           </div>
-          <div className="flex gap-3 w-full sm:w-auto">
-            <Button onClick={handleSave} variant="outline" className="flex-1 sm:flex-none">
+          <div className="flex flex-wrap sm:flex-nowrap gap-3 w-full md:w-auto justify-end shrink-0">
+            <Button onClick={handleSave} variant="outline" className="flex-1 sm:flex-none shrink-0">
               {saved ? <><Check size={18} /> Saved!</> : <><Save size={18} /> Save</>}
             </Button>
-            <Button onClick={handleCalculate} variant="accent" className="flex-1 sm:flex-none justify-center">
+            <Button onClick={handleCalculate} variant="accent" className="flex-1 sm:flex-none justify-center shrink-0">
               <Activity size={18} /> Calculate Cycle
             </Button>
           </div>
