@@ -255,7 +255,7 @@ TrafficSync/
 │   ├── assets/                       # Real screenshots, logos, and visual assets
 │   ├── 01-proposal.md                # Revised project proposal & objectives
 │   ├── 02-mockup.md                  # Responsive wireframe specifications
-│   ├── 03-design-system.md           # Tokens, Norman Window architecture & typography
+│   ├── 03-design-system.md           # Tokens, Atomic Design architecture & typography
 │   ├── 04-weekly-reports.md          # Chronological development reports
 │   ├── 05-demo-video.md              # Video presentation guide & 3-5 min script
 │   ├── 06-security-and-privacy.md    # Security audit, secrets scrubbing & CORS
@@ -277,11 +277,11 @@ TrafficSync separates responsibilities across three discrete layers to ensure re
 │                              CLIENT LAYER (React 18 SPA)                               │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │  Dashboard View   │  Setup & Lanes Editor  │  Phase Builder  │  Cycle Results Summary  │
-│  [SimulationCard] │  [NormanWindowDropdown]│  [SignalHeads]  │  [Visual Phase Breakdown]│
+│  [SimulationCard] │  [LaneCustomization]   │  [SignalHeads]  │ [Visual Phase Breakdown]│
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │                          SimulationContext (State & Math Engine)                       │
-│  • Cycle calculations (1s Go, 3s Amber, 2s RC)  • Liquid Glass CSS variable controller  │
-│  • Unconfigured light verification              • hasBeenSaved session navigation guard│
+│  • Multi-Phase Clearance Engine (Go, Caution, RC) • Liquid Glass Variable Controller   │
+│  • Unconfigured Light Verification                • Session Navigation Safety Guards   │
 └───────────────────────────────────────────┬────────────────────────────────────────────┘
                                             │
                      ┌──────────────────────┴──────────────────────┐
@@ -290,20 +290,20 @@ TrafficSync separates responsibilities across three discrete layers to ensure re
         Instant, self-contained client state          HTTPS Basic Auth JSON Requests
                                                                    │
 ┌──────────────────────────────────────────────────────────────────┴─────────────────────┐
-│                              SERVER LAYER (Express REST API)                            │
+│                             SERVER LAYER (Express REST API)                            │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│  • Security Gate: HTTP Basic Authentication middleware                                  │
-│  • CORS Whitelist origin validation                                                    │
+│  • Security Gate: HTTP Basic Authentication middleware                                 │
+│  • CORS Whitelist Origin Validation                                                    │
 │  • Payload Boundary Validation (strings, numbers, direction constraints)               │
 │  • Parameterized SQL Repository (simulationsRepo.js)                                   │
 └───────────────────────────────────────────┬────────────────────────────────────────────┘
                                             │
                                             ▼
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                             DATABASE LAYER (Neon PostgreSQL)                            │
+│                            DATABASE LAYER (Neon PostgreSQL)                            │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│  • Relational `simulations` table with JSONB simulation data payloads                  │
-│  • Automated timestamp tracking (`created_at`, `updated_at`)                           │
+│  • Relational simulations table with JSONB simulation data payloads                    │
+│  • Automated timestamp tracking (created_at, updated_at)                               │
 │  • Encrypted SSL Connection Pooling (sslmode=require)                                  │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -342,7 +342,7 @@ While TrafficSync achieves all its initial objectives, real-world transportation
 This project was built with **AI Assistance**. In accordance with modern engineering standards and academic transparency, we disclose the role of AI in our development lifecycle:
 
 * **AI Assistant:** Google Gemini (Antigravity CLI Agent)
-* **Scope of Assistance:** Component refactoring into Atomic Design, mathematical cycle engine validation, Norman Window fixed-coordinate popover implementation, press-and-hold interval timer debouncing, and comprehensive rubric audit compliance.
+* **Scope of Assistance:** Component refactoring into Atomic Design, mathematical multi-phase cycle engine validation, responsive cross-device layout engineering, press-and-hold interval timer debouncing, and comprehensive rubric audit compliance.
 * **Full Transparency Log:** For complete prompt transcripts, error corrections, and commit-by-commit attributions, see [AI-USAGE.md](AI-USAGE.md).
 
 ---
