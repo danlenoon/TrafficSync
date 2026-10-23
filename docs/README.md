@@ -9,7 +9,7 @@ All technical documentation, system specifications, design system artifacts, wee
 | Deliverable File | Overview & Scope | Milestone & Status |
 | :--- | :--- | :--- |
 | **[01-proposal.md](01-proposal.md)** | Revised project proposal, target audience, five-screen user flows, state architecture, deployment structure, and risk mitigation strategies. | **Completed (Finals, M8A1)** |
-| **[02-mockup.md](02-mockup.md)** | UI/UX responsive wireframe specifications (desktop grid vs. stacked phone layouts), Atomic Design hierarchy, and Norman Window popover spatial geometry. | **Completed (Finals, M8A2)** |
+| **[02-mockup.md](02-mockup.md)** | UI/UX responsive wireframe specifications (desktop grid vs. stacked phone layouts), and Atomic Design hierarchy. | **Completed (Finals, M8A2)** |
 | **[03-design-system.md](03-design-system.md)** | Design tokens, color palette, typography scale in exact pixels, 8px spacing grid, concentric rounded-pill geometry, custom scrollbars, and dynamic Liquid Glass formulas. | **Completed (Finals, M8A3)** |
 | **[04-weekly-reports.md](04-weekly-reports.md)** | Chronological weekly engineering journal covering Week 1 through Week 5 (including 2026-10-11 and 2026-10-23 iterations), detailing accomplishments, blockers, and hours. | **Maintained Weekly** |
 | **[05-demo-video.md](05-demo-video.md)** | Demonstration video guide featuring a structured 3-to-5 minute presentation script, live walkthrough scenario, Canva slide deck outlines, and pre-recording checklist. | **Completed (Final Submission)** |

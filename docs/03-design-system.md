@@ -42,23 +42,9 @@ Standardized globally to `Arial, sans-serif` for clean readability, technical pr
 
 ---
 
-## 4. Norman Window Architectural Geometry
+## 4. Custom App-Consistent Scrollbars
 
-The custom dropdown menus adhere to classical Norman Window architectural curves (an arched semicircular top resting upon a rectangular base with rounded corners):
-
-* **Downward Popover Curvature:**
-  * Top edge: Arched semicircular radius `rounded-t-[2.5rem]` (`40px`).
-  * Bottom edge: Rounded pill corners `rounded-b-[2rem]` (`32px`).
-* **Upward Popover Curvature (Dynamic Inversion):**
-  * Top edge: Rounded pill corners `rounded-t-[2rem]` (`32px`).
-  * Bottom edge: Arched semicircular radius `rounded-b-[2.5rem]` (`40px`).
-* **Arch Ornament:** Every Norman Window popover features an ornamental blue accent handle (`w-12 h-1.5 bg-blue-500 rounded-full`) and an uppercase `SELECT MOVEMENT` label at its apex.
-
----
-
-## 5. Custom App-Consistent Scrollbars
-
-All scrollable containers inside the application—including dense timing matrices, phase builder lane columns, and Norman Window popover lists—utilize unified custom scrollbars defined in `client/src/index.css`:
+All scrollable containers inside the application—including dense timing matrices, phase builder lane columns, and unified custom scrollbars defined in `client/src/index.css`:
 
 ```css
 /* App-consistent transparent track and translucent blue pill thumb */

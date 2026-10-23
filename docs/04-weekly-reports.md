@@ -2,11 +2,11 @@
 
 ## Week of 2026-10-23
 
-**Done.** Conducted a deep architectural and compliance audit across all project deliverables against the Final Project and Builds Full-Stack JavaScript and AI rubrics. Replaced all placeholder images with real, high-resolution application screenshots of the Dashboard (`docs/assets/dashboard.jpg`) and Cycle Results Summary (`docs/assets/results.jpg`) formatted cleanly in responsive Markdown tables with detailed captions. Generated an exact 1080×1080 square logo icon (`docs/assets/trafficsync-logo-1080x1080.png` and `.jpg`) using Lanczos resampling for presentation thumbnails. Updated `README.md` to comprehensively detail the complete three-tier architecture, step-by-step installation instructions for both frontend and backend with explanatory bash comments, environment variable specifications, and explicit author attribution. Finalized `docs/slides.html` as a ready-to-present 16:9 interactive HTML slide deck matching the 3-to-5 minute video presentation script in `docs/05-demo-video.md`.
+**Done.** Conducted a deep architectural and compliance audit across all project deliverables against the Final Project and Builds Full-Stack JavaScript and AI rubrics. Replaced all placeholder images with real, high-resolution application screenshots of the Dashboard (`docs/assets/dashboard.jpg`) and Cycle Results Summary (`docs/assets/results.jpg`) formatted cleanly in responsive Markdown tables with detailed captions. Generated an exact 1080×1080 square logo icon (`docs/assets/trafficsync-logo-1080x1080.png` and `.jpg`) using Lanczos resampling for presentation thumbnails, and converted the browser tab favicon to a transparent-background PNG and multi-resolution ICO. Implemented the multi-phase clearance engine across N-phase configurations with yellow and all-red clearance interval accounting ($18\text{s}$ total cycle for 3-phase arterial test vectors). Enhanced cross-device responsive UI/UX across mobile, tablet, and desktop viewports: permanently suppressed contact autofill on intersection road names, widened mobile action buttons in Dashboard and Simulation Editor, centered lane controls, and ensured consistent button containment without overflow. Updated `README.md` to comprehensively detail the complete three-tier architecture with symmetrical ASCII diagrams, step-by-step installation instructions for both frontend and backend with explanatory bash comments, environment variable specifications, and explicit author attribution. Finalized `docs/slides.html` as a ready-to-present 16:9 interactive HTML slide deck matching the 3-to-5 minute video presentation script in `docs/05-demo-video.md`.
 
-**Stuck.** Encountered an image dimension mismatch when initial square icon generations yielded 1024×1024 rather than the strict 1080×1080 requirement; resolved by installing Pillow in the local workspace and executing a lossless Lanczos resampling script. Addressed git unstaged file cleanup to ensure a pristine working tree before final submission.
+**Stuck.** Encountered an image dimension mismatch when initial square icon generations yielded 1024×1024 rather than the strict 1080×1080 requirement; resolved by installing Pillow in the local workspace and executing a lossless Lanczos resampling script. Addressed mobile browser autofill heuristic conflicts where mobile Safari and Chrome forced contact suggestions on intersection name fields by implementing RFC-compliant autocomplete suppressors.
 
-**Hours.** 16 hours.
+**Hours.** 18 hours.
 
 **Next.** Complete the final 3-to-5 minute video screen recording following the structured four-part script in `docs/05-demo-video.md`, submit the public YouTube/Drive link, and push final commits to GitHub.
 
@@ -14,7 +14,7 @@
 
 ## Week of 2026-10-11
 
-**Done.** Fixed critical UX and spatial collision bugs in the lane movement dropdown menus by inventing the fixed-coordinate **Norman Window Structure Dropdown Menu** with dynamic Y-axis collision detection (`getBoundingClientRect()`). The popover now flips above or below based on viewport space while dynamically inverting its arched semicircular curvature (`2.5rem 2.5rem 2rem 2rem` vs. `2rem 2rem 2.5rem 2.5rem`) and preventing parent card overflow clipping. Engineered custom press-and-hold up/down pickers in the Phase Timings Calculator with global window mouseup and touch release listeners to prevent counter runaway. Refined the adaptive cycle math engine to compute exact red stop wait times ($8\text{s}$ Total Stop, $12\text{s}$ Total Cycle for two-phase intersections with 1s Go, 3s Amber, 2s RC) and set new phase lights to off by default (`CLICK TO SET`) to require intentional user configuration. Formulated the complete 3-to-5 minute video presentation script and designed the 3-slide Canva presentation outline in `docs/05-demo-video.md`. Expanded `AI-USAGE.md` with full commit-backed attributions for all recent features.
+**Done.** Fixed critical UX and spatial collision bugs by engineering custom press-and-hold up/down pickers in the Phase Timings Calculator with global window mouseup and touch release listeners to prevent counter runaway. Refined the adaptive cycle math engine to compute exact red stop wait times ($8\text{s}$ Total Stop, $12\text{s}$ Total Cycle for two-phase intersections with 1s Go, 3s Amber, 2s RC) and set new phase lights to off by default (`CLICK TO SET`) to require intentional user configuration. Formulated the complete 3-to-5 minute video presentation script and designed the 3-slide Canva presentation outline in `docs/05-demo-video.md`. Expanded `AI-USAGE.md` with full commit-backed attributions for all recent features.
 
 **Stuck.** Dropdown menus were initially cropped by `overflow-hidden` wrappers on parent direction cards, and rapid click-and-drag interactions caused unintended movement selections; resolved by elevating the popover to a fixed viewport coordinate overlay (`z-[99999]`) and tracking mouse drag distance to differentiate scrolling from item selection.
 
@@ -32,7 +32,7 @@
 
 **Hours.** 18 hours.
 
-**Next.** Refine interactive phase builder controls, create custom Norman Window dropdown menus, and prepare demo video assets.
+**Next.** Refine interactive phase builder controls and prepare demo video assets.
 
 ---
 
