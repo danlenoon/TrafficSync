@@ -218,7 +218,7 @@ export default function PhaseBuilderSection() {
                       {hasPed && (
                         <div 
                           onClick={() => togglePhaseLight(phase.id, pedKey)}
-                          className={`mt-1 p-3.5 rounded-2xl border text-center cursor-pointer transition-all duration-200 select-none flex items-center justify-between px-4 hover:scale-[1.01] shadow-2xs ${
+                          className={`mt-1 p-3 sm:p-3.5 rounded-2xl border text-center cursor-pointer transition-all duration-200 select-none grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-3 px-3 sm:px-4 hover:scale-[1.01] shadow-2xs ${
                             isPedGreen 
                               ? 'bg-green-50/90 border-green-300/80 hover:border-green-400' 
                               : (isPedRed 
@@ -226,38 +226,39 @@ export default function PhaseBuilderSection() {
                                 : 'bg-gray-100/80 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50/40')
                           }`}
                         >
-                          <div className="flex items-center gap-2 text-xs font-extrabold text-gray-800">
-                            <User size={16} /> Pedestrian Crossing
+                          <div className="flex items-center gap-1.5 sm:gap-2 text-xs font-extrabold text-gray-800 justify-start min-w-0">
+                            <User size={15} className="text-gray-600 shrink-0" />
+                            <span className="leading-tight text-left truncate">Pedestrian Crossing</span>
                           </div>
                           
-                          <div className="flex items-center gap-2.5">
-                            <div className="w-24 bg-gray-900 rounded-full p-1.5 flex items-center justify-center gap-1.5 shadow-inner border border-gray-800">
-                              <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                          <div className="flex items-center justify-center">
+                            <div className="w-20 sm:w-22 bg-gray-900 rounded-full p-1 sm:p-1.5 flex items-center justify-center gap-1 sm:gap-1.5 shadow-inner border border-gray-800">
+                              <div className={`w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-full flex items-center justify-center transition-all ${
                                 isPedRed 
                                   ? 'bg-red-500 text-white shadow-[0_0_6px_rgba(239,68,68,0.9)]' 
                                   : 'bg-red-950/60 text-red-900/40'
                               }`}>
-                                <User size={14} className="stroke-[2.5]" />
+                                <User size={13} className="stroke-[2.5]" />
                               </div>
 
-                              <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                              <div className={`w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-full flex items-center justify-center transition-all ${
                                 isPedGreen 
                                   ? 'bg-green-500 text-white shadow-[0_0_6px_rgba(34,197,94,0.9)]' 
                                   : 'bg-green-950/60 text-green-900/40'
                               }`}>
-                                <User size={14} className="stroke-[2.5]" />
+                                <User size={13} className="stroke-[2.5]" />
                               </div>
                             </div>
+                          </div>
 
-                            <div className={`text-[11px] font-extrabold uppercase tracking-wider w-24 text-right ${
-                              isPedGreen 
-                                ? 'text-green-700' 
-                                : (isPedRed 
-                                  ? 'text-red-700' 
-                                  : 'text-gray-400 italic text-[10px]')
-                            }`}>
-                              {isPedGreen ? 'GO' : (isPedRed ? 'STOP' : 'UNCONFIGURED')}
-                            </div>
+                          <div className={`flex items-center justify-end text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider min-w-0 ${
+                            isPedGreen 
+                              ? 'text-green-700' 
+                              : (isPedRed 
+                                ? 'text-red-700' 
+                                : 'text-gray-400 italic text-[9px] sm:text-[10px]')
+                          }`}>
+                            <span className="truncate">{isPedGreen ? 'GO' : (isPedRed ? 'STOP' : 'UNCONFIGURED')}</span>
                           </div>
                         </div>
                       )}
