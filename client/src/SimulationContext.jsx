@@ -95,9 +95,22 @@ export function SimulationProvider({ children }) {
   };
 
   const updatePedestrianTiming = (dir, field, value) => {
+    let numVal;
+    if (value === '' || value === null || value === undefined) {
+      numVal = field === 'go' ? 1 : 0;
+    } else {
+      const parsed = parseInt(value, 10);
+      if (isNaN(parsed)) {
+        numVal = field === 'go' ? 1 : 0;
+      } else if (field === 'go') {
+        numVal = Math.min(9999, Math.max(1, parsed));
+      } else {
+        numVal = Math.min(9999, Math.max(0, parsed));
+      }
+    }
     setPedestrianTimings(prev => ({
       ...prev,
-      [dir]: { ...prev[dir], [field]: field === 'go' ? Math.max(1, Number(value) || 1) : Math.max(0, Number(value) || 0) }
+      [dir]: { ...prev[dir], [field]: numVal }
     }));
   };
 
@@ -138,7 +151,19 @@ export function SimulationProvider({ children }) {
   const updateTiming = (key, field, value) => {
     setPhaseTimings(prev => {
       const current = prev[key] || { go: 1, amber: 3, red: 2 };
-      const numVal = field === 'go' ? Math.max(1, Number(value) || 1) : Math.max(0, Number(value) || 0);
+      let numVal;
+      if (value === '' || value === null || value === undefined) {
+        numVal = field === 'go' ? 1 : 0;
+      } else {
+        const parsed = parseInt(value, 10);
+        if (isNaN(parsed)) {
+          numVal = field === 'go' ? 1 : 0;
+        } else if (field === 'go') {
+          numVal = Math.min(9999, Math.max(1, parsed));
+        } else {
+          numVal = Math.min(9999, Math.max(0, parsed));
+        }
+      }
       return {
         ...prev,
         [key]: { ...current, [field]: numVal }
@@ -271,8 +296,8 @@ export function SimulationProvider({ children }) {
       let sumPhaseCycle = 0;
       phases.forEach(p => {
         let maxPhaseGo = 0;
-        let maxPhaseAmber = 3;
-        let maxPhaseRed = 2;
+        let maxPhaseAmber = 0;
+        let maxPhaseRed = 0;
         let hasActiveMovement = false;
 
         Object.keys(directions).filter(d => directions[d]).forEach(dir => {
@@ -283,7 +308,7 @@ export function SimulationProvider({ children }) {
             if (isGreen) {
               hasActiveMovement = true;
               maxPhaseGo = Math.max(maxPhaseGo, Math.max(1, Number(t.go) || 1));
-              maxPhaseAmber = Math.max(maxPhaseAmber, Math.max(0, Number(t.amber) || 3));
+              maxPhaseAmber = Math.max(maxPhaseAmber, Math.max(0, Number(t.amber) !== undefined ? Number(t.amber) : 3));
               maxPhaseRed = Math.max(maxPhaseRed, Math.max(0, Number(t.red) !== undefined ? Number(t.red) : 2));
             }
           });
@@ -291,6 +316,7 @@ export function SimulationProvider({ children }) {
             hasActiveMovement = true;
             const pt = pedestrianTimings[dir] || { go: 1, red: 2 };
             maxPhaseGo = Math.max(maxPhaseGo, Math.max(1, Number(pt.go) || 1));
+            // Pedestrians have walk interval and red clearance (amber is 0)
             maxPhaseRed = Math.max(maxPhaseRed, Math.max(0, Number(pt.red) !== undefined ? Number(pt.red) : 2));
           }
         });
