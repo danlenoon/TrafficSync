@@ -1,4 +1,4 @@
-# UI Mockup & Wireframe Specifications (M6A2)
+# UI Mockup & Wireframe Specifications
 
 ## 1. Overview & Design Principles
 TrafficSync's user interface is purposefully designed for civil engineering students, urban traffic planners, and municipal analysts who demand high operational clarity, precision, and visual feedback. Built upon the M6A2 wireframe specifications, the application implements a fully responsive design system accommodating wide-screen desktop displays, laptop views, and stacked mobile layouts. 
@@ -25,7 +25,7 @@ The interface incorporates the **iOS 27 Liquid Glass design system**, featuring 
 * **Desktop Layout:**
   * Header contains a return link to the Dashboard and a primary **"Calculate Cycle"** call-to-action button, flanked by an inline **"Save"** action.
   * **Section 1: Intersection Setup:** 2-column card featuring the Road Name text input on the left and active Direction checkboxes (Northbound, Southbound, Eastbound, Westbound) equipped with directional indicator arrows on the right.
-  * **Section 2: Lane Customization:** Directional sub-cards displaying lane counts, circular lane badges fitting 1 to 3 arrows in a single line, custom Norman Window turning dropdowns, and pedestrian crossing toggles.
+  * **Section 2: Lane Customization:** Directional sub-cards displaying lane counts, circular lane badges fitting 1 to 3 arrows in a single line, and pedestrian crossing toggles.
   * **Section 3: Phase Timings Calculator:** High-density timing table featuring custom oval up/down pickers for Go ($\ge 1\text{s}$), Caution (Amber), and Red Clearance (RC) with fluid press-and-hold acceleration.
   * **Section 4: Interactive Phase Builder:** Visual 3-lens signal heads for vehicular lanes and pedestrian signals across sequential phases. New phases default to off (`CLICK TO SET`) to require intentional user selection.
 * **Phone Layout:**
@@ -62,7 +62,6 @@ To maintain clean code separation and reusability, components are organized acco
 * **Organisms (`src/components/organisms/`):**
   * `<Navbar />` — Main header housing the logo, title, and interactive Liquid Glass slider.
   * `<SetupSection />` — Intersection name and directional approach selectors.
-  * `<LanesSection />` — Lane customization engine with Norman Window floating dropdown popovers.
   * `<TimingsSection />` — Numerical timing controls for Go, Amber, and Red Clearance intervals.
   * `<PhaseBuilderSection />` — Visual traffic signal heads and sequential phase state matrix.
 * **Pages (`src/pages/`):**
@@ -71,13 +70,3 @@ To maintain clean code separation and reusability, components are organized acco
   * `<Results />` — Detailed cycle output, phase proportions, and analysis summary.
 
 ---
-
-## 4. Norman Window Popover Architecture
-
-A major UX breakthrough in the mockup is the **Norman Window Structure Dropdown Menu**:
-* Modeled after classical Norman architecture (semicircular arch atop a rectangular base).
-* Utilizes **Fixed Viewport Spatial Positioning** via `getBoundingClientRect()` rather than relative absolute stacking.
-* Dynamically calculates available screen height on the Y-axis:
-  * When opening **downward**: Features an arched top and rounded pill base (`border-radius: 2.5rem 2.5rem 2rem 2rem`).
-  * When opening **upward**: Inverts its geometry to feature an arched base and rounded pill top (`border-radius: 2rem 2rem 2.5rem 2.5rem`).
-* Completely eliminates boundary clipping, z-index clashing, and parent overflow truncation across all devices.
