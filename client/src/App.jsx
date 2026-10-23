@@ -12,7 +12,7 @@ export default function App() {
       <BrowserRouter basename={import.meta.env.BASE_URL}>
         <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
           <Navbar />
-          <main className="flex-1 p-4 md:p-8 max-w-6xl w-full mx-auto overflow-x-hidden">
+          <main className="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto overflow-x-hidden">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/editor" element={<SimulationEditor />} />

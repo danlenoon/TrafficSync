@@ -101,9 +101,11 @@ export default function Dashboard() {
           <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'Arial, sans-serif', color: 'var(--text-main)' }}>Welcome back!</h1>
           <p className="font-medium" style={{ color: 'var(--text-muted)' }}>Design, calculate, and evaluate professional traffic intersection signal timings with precision.</p>
         </div>
-        <Button onClick={() => { resetSimulation(); navigate('/editor'); }} variant="primary">
-          <Plus size={18} /> New Simulation
-        </Button>
+        <div className="w-full sm:w-auto flex justify-center">
+          <Button onClick={() => { resetSimulation(); navigate('/editor'); }} variant="primary" className="w-full sm:w-auto px-8 justify-center">
+            <Plus size={18} /> New Simulation
+          </Button>
+        </div>
       </div>
 
       <h2 className="text-sm font-bold uppercase tracking-wider mb-4 px-1" style={{ color: 'var(--text-muted)' }}>Saved Simulations</h2>
@@ -118,12 +120,14 @@ export default function Dashboard() {
           </div>
           <h3 className="font-bold text-xl mb-1" style={{ fontFamily: 'Arial, sans-serif', color: 'var(--text-main)' }}>No Saved Simulations</h3>
           <p className="text-sm max-w-md mb-6 font-medium" style={{ color: 'var(--text-muted)' }}>You haven't created any simulations yet. Click below to start configuring intersection lanes and cycle timings.</p>
-          <Button onClick={() => { resetSimulation(); navigate('/editor'); }} variant="primary">
-            <Plus size={18} /> Create First Simulation
-          </Button>
+          <div className="w-full sm:w-auto flex justify-center">
+            <Button onClick={() => { resetSimulation(); navigate('/editor'); }} variant="primary" className="w-full sm:w-auto px-8 justify-center">
+              <Plus size={18} /> Create First Simulation
+            </Button>
+          </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
           {savedSimulations.map((sim) => {
             const dirCount = sim.directions ? Object.values(sim.directions).filter(Boolean).length : 0;
             return (
@@ -143,8 +147,8 @@ export default function Dashboard() {
       )}
 
       {/* Reset All Button below Saved Simulations */}
-      <div className="mt-12 pt-6 border-t flex justify-end" style={{ borderColor: 'var(--glass-border)' }}>
-        <Button onClick={() => setShowResetConfirm(true)} variant="outline" className="rounded-full text-red-600 hover:text-red-700 hover:bg-red-50/50 border-red-200">
+      <div className="mt-12 pt-6 border-t flex justify-center sm:justify-end" style={{ borderColor: 'var(--glass-border)' }}>
+        <Button onClick={() => setShowResetConfirm(true)} variant="outline" className="w-full sm:w-auto px-8 justify-center rounded-full text-red-600 hover:text-red-700 hover:bg-red-50/50 border-red-200">
           <RotateCcw size={16} /> Reset All Data & Settings
         </Button>
       </div>
