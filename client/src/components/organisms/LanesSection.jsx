@@ -54,7 +54,7 @@ export default function LanesSection() {
   };
 
   return (
-    <section className="border p-8 rounded-3xl shadow-sm transition-all" style={glassStyle}>
+    <section className="border p-4 sm:p-8 rounded-3xl shadow-sm transition-all" style={glassStyle}>
       <div>
         <h2 className="text-xl font-black mb-2 flex items-center gap-3" style={{ fontFamily: 'Arial, sans-serif', color: 'var(--text-main)' }}>
           <span className="bg-gradient-to-tr from-blue-600 to-blue-500 text-white w-8 h-8 rounded-2xl flex items-center justify-center text-sm shadow-md shadow-blue-500/20">2</span>
@@ -66,13 +66,13 @@ export default function LanesSection() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {Object.keys(directions).filter(d => directions[d]).map(dir => (
           <div key={dir} className="border rounded-2xl overflow-hidden shadow-sm transition-all hover:shadow-md" style={glassStyle}>
-            <div className="border-b p-4 flex flex-wrap justify-between items-center gap-3" style={{ borderColor: 'var(--glass-border)', backgroundColor: 'var(--card-bg)' }}>
-              <div className="flex items-center gap-3">
+            <div className="border-b p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3" style={{ borderColor: 'var(--glass-border)', backgroundColor: 'var(--card-bg)' }}>
+              <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
                 <h3 className="font-extrabold text-base" style={{ fontFamily: 'Arial, sans-serif', color: 'var(--text-main)' }}>{dir}</h3>
                 
                 {/* Pedestrian Yes/No enclosed in a rounded card visible in both Light and Dark modes */}
                 <div 
-                  className="flex items-center gap-2.5 text-xs border px-5 py-2.5 rounded-full shadow-sm"
+                  className="flex items-center gap-2.5 text-xs border px-4 py-2 sm:px-5 sm:py-2.5 rounded-full shadow-sm"
                   style={{ backgroundColor: 'var(--input-bg)', borderColor: 'var(--glass-border)', color: 'var(--text-main)' }}
                 >
                   <span className="font-bold" style={{ color: 'var(--text-muted)' }}>Pedestrian:</span>
@@ -100,7 +100,7 @@ export default function LanesSection() {
               </div>
               <button 
                 onClick={() => addLane(dir)} 
-                className="text-xs font-bold border px-4 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition-all hover:scale-[1.03] active:scale-95"
+                className="text-xs font-bold border px-4 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition-all duration-300 hover:scale-[1.03] active:scale-95 shrink-0 self-end sm:self-auto"
                 style={{ ...dropdownStyle, color: 'var(--text-main)' }}
               >
                 <Plus size={14}/> Add Lane
@@ -113,41 +113,48 @@ export default function LanesSection() {
                 laneConfigs[dir].map((lane, idx) => {
                   const arrow = getArrowSymbol(lane.type);
                   return (
-                    <div key={lane.id} className="flex gap-3 items-center border p-3.5 rounded-2xl shadow-2xs transition-all hover:border-blue-300" style={dropdownStyle}>
+                    <div key={lane.id} className="flex gap-2.5 sm:gap-3 items-center border p-3 sm:p-3.5 rounded-2xl shadow-2xs transition-all hover:border-blue-300" style={dropdownStyle}>
                       {/* Circle beside Lane number fitting 1, 2, or 3 arrows in one single line */}
-                      <div className="w-32 text-sm font-extrabold flex items-center gap-2.5" style={{ color: 'var(--text-main)' }}>
-                        <span>Lane {idx + 1}</span>
-                        <span className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-black text-xs sm:text-sm shadow-xs shrink-0 px-2 whitespace-nowrap">
+                      <div className="text-xs sm:text-sm font-extrabold flex items-center gap-2 shrink-0" style={{ color: 'var(--text-main)' }}>
+                        <span className="whitespace-nowrap">Lane {idx + 1}</span>
+                        <span className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-black text-xs sm:text-sm shadow-xs shrink-0 px-1.5 whitespace-nowrap">
                           {arrow}
                         </span>
                       </div>
                       
-                      {/* Fully Custom Dropdown Menu with Centered Down Chevron */}
-                      <div className="custom-dropdown flex-1">
+                      {/* Default HTML / CSS / JS Dropdown Menu with Arrow Indicator */}
+                      <div className="custom-dropdown flex-1 min-w-0">
                         <select 
                           value={lane.type}
                           onChange={e => updateLaneType(dir, lane.id, e.target.value)}
-                          className="border rounded-full px-5 py-3 pr-10 text-sm font-bold shadow-md transition-all cursor-pointer"
+                          className="w-full border rounded-full px-3.5 py-2.5 sm:px-5 sm:py-3 pr-8 sm:pr-10 text-xs sm:text-sm font-bold shadow-md transition-all cursor-pointer truncate"
                           style={{
                             ...dropdownStyle,
-                            color: 'var(--text-main)',
-                            width: '100%'
+                            color: 'var(--text-main)'
                           }}
                         >
                           {laneTypes.map(t => (
-                            <option key={t} value={t} style={{ backgroundColor: theme === 'dark' ? '#121216' : '#ffffff', color: theme === 'dark' ? '#f3f4f6' : '#1f2937' }}>
+                            <option 
+                              key={t} 
+                              value={t} 
+                              style={{ 
+                                backgroundColor: theme === 'dark' ? '#121216' : '#ffffff', 
+                                color: theme === 'dark' ? '#f3f4f6' : '#1f2937' 
+                              }}
+                            >
                               {t} ({getArrowSymbol(t)})
                             </option>
                           ))}
                         </select>
                       </div>
 
+                      {/* Trash Delete Button with Synced Hover Effects */}
                       <button 
                         onClick={() => removeLane(dir, lane.id)}
-                        className="p-2.5 transition-all rounded-full hover:bg-red-50 hover:text-red-600 text-gray-500 bg-white/95 border border-gray-200 shadow-2xs"
+                        className="p-2 sm:p-2.5 rounded-full text-gray-400 hover:text-red-600 bg-white/95 border border-gray-200 shadow-2xs transition-all duration-300 hover:bg-red-50 hover:border-red-300 hover:scale-110 active:scale-95 group/lanetrash shrink-0"
                         title="Remove Lane"
                       >
-                        <Trash2 size={16} />
+                        <Trash2 size={16} className="transition-transform group-hover/lanetrash:rotate-12" />
                       </button>
                     </div>
                   );
