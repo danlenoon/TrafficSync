@@ -38,12 +38,22 @@ export default function TimingsSection() {
     fontFamily: 'Arial, sans-serif'
   };
 
-  // Helper custom oval up/down picker component with press-and-hold auto increment/decrement
-  const OvalNumberPicker = ({ value, min = 0, onChange, colorScheme = 'green' }) => {
+  // Helper custom oval up/down picker component with press-and-hold auto increment/decrement and continuous typing
+  const OvalNumberPicker = ({ value, min = 0, max = 9999, onChange, colorScheme = 'green' }) => {
     const num = Number(value) || 0;
+    const [localStr, setLocalStr] = React.useState(String(value ?? ''));
+    const isFocusedRef = React.useRef(false);
+
     const timerRef = React.useRef(null);
     const speedTimerRef = React.useRef(null);
     const isChangingRef = React.useRef(false);
+
+    // Keep localStr in sync when value changes externally and input is NOT focused
+    React.useEffect(() => {
+      if (!isFocusedRef.current) {
+        setLocalStr(String(value ?? ''));
+      }
+    }, [value]);
 
     const stopChange = React.useCallback(() => {
       isChangingRef.current = false;
@@ -60,7 +70,8 @@ export default function TimingsSection() {
     const startChange = (delta) => {
       stopChange(); // Clear any existing timers first
       isChangingRef.current = true;
-      let currentVal = Math.max(min, num + delta);
+      let currentVal = Math.min(max, Math.max(min, num + delta));
+      setLocalStr(String(currentVal));
       onChange(currentVal);
       
       // Delay before rapid continuous change starts
@@ -71,7 +82,8 @@ export default function TimingsSection() {
             stopChange();
             return;
           }
-          currentVal = Math.max(min, currentVal + delta);
+          currentVal = Math.min(max, Math.max(min, currentVal + delta));
+          setLocalStr(String(currentVal));
           onChange(currentVal);
         }, 80); // Quick tick every 80ms while held
       }, 350);
@@ -94,6 +106,37 @@ export default function TimingsSection() {
         window.removeEventListener('touchcancel', handleGlobalRelease);
       };
     }, [stopChange]);
+
+    const handleInputChange = (e) => {
+      const raw = e.target.value;
+      // Allow only digits
+      const digitsOnly = raw.replace(/[^0-9]/g, '');
+      if (digitsOnly === '') {
+        setLocalStr('');
+        return;
+      }
+      const parsed = parseInt(digitsOnly, 10);
+      if (parsed > max) {
+        setLocalStr(String(max));
+        onChange(max);
+      } else {
+        setLocalStr(String(parsed));
+        onChange(parsed);
+      }
+    };
+
+    const handleBlur = () => {
+      isFocusedRef.current = false;
+      if (localStr === '') {
+        setLocalStr(String(min));
+        onChange(min);
+      } else {
+        const parsed = parseInt(localStr, 10);
+        const clamped = isNaN(parsed) ? min : Math.min(max, Math.max(min, parsed));
+        setLocalStr(String(clamped));
+        onChange(clamped);
+      }
+    };
 
     const colors = {
       green: {
@@ -133,18 +176,21 @@ export default function TimingsSection() {
           onMouseLeave={stopChange}
           onTouchStart={() => startChange(-1)}
           onTouchEnd={stopChange}
-          className={`w-7 h-7 rounded-full flex items-center justify-center text-gray-500 transition-all duration-150 active:scale-90 select-none ${colors.btnHover}`}
+          className={`w-7 h-7 rounded-full flex items-center justify-center text-gray-500 transition-all duration-300 hover:scale-110 active:scale-95 select-none ${colors.btnHover}`}
           title="Decrease (Click or press & hold)"
         >
-          <ChevronDown size={18} />
+          <ChevronDown size={18} className="transition-transform group-hover:scale-110" />
         </button>
 
         <input
-          type="number"
-          min={min}
-          value={value}
-          onChange={e => onChange(e.target.value)}
-          className={`w-12 text-center font-black text-lg bg-transparent focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${colors.text}`}
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          value={localStr}
+          onFocus={() => { isFocusedRef.current = true; }}
+          onChange={handleInputChange}
+          onBlur={handleBlur}
+          className={`w-14 text-center font-black text-lg bg-transparent focus:outline-none ${colors.text}`}
         />
 
         <button
@@ -154,10 +200,10 @@ export default function TimingsSection() {
           onMouseLeave={stopChange}
           onTouchStart={() => startChange(1)}
           onTouchEnd={stopChange}
-          className={`w-7 h-7 rounded-full flex items-center justify-center text-gray-500 transition-all duration-150 active:scale-90 select-none ${colors.btnHover}`}
+          className={`w-7 h-7 rounded-full flex items-center justify-center text-gray-500 transition-all duration-300 hover:scale-110 active:scale-95 select-none ${colors.btnHover}`}
           title="Increase (Click or press & hold)"
         >
-          <ChevronUp size={18} />
+          <ChevronUp size={18} className="transition-transform group-hover:scale-110" />
         </button>
       </div>
     );
@@ -178,9 +224,9 @@ export default function TimingsSection() {
           <thead className="border-b text-gray-800 text-sm font-extrabold" style={{ borderColor: 'var(--glass-border)', ...tableHeaderStyle }}>
             <tr>
               <th className="p-4" style={{ fontFamily: 'Arial, sans-serif' }}>Lane Configuration</th>
-              <th className="p-4 text-center border-l" style={{ borderColor: 'var(--glass-border)', fontFamily: 'Arial, sans-serif' }}>Go (G)</th>
-              <th className="p-4 text-center border-l" style={{ borderColor: 'var(--glass-border)', fontFamily: 'Arial, sans-serif' }}>Caution (C)</th>
-              <th className="p-4 text-center border-l" style={{ borderColor: 'var(--glass-border)', fontFamily: 'Arial, sans-serif' }}>Red Clearance (RC)</th>
+              <th className="p-4 text-center border-l" style={{ borderColor: 'var(--glass-border)', fontFamily: 'Arial, sans-serif' }}>Go 🟢</th>
+              <th className="p-4 text-center border-l" style={{ borderColor: 'var(--glass-border)', fontFamily: 'Arial, sans-serif' }}>Caution 🟡</th>
+              <th className="p-4 text-center border-l" style={{ borderColor: 'var(--glass-border)', fontFamily: 'Arial, sans-serif' }}>Red Clearance 🔴</th>
             </tr>
           </thead>
           <tbody className="divide-y" style={{ borderColor: 'var(--glass-border)' }}>
@@ -207,7 +253,8 @@ export default function TimingsSection() {
                       <td className="p-4 border-l bg-green-50/20" style={{ borderColor: 'var(--glass-border)' }}>
                         <OvalNumberPicker
                           value={t.go ?? 1}
-                          min={0}
+                          min={1}
+                          max={9999}
                           colorScheme="green"
                           onChange={val => updateTiming(key, 'go', val)}
                         />
@@ -216,6 +263,7 @@ export default function TimingsSection() {
                         <OvalNumberPicker
                           value={t.amber ?? 3}
                           min={0}
+                          max={9999}
                           colorScheme="yellow"
                           onChange={val => updateTiming(key, 'amber', val)}
                         />
@@ -224,6 +272,7 @@ export default function TimingsSection() {
                         <OvalNumberPicker
                           value={t.red ?? 2}
                           min={0}
+                          max={9999}
                           colorScheme="red"
                           onChange={val => updateTiming(key, 'red', val)}
                         />
@@ -247,7 +296,8 @@ export default function TimingsSection() {
                       <td className="p-4 border-l bg-green-50/20" style={{ borderColor: 'var(--glass-border)' }}>
                         <OvalNumberPicker
                           value={p.go ?? 1}
-                          min={0}
+                          min={1}
+                          max={9999}
                           colorScheme="green"
                           onChange={val => updatePedestrianTiming(dir, 'go', val)}
                         />
@@ -259,6 +309,7 @@ export default function TimingsSection() {
                         <OvalNumberPicker
                           value={p.red ?? 2}
                           min={0}
+                          max={9999}
                           colorScheme="red"
                           onChange={val => updatePedestrianTiming(dir, 'red', val)}
                         />
