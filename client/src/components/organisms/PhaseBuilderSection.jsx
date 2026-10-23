@@ -6,7 +6,7 @@ export default function PhaseBuilderSection() {
   const { 
     directions, laneConfigs, pedestrians, 
     phases, addPhase, removePhase, togglePhaseLight, 
-    glassClarity, getDirectionArrow 
+    glassClarity
   } = useContext(SimulationContext);
 
   // Track animating lane states: { [`${phaseId}-${laneKey}`]: true }
@@ -30,6 +30,16 @@ export default function PhaseBuilderSection() {
     }
   };
 
+  const getDirectionArrow = (dir) => {
+    switch (dir) {
+      case 'Northbound': return '↑';
+      case 'Southbound': return '↓';
+      case 'Eastbound': return '→';
+      case 'Westbound': return '←';
+      default: return '•';
+    }
+  };
+
   const handleLaneClick = (phaseId, laneKey, isCurrentlyGreen) => {
     if (isCurrentlyGreen) {
       // Transition from Green -> Amber animation -> Red
@@ -50,7 +60,7 @@ export default function PhaseBuilderSection() {
     }
   };
 
-  const activeDirections = Object.keys(directions).filter(d => directions[d]);
+  const activeDirections = Object.keys(directions || {}).filter(d => directions[d]);
 
   const glassStyle = {
     backgroundColor: 'var(--card-bg)',
@@ -71,7 +81,7 @@ export default function PhaseBuilderSection() {
       </div>
 
       <div className="space-y-6">
-        {phases.map((phase, idx) => (
+        {(phases || []).map((phase, idx) => (
           <div key={phase.id} className="border p-4 sm:p-5 rounded-2xl shadow-sm space-y-4 transition-all" style={{ backgroundColor: 'var(--input-bg)', backdropFilter: 'blur(var(--glass-blur))', borderColor: 'var(--glass-border)' }}>
             <div className="flex justify-between items-center border-b pb-3" style={{ borderColor: 'var(--glass-border)' }}>
               <span className="font-extrabold text-xs text-gray-900 bg-white border border-gray-200 px-3.5 py-1.5 rounded-full shadow-2xs">Phase {idx + 1}</span>
@@ -94,11 +104,11 @@ export default function PhaseBuilderSection() {
                 activeDirections.map(dir => {
                   const pedKey = `${dir}_pedestrian`;
                   // Unconfigured pedestrian signal is off by default until clicked
-                  const pedState = phase.lights[pedKey]; // undefined, 'green', 'red'
+                  const pedState = (phase.lights || {})[pedKey]; // undefined, 'green', 'red'
                   const isPedGreen = pedState === 'green';
                   const isPedRed = pedState === 'red';
-                  const hasPed = pedestrians[dir] === 'Yes';
-                  const lanes = laneConfigs[dir] || [];
+                  const hasPed = pedestrians && pedestrians[dir] === 'Yes';
+                  const lanes = (laneConfigs && laneConfigs[dir]) || [];
                   const laneCountText = lanes.length === 1 ? '1 Lane' : `${lanes.length} Lanes`;
                   const dirArrow = getDirectionArrow(dir);
 
@@ -121,7 +131,7 @@ export default function PhaseBuilderSection() {
                         ) : (
                           lanes.map(lane => {
                             const laneKey = `${dir}-${lane.id}`;
-                            const laneState = phase.lights[laneKey]; // undefined = unconfigured / turned off
+                            const laneState = (phase.lights || {})[laneKey]; // undefined = unconfigured / turned off
                             const isLaneGreen = laneState === 'green';
                             const isLaneRed = laneState === 'red';
                             const isAmberAnimating = animatingLanes[`${phase.id}-${laneKey}`];
@@ -196,7 +206,7 @@ export default function PhaseBuilderSection() {
                                       ? 'GO' 
                                       : (isLaneRed 
                                         ? 'STOP' 
-                                        : 'CLICK TO SET'))}
+                                        : 'UNCONFIGURED'))}
                                 </div>
                               </div>
                             );
@@ -239,14 +249,14 @@ export default function PhaseBuilderSection() {
                               </div>
                             </div>
 
-                            <div className={`text-[11px] font-extrabold uppercase tracking-wider w-14 sm:w-16 text-right ${
+                            <div className={`text-[11px] font-extrabold uppercase tracking-wider w-24 text-right ${
                               isPedGreen 
                                 ? 'text-green-700' 
                                 : (isPedRed 
                                   ? 'text-red-700' 
                                   : 'text-gray-400 italic text-[10px]')
                             }`}>
-                              {isPedGreen ? 'GO' : (isPedRed ? 'STOP' : 'SET')}
+                              {isPedGreen ? 'GO' : (isPedRed ? 'STOP' : 'UNCONFIGURED')}
                             </div>
                           </div>
                         </div>
@@ -260,12 +270,12 @@ export default function PhaseBuilderSection() {
         ))}
       </div>
 
-      {/* Add Phase button positioned at the bottom of the card */}
-      <div className="pt-2 flex justify-center">
+      {/* Add Phase button positioned at the bottom of the card, wider on mobile */}
+      <div className="pt-2 flex justify-center w-full">
         <button 
           type="button" 
           onClick={addPhase}
-          className="text-xs font-bold bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-8 py-3.5 rounded-full flex items-center gap-2 shadow-lg shadow-blue-500/25 transition-all duration-300 hover:scale-[1.03] active:scale-95"
+          className="text-xs font-bold bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-9 sm:px-8 py-3.5 rounded-full flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 transition-all duration-300 hover:scale-[1.03] active:scale-95 w-full xs:w-auto max-w-xs"
           style={{ fontFamily: 'Arial, sans-serif' }}
         >
           <Plus size={16} /> Add Phase
