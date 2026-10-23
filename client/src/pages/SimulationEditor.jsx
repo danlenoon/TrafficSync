@@ -51,17 +51,26 @@ export default function SimulationEditor() {
       return;
     }
     if (!hasActiveDir) {
-      setErrorMsg('Validation Error: Please select at least 1 direction.');
+      setErrorMsg('Validation Error: Please select at least 1 active direction.');
       setTimeout(() => setErrorMsg(''), 7000);
       return;
     }
     if (totalLanesCount === 0) {
-      setErrorMsg('Validation Error: You must configure at least one lane in Lane Customization.');
+      setErrorMsg('Validation Error: Please add at least 1 lane in Lane Customization.');
       setTimeout(() => setErrorMsg(''), 7000);
       return;
     }
-    if (phases.length < 2) {
+
+    const hasAtLeastTwoPhases = phases.length >= 2;
+    if (!hasAtLeastTwoPhases) {
       setErrorMsg('Validation Error: There must be at least 2 phases configured in the Interactive Traffic Light Phase Builder.');
+      setTimeout(() => setErrorMsg(''), 7000);
+      return;
+    }
+
+    const allPhasesHaveGo = phases.every(p => Object.values(p.lights).some(l => l === 'green'));
+    if (!allPhasesHaveGo) {
+      setErrorMsg('Validation Error: At least each phase must have a green go signal configured.');
       setTimeout(() => setErrorMsg(''), 7000);
       return;
     }
@@ -77,7 +86,17 @@ export default function SimulationEditor() {
     fontFamily: 'Arial, sans-serif'
   };
 
-  // Light appearance for popups when in ultra clear Liquid Glass (matching Dashboard modals)
+  // Dedicated dynamic style for the Back button inside the card adhering to Liquid Glass slider
+  const backBtnGlassStyle = {
+    backgroundColor: 'var(--input-bg)',
+    backdropFilter: 'blur(var(--glass-blur))',
+    borderColor: 'var(--glass-border)',
+    color: 'var(--text-main)',
+    fontFamily: 'Arial, sans-serif',
+    boxShadow: `0 4px 14px rgba(0, 0, 0, ${0.04 + glassClarity * 0.08})`
+  };
+
+  // Popup styling adapting to Liquid Glass blur
   const popupBg = glassClarity < 0.3 ? 'rgba(255, 255, 255, 0.95)' : 'var(--card-bg)';
   const popupTextColor = glassClarity < 0.3 ? '#1f2937' : 'var(--text-main)';
 
@@ -90,7 +109,7 @@ export default function SimulationEditor() {
 
   return (
     <div className="h-full flex flex-col animate-in slide-in-from-right-4 relative" style={{ fontFamily: 'Arial, sans-serif' }}>
-      {/* Unsaved Changes Warning Modal unified with Delete & Reset All modal color appearance */}
+      {/* Unsaved Changes Warning Modal dynamically adapting to Liquid Glass blur */}
       {showBackDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 animate-in fade-in" style={{ backdropFilter: `blur(${glassClarity * 12}px)` }}>
           <div 
@@ -111,14 +130,11 @@ export default function SimulationEditor() {
         </div>
       )}
 
-      {/* Custom Notification Friendly Popup Pill (Stays 7s, clickable to dismiss without hover title) */}
+      {/* Custom Notification Friendly Popup Pill dynamically adapting to Liquid Glass blur */}
       {errorMsg && (
-        <div 
-          onClick={() => setErrorMsg('')}
-          className="fixed top-24 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-top-4 cursor-pointer group"
-        >
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-top-4 w-[92%] max-w-lg">
           <div 
-            className="px-8 py-3.5 rounded-full shadow-2xl font-extrabold text-sm border flex items-center gap-3 backdrop-blur-xl transition-all group-hover:scale-[1.02]"
+            className="px-6 py-3.5 sm:px-8 rounded-full shadow-2xl font-extrabold text-xs sm:text-sm border flex items-center gap-3 backdrop-blur-xl transition-all"
             style={{
               backgroundColor: 'var(--card-bg)',
               backdropFilter: 'blur(var(--glass-blur))',
@@ -127,42 +143,31 @@ export default function SimulationEditor() {
               boxShadow: `0 20px 40px rgba(0, 0, 0, ${0.1 + glassClarity * 0.1})`
             }}
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse"></span>
-            <span>{errorMsg}</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse shrink-0"></span>
+            <span className="truncate sm:whitespace-normal">{errorMsg}</span>
           </div>
         </div>
       )}
-
-      {/* iOS 27 Liquid Glass Back Button with Left Chevron */}
-      <button 
-        onClick={handleBackClick} 
-        className="px-5 py-2.5 rounded-full border shadow-sm flex items-center gap-2.5 font-bold text-gray-800 transition-all duration-300 hover:scale-[1.03] active:scale-95 group mb-6 w-fit"
-        style={{
-          backgroundColor: 'var(--input-bg)',
-          backdropFilter: 'blur(var(--glass-blur))',
-          borderColor: 'var(--glass-border)',
-          fontFamily: 'Arial, sans-serif'
-        }}
-      >
-        <ChevronLeft size={16} className="text-blue-600 transition-transform group-hover:-translate-x-1" />
-        <span>Back to Dashboard</span>
-      </button>
       
+      {/* Simulation Editor Card with Back button inside on the left and Right-Aligned Title & Subtitle */}
       <div 
-        className="p-8 rounded-3xl border mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 transition-all"
+        className="p-6 sm:p-8 rounded-3xl border mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 transition-all"
         style={glassStyle}
       >
-        <div>
-          <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'Arial, sans-serif', color: 'var(--text-main)' }}>Simulation Editor</h1>
-          <p className="font-medium" style={{ color: 'var(--text-muted)' }}>Configure your intersection geometry, lanes, and phase timings.</p>
-        </div>
-        <div className="flex gap-3 w-full sm:w-auto">
-          <Button onClick={handleSave} variant="outline" className="flex-1 sm:flex-none">
-            {saved ? <><Check size={18} /> Saved!</> : <><Save size={18} /> Save</>}
-          </Button>
-          <Button onClick={handleCalculate} variant="accent" className="flex-1 sm:flex-none justify-center">
-            <Activity size={18} /> Calculate Cycle
-          </Button>
+        {/* Back to Dashboard Button inside the card on the left */}
+        <button 
+          onClick={handleBackClick} 
+          className="px-5 py-2.5 rounded-full border flex items-center gap-2.5 font-bold transition-all duration-300 hover:scale-[1.03] active:scale-95 group shrink-0"
+          style={backBtnGlassStyle}
+        >
+          <ChevronLeft size={16} className="text-blue-600 transition-transform group-hover:-translate-x-1" />
+          <span>Back to Dashboard</span>
+        </button>
+
+        {/* Right-aligned Title & Subtitle */}
+        <div className="text-left sm:text-right w-full sm:w-auto">
+          <h1 className="text-2xl sm:text-3xl font-black mb-1" style={{ fontFamily: 'Arial, sans-serif', color: 'var(--text-main)' }}>Simulation Editor</h1>
+          <p className="font-medium text-xs sm:text-sm" style={{ color: 'var(--text-muted)' }}>Configure your intersection geometry, lanes, and phase timings.</p>
         </div>
       </div>
 
@@ -171,6 +176,24 @@ export default function SimulationEditor() {
         <LanesSection />
         <PhaseBuilderSection />
         <TimingsSection />
+
+        {/* Action Controls located directly below the Phase Timings Calculator */}
+        <div 
+          className="p-6 rounded-3xl border flex flex-col sm:flex-row justify-between items-center gap-4 transition-all shadow-md"
+          style={glassStyle}
+        >
+          <div className="text-sm font-semibold text-center sm:text-left" style={{ color: 'var(--text-muted)' }}>
+            Review your configurations above before saving or calculating cycle timings.
+          </div>
+          <div className="flex gap-3 w-full sm:w-auto">
+            <Button onClick={handleSave} variant="outline" className="flex-1 sm:flex-none">
+              {saved ? <><Check size={18} /> Saved!</> : <><Save size={18} /> Save</>}
+            </Button>
+            <Button onClick={handleCalculate} variant="accent" className="flex-1 sm:flex-none justify-center">
+              <Activity size={18} /> Calculate Cycle
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
