@@ -5,10 +5,26 @@
 
 const BASE = import.meta.env.VITE_API_BASE_URL || ''
 
-async function request(path, options) {
+async function request(path, options = {}) {
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(options.headers || {})
+  }
+
+  // Provide Basic Authentication credentials if configured
+  const username = import.meta.env.VITE_APP_USERNAME || 'admin'
+  const password = import.meta.env.VITE_APP_PASSWORD || 'supersecretpassword'
+  if (username && password) {
+    try {
+      headers['Authorization'] = `Basic ${btoa(`${username}:${password}`)}`
+    } catch {
+      // Browser btoa fallback if needed
+    }
+  }
+
   const response = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
     ...options,
+    headers,
   })
 
   if (!response.ok) {
@@ -26,15 +42,22 @@ async function request(path, options) {
   return response.status === 204 ? null : response.json()
 }
 
-export const listSightings = () => request('/api/sightings')
+export const listSimulations = () => request('/api/simulations')
 
-export const getSighting = (id) => request(`/api/sightings/${id}`)
+export const getSimulation = (id) => request(`/api/simulations/${id}`)
 
-export const createSighting = (input) =>
-  request('/api/sightings', { method: 'POST', body: JSON.stringify(input) })
+export const createSimulation = (input) =>
+  request('/api/simulations', { method: 'POST', body: JSON.stringify(input) })
 
-export const updateSighting = (id, input) =>
-  request(`/api/sightings/${id}`, { method: 'PUT', body: JSON.stringify(input) })
+export const updateSimulation = (id, input) =>
+  request(`/api/simulations/${id}`, { method: 'PUT', body: JSON.stringify(input) })
 
-export const deleteSighting = (id) =>
-  request(`/api/sightings/${id}`, { method: 'DELETE' })
+export const deleteSimulation = (id) =>
+  request(`/api/simulations/${id}`, { method: 'DELETE' })
+
+// Backward compatibility aliases
+export const listSightings = listSimulations
+export const getSighting = getSimulation
+export const createSighting = createSimulation
+export const updateSighting = updateSimulation
+export const deleteSighting = deleteSimulation
