@@ -286,49 +286,70 @@ export function SimulationProvider({ children }) {
     return newSim;
   };
 
-  // Derived results based purely on user input data
+  // Derived results based on dynamic phase clearance model and exact user clearance equations
   const results = useMemo(() => {
     let intersectionCycle = 0;
+    const phaseDurations = [];
 
     if (phases.length > 0) {
-      // Each phase runs for its active duration, plus the clearance interval (Amber + Red Clearance)
-      // For each phase, compute the maximum clearance required by active/clearing movements in that phase
-      let sumPhaseCycle = 0;
-      phases.forEach(p => {
-        let maxPhaseGo = 0;
-        let maxPhaseAmber = 0;
-        let maxPhaseRed = 0;
-        let hasActiveMovement = false;
+      // Calculate each phase's duration based on transitioning movements that clear at the end of that phase
+      phases.forEach((p, pIdx) => {
+        const nextPhase = phases[(pIdx + 1) % phases.length];
 
+        // Find movements that are green in phase p
+        const greenMovements = [];
         Object.keys(directions).filter(d => directions[d]).forEach(dir => {
           (laneConfigs[dir] || []).forEach(lane => {
             const key = `${dir}-${lane.id}`;
-            const isGreen = p.lights[key] === 'green';
-            const t = phaseTimings[key] || { go: 1, amber: 3, red: 2 };
-            if (isGreen) {
-              hasActiveMovement = true;
-              maxPhaseGo = Math.max(maxPhaseGo, Math.max(1, Number(t.go) || 1));
-              maxPhaseAmber = Math.max(maxPhaseAmber, Math.max(0, Number(t.amber) !== undefined ? Number(t.amber) : 3));
-              maxPhaseRed = Math.max(maxPhaseRed, Math.max(0, Number(t.red) !== undefined ? Number(t.red) : 2));
+            if (p.lights && p.lights[key] === 'green') {
+              const continuesNext = nextPhase && nextPhase.lights && nextPhase.lights[key] === 'green';
+              const t = phaseTimings[key] || { go: 1, amber: 3, red: 2 };
+              greenMovements.push({
+                key,
+                type: 'lane',
+                continuesNext,
+                go: Math.max(1, Number(t.go) || 1),
+                amber: Math.max(0, Number(t.amber) !== undefined ? Number(t.amber) : 3),
+                red: Math.max(0, Number(t.red) !== undefined ? Number(t.red) : 2)
+              });
             }
           });
-          if (pedestrians[dir] === 'Yes' && p.lights[`${dir}_pedestrian`] === 'green') {
-            hasActiveMovement = true;
+
+          if (pedestrians[dir] === 'Yes' && p.lights && p.lights[`${dir}_pedestrian`] === 'green') {
+            const pedKey = `${dir}_pedestrian`;
+            const continuesNext = nextPhase && nextPhase.lights && nextPhase.lights[pedKey] === 'green';
             const pt = pedestrianTimings[dir] || { go: 1, red: 2 };
-            maxPhaseGo = Math.max(maxPhaseGo, Math.max(1, Number(pt.go) || 1));
-            // Pedestrians have walk interval and red clearance (amber is 0)
-            maxPhaseRed = Math.max(maxPhaseRed, Math.max(0, Number(pt.red) !== undefined ? Number(pt.red) : 2));
+            greenMovements.push({
+              key: pedKey,
+              type: 'pedestrian',
+              continuesNext,
+              go: Math.max(1, Number(pt.go) || 1),
+              amber: 0,
+              red: Math.max(0, Number(pt.red) !== undefined ? Number(pt.red) : 2)
+            });
           }
         });
 
-        if (hasActiveMovement) {
-          sumPhaseCycle += (maxPhaseGo + maxPhaseAmber + maxPhaseRed);
-        } else {
-          // If no lights were marked green in this phase, default phase duration
-          sumPhaseCycle += Math.max(1, Number(p.duration) || 6);
+        if (greenMovements.length === 0) {
+          const fallbackDur = Math.max(1, Number(p.duration) || 6);
+          phaseDurations.push(fallbackDur);
+          return;
         }
+
+        // Movements ending in this phase determine the clearance requirements
+        const endingMovements = greenMovements.filter(m => !m.continuesNext);
+        const refMovements = endingMovements.length > 0 ? endingMovements : greenMovements;
+
+        // Find the nominal go for concurrent transitioning movements
+        const minEndingGo = Math.min(...refMovements.map(m => m.go));
+        const maxAmber = Math.max(...refMovements.map(m => m.amber));
+        const maxRed = Math.max(...refMovements.map(m => m.red));
+
+        const phaseDur = minEndingGo + maxAmber + maxRed;
+        phaseDurations.push(phaseDur);
       });
-      intersectionCycle = sumPhaseCycle;
+
+      intersectionCycle = phaseDurations.reduce((sum, d) => sum + d, 0);
     } else {
       let totalSum = 0;
       Object.keys(directions).filter(d => directions[d]).forEach(dir => {
