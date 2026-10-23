@@ -5,17 +5,16 @@
 // visitor's own browser and goes no further.
 //
 // This exists so the template's GitHub Pages link works on day one and so you
-// can build the interface before your API is deployed. It is NOT a finished
-// project. See content/extending-your-app page 3.
+// can build the interface before your API is deployed.
 
 import seed from './seed.json'
 
-const KEY = 'final-project:sightings'
+const KEY = 'trafficsync:simulations'
 
 // A real network is not instant. Keeping this delay is what forces you to build
 // a loading state now, while it is cheap, instead of discovering you need one
 // the day you switch to the real API.
-const delay = (ms = 250) => new Promise((resolve) => setTimeout(resolve, ms))
+const delay = (ms = 150) => new Promise((resolve) => setTimeout(resolve, ms))
 
 function read() {
   const stored = localStorage.getItem(KEY)
@@ -36,40 +35,48 @@ function write(rows) {
   return rows
 }
 
-export async function listSightings() {
+export async function listSimulations() {
   await delay()
-  return read().slice().sort((a, b) => b.reported_at.localeCompare(a.reported_at))
+  return read().slice().sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''))
 }
 
-export async function getSighting(id) {
+export async function getSimulation(id) {
   await delay()
   const found = read().find((row) => String(row.id) === String(id))
   if (!found) throw new Error('Not found')
   return found
 }
 
-export async function createSighting(input) {
+export async function createSimulation(input) {
   await delay()
   const created = {
     ...input,
-    id: crypto.randomUUID(),
-    reported_at: new Date().toISOString(),
+    id: input.id || Date.now().toString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   }
   write([...read(), created])
   return created
 }
 
-export async function updateSighting(id, input) {
+export async function updateSimulation(id, input) {
   await delay()
   const rows = read()
   const index = rows.findIndex((row) => String(row.id) === String(id))
   if (index === -1) throw new Error('Not found')
-  rows[index] = { ...rows[index], ...input }
+  rows[index] = { ...rows[index], ...input, updated_at: new Date().toISOString() }
   write(rows)
   return rows[index]
 }
 
-export async function deleteSighting(id) {
+export async function deleteSimulation(id) {
   await delay()
   write(read().filter((row) => String(row.id) !== String(id)))
 }
+
+// Backward compatibility aliases
+export const listSightings = listSimulations
+export const getSighting = getSimulation
+export const createSighting = createSimulation
+export const updateSighting = updateSimulation
+export const deleteSighting = deleteSimulation
