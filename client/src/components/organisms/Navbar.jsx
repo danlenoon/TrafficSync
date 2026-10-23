@@ -29,7 +29,7 @@ export default function Navbar() {
       {/* iOS Liquid Glass Slider: centered on mobile, right-aligned on md+ (tablets, laptops, desktops) */}
       <div className="w-full md:w-auto flex justify-center md:justify-end items-center md:ml-auto">
         <div 
-          className="flex items-center gap-3 sm:gap-4 px-5 sm:px-6 py-2 sm:py-2.5 rounded-full border shadow-sm transition-all hover:shadow-md"
+          className="w-full max-w-xs sm:max-w-sm md:w-auto flex items-center justify-between md:justify-start gap-3 sm:gap-4 px-5 sm:px-6 py-2 sm:py-2.5 rounded-full border shadow-sm transition-all hover:shadow-md"
           style={{
             backgroundColor: 'var(--input-bg)',
             backdropFilter: 'blur(var(--glass-blur))',
@@ -37,7 +37,7 @@ export default function Navbar() {
           }}
         >
           <Sliders size={16} className="text-blue-600 shrink-0" />
-          <div className="flex items-center gap-2.5 sm:gap-3.5">
+          <div className="flex-1 md:flex-initial flex items-center gap-2.5 sm:gap-3.5">
             <span className="text-sm font-extrabold text-gray-400 select-none hover:text-gray-700 transition-colors">○</span>
             <input 
               type="range" 
@@ -46,7 +46,7 @@ export default function Navbar() {
               step="0.01" 
               value={glassClarity} 
               onChange={(e) => setGlassClarity(Number(e.target.value))}
-              className="w-36 xs:w-44 sm:w-60 cursor-pointer h-2 bg-gray-200/80 rounded-full shadow-inner border border-white/90 transition-all"
+              className="w-full md:w-48 lg:w-60 cursor-pointer h-2 bg-gray-200/80 rounded-full shadow-inner border border-white/90 transition-all"
             />
             <span className="text-sm font-extrabold text-blue-600 select-none hover:text-blue-700 transition-colors">✦</span>
           </div>
