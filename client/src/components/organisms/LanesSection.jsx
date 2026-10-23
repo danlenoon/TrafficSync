@@ -66,7 +66,7 @@ export default function LanesSection() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {Object.keys(directions).filter(d => directions[d]).map(dir => (
           <div key={dir} className="border rounded-2xl overflow-hidden shadow-sm transition-all hover:shadow-md" style={glassStyle}>
-            <div className="border-b p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3" style={{ borderColor: 'var(--glass-border)', backgroundColor: 'var(--card-bg)' }}>
+            <div className="border-b p-4 flex flex-wrap justify-between items-center gap-3" style={{ borderColor: 'var(--glass-border)', backgroundColor: 'var(--card-bg)' }}>
               <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
                 <h3 className="font-extrabold text-base" style={{ fontFamily: 'Arial, sans-serif', color: 'var(--text-main)' }}>{dir}</h3>
                 
@@ -98,14 +98,8 @@ export default function LanesSection() {
                   </button>
                 </div>
               </div>
-              <button 
-                onClick={() => addLane(dir)} 
-                className="text-xs font-bold border px-4 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition-all duration-300 hover:scale-[1.03] active:scale-95 shrink-0 self-end sm:self-auto"
-                style={{ ...dropdownStyle, color: 'var(--text-main)' }}
-              >
-                <Plus size={14}/> Add Lane
-              </button>
             </div>
+            
             <div className="p-4 space-y-3">
               {(laneConfigs[dir] || []).length === 0 ? (
                 <p className="text-sm italic py-2" style={{ color: 'var(--text-muted)' }}>No lanes added yet.</p>
@@ -160,6 +154,18 @@ export default function LanesSection() {
                   );
                 })
               )}
+
+              {/* Add Lane Button horizontally centered on X-Axis below the last lane inside the card, wider on mobile */}
+              <div className="pt-2 flex justify-center w-full">
+                <button 
+                  onClick={() => addLane(dir)} 
+                  className="text-xs font-bold border px-8 sm:px-6 py-2.5 rounded-full shadow-sm flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.03] active:scale-95 w-full xs:w-auto max-w-xs"
+                  style={{ ...dropdownStyle, color: 'var(--text-main)' }}
+                >
+                  <Plus size={14} className="text-blue-600 stroke-[3]" />
+                  <span>Add Lane</span>
+                </button>
+              </div>
             </div>
           </div>
         ))}
