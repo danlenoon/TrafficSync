@@ -4,16 +4,13 @@ import { SimulationContext } from '../../SimulationContext';
 
 export default function PhaseBuilderSection() {
   const { 
-    directions, 
-    laneConfigs,
-    pedestrians,
-    phases, addPhase, removePhase, togglePhaseLight,
-    glassClarity
+    directions, laneConfigs, pedestrians, 
+    phases, addPhase, removePhase, togglePhaseLight, 
+    glassClarity, getDirectionArrow 
   } = useContext(SimulationContext);
 
+  // Track animating lane states: { [`${phaseId}-${laneKey}`]: true }
   const [animatingLanes, setAnimatingLanes] = useState({});
-
-  const activeDirections = Object.keys(directions).filter(d => directions[d]);
 
   const getArrowSymbol = (type) => {
     switch (type) {
@@ -23,7 +20,7 @@ export default function PhaseBuilderSection() {
       case 'U-Turn': return '↩';
       case 'Left & Straight': return '↰ ↑';
       case 'Straight & Right': return '↑ ↱';
-      case 'Left & Right': return '↰ 1';
+      case 'Left & Right': return '↰ ↱';
       case 'Left & U-Turn': return '↰ ↩';
       case 'Straight & U-Turn': return '↑ ↩';
       case 'Right & U-Turn': return '↱ ↩';
@@ -33,29 +30,27 @@ export default function PhaseBuilderSection() {
     }
   };
 
-  const getDirectionArrow = (dir) => {
-    switch (dir) {
-      case 'Northbound': return '↑';
-      case 'Southbound': return '↓';
-      case 'Eastbound': return '→';
-      case 'Westbound': return '←';
-      default: return '•';
-    }
-  };
-
   const handleLaneClick = (phaseId, laneKey, isCurrentlyGreen) => {
     if (isCurrentlyGreen) {
-      // Switching from Go to Stop: trigger Amber caution animation first (for vehicles only)
-      setAnimatingLanes(prev => ({ ...prev, [`${phaseId}-${laneKey}`]: true }));
+      // Transition from Green -> Amber animation -> Red
+      const animKey = `${phaseId}-${laneKey}`;
+      setAnimatingLanes(prev => ({ ...prev, [animKey]: true }));
+      
       setTimeout(() => {
-        setAnimatingLanes(prev => ({ ...prev, [`${phaseId}-${laneKey}`]: false }));
+        setAnimatingLanes(prev => {
+          const updated = { ...prev };
+          delete updated[animKey];
+          return updated;
+        });
         togglePhaseLight(phaseId, laneKey);
-      }, 600); // 600ms amber pulse animation
+      }, 700);
     } else {
-      // Switching from Stop to Go: instant
+      // Instant transition Red/Off -> Green
       togglePhaseLight(phaseId, laneKey);
     }
   };
+
+  const activeDirections = Object.keys(directions).filter(d => directions[d]);
 
   const glassStyle = {
     backgroundColor: 'var(--card-bg)',
@@ -66,18 +61,18 @@ export default function PhaseBuilderSection() {
   };
 
   return (
-    <section className="border p-8 rounded-3xl shadow-sm space-y-6 transition-all" style={glassStyle}>
+    <section className="border p-4 sm:p-8 rounded-3xl shadow-sm space-y-6 transition-all" style={glassStyle}>
       <div>
-        <h2 className="text-xl font-black text-gray-900 flex items-center gap-3 mb-2" style={{ fontFamily: 'Arial, sans-serif' }}>
+        <h2 className="text-xl font-black text-gray-900 mb-2 flex items-center gap-3" style={{ fontFamily: 'Arial, sans-serif' }}>
           <span className="bg-gradient-to-tr from-blue-600 to-blue-500 text-white w-8 h-8 rounded-2xl flex items-center justify-center text-sm shadow-md shadow-blue-500/20">3</span>
           Interactive Traffic Light Phase Builder
         </h2>
         <p className="text-xs text-gray-600 font-medium ml-11">Construct visual signal phases dynamically by toggling directional lane lights and pedestrian signals between GO (Green) and STOP (Red) states for each signal phase interval.</p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         {phases.map((phase, idx) => (
-          <div key={phase.id} className="border p-5 rounded-2xl shadow-sm space-y-4 transition-all" style={{ backgroundColor: 'var(--input-bg)', backdropFilter: 'blur(var(--glass-blur))', borderColor: 'var(--glass-border)' }}>
+          <div key={phase.id} className="border p-4 sm:p-5 rounded-2xl shadow-sm space-y-4 transition-all" style={{ backgroundColor: 'var(--input-bg)', backdropFilter: 'blur(var(--glass-blur))', borderColor: 'var(--glass-border)' }}>
             <div className="flex justify-between items-center border-b pb-3" style={{ borderColor: 'var(--glass-border)' }}>
               <span className="font-extrabold text-xs text-gray-900 bg-white border border-gray-200 px-3.5 py-1.5 rounded-full shadow-2xs">Phase {idx + 1}</span>
 
@@ -102,7 +97,6 @@ export default function PhaseBuilderSection() {
                   const pedState = phase.lights[pedKey]; // undefined, 'green', 'red'
                   const isPedGreen = pedState === 'green';
                   const isPedRed = pedState === 'red';
-                  const isPedOff = !pedState || pedState === 'off';
                   const hasPed = pedestrians[dir] === 'Yes';
                   const lanes = laneConfigs[dir] || [];
                   const laneCountText = lanes.length === 1 ? '1 Lane' : `${lanes.length} Lanes`;
@@ -130,7 +124,6 @@ export default function PhaseBuilderSection() {
                             const laneState = phase.lights[laneKey]; // undefined = unconfigured / turned off
                             const isLaneGreen = laneState === 'green';
                             const isLaneRed = laneState === 'red';
-                            const isLaneOff = !laneState || laneState === 'off';
                             const isAmberAnimating = animatingLanes[`${phase.id}-${laneKey}`];
                             const arrowDisplay = getArrowSymbol(lane.type);
 
@@ -163,17 +156,17 @@ export default function PhaseBuilderSection() {
                                   {/* Red Light */}
                                   <div className={`w-full h-8 rounded-full flex items-center justify-center font-black text-xs sm:text-sm transition-all whitespace-nowrap px-1.5 ${
                                     isLaneRed && !isAmberAnimating
-                                      ? 'bg-red-500 text-white shadow-[0_0_10px_rgba(239,68,68,0.9)] scale-105' 
+                                      ? 'bg-red-500 text-white shadow-[0_0_8px_rgba(239,68,68,0.9)]'
                                       : 'bg-red-950/60 text-red-900/40'
                                   }`}>
                                     {arrowDisplay}
                                   </div>
 
-                                  {/* Amber Light (Caution) */}
+                                  {/* Amber Light */}
                                   <div className={`w-full h-8 rounded-full flex items-center justify-center font-black text-xs sm:text-sm transition-all whitespace-nowrap px-1.5 ${
-                                    isAmberAnimating 
-                                      ? 'bg-yellow-400 text-white shadow-[0_0_12px_rgba(250,204,21,1)] scale-110 animate-bounce' 
-                                      : 'bg-yellow-950/40 text-yellow-900/30'
+                                    isAmberAnimating
+                                      ? 'bg-yellow-400 text-yellow-950 shadow-[0_0_10px_rgba(250,204,21,0.9)] animate-pulse'
+                                      : 'bg-yellow-950/60 text-yellow-900/40'
                                   }`}>
                                     {arrowDisplay}
                                   </div>
@@ -181,7 +174,7 @@ export default function PhaseBuilderSection() {
                                   {/* Green Light */}
                                   <div className={`w-full h-8 rounded-full flex items-center justify-center font-black text-xs sm:text-sm transition-all whitespace-nowrap px-1.5 ${
                                     isLaneGreen && !isAmberAnimating
-                                      ? 'bg-green-500 text-white shadow-[0_0_10px_rgba(34,197,94,0.9)] scale-105' 
+                                      ? 'bg-green-500 text-white shadow-[0_0_8px_rgba(34,197,94,0.9)]'
                                       : 'bg-green-950/60 text-green-900/40'
                                   }`}>
                                     {arrowDisplay}
@@ -246,7 +239,7 @@ export default function PhaseBuilderSection() {
                               </div>
                             </div>
 
-                            <div className={`text-[11px] font-extrabold uppercase tracking-wider w-16 text-right ${
+                            <div className={`text-[11px] font-extrabold uppercase tracking-wider w-14 sm:w-16 text-right ${
                               isPedGreen 
                                 ? 'text-green-700' 
                                 : (isPedRed 
