@@ -258,7 +258,7 @@
         },
         {
           "id": 4,
-          "name": "Phase 4: Eastbound Movement",
+          "name": "Phase 4: Eastbound Left, Straight, & Right",
           "lights": {
             "Northbound-1": "red",
             "Northbound-2": "red",
@@ -277,7 +277,7 @@
         },
         {
           "id": 5,
-          "name": "Phase 5: Westbound Movement",
+          "name": "Phase 5: Westbound Left, Straight, & Right",
           "lights": {
             "Northbound-1": "red",
             "Northbound-2": "red",
