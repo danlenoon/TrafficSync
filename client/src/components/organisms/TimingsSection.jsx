@@ -228,7 +228,7 @@ export default function TimingsSection() {
             </tr>
           </thead>
           <tbody className="divide-y" style={{ borderColor: 'var(--glass-border)' }}>
-            {Object.keys(directions).filter(d => directions[d]).map(dir => (
+            {['Northbound', 'Southbound', 'Eastbound', 'Westbound'].filter(d => directions && directions[d]).map(dir => (
               <React.Fragment key={dir}>
                 {(laneConfigs[dir] || []).map(lane => {
                   const key = `${dir}-${lane.id}`;
