@@ -113,18 +113,27 @@ cd TrafficSync
 
 The frontend runs in **Offline Demo Mode out-of-the-box**, meaning you can test all features immediately without setting up a backend server or database!
 
-```bash
-# Navigate into the client directory from the project root
-cd client
+Navigate into the client directory from the project root:
 
-# Install all frontend dependencies (React, Vite, Lucide, Tailwind)
+```bash
+# Move into the client folder
+cd client
+```
+
+Install all frontend dependencies and prepare the environment:
+
+```bash
+# Install React, Vite, Lucide, and Tailwind dependencies
 npm install
 
-# (Optional) Create your client environment configuration
-# Copy the example file to a real .env file
+# (Optional) Copy the example environment file to a real .env file
 cp .env.example .env
+```
 
-# Start the local Vite development server
+Start the local Vite development server:
+
+```bash
+# Launch the development server
 npm run dev
 ```
 
@@ -137,14 +146,17 @@ You can immediately configure intersections, customize lanes, build phases, calc
 
 ### Step 3: Setup the Database (Optional)
 
-If you intend to run the full-stack version, you will need a PostgreSQL database.
+If you intend to run the full-stack version, you will need a PostgreSQL database. Ensure you have a PostgreSQL instance running locally or in the cloud, then create a new database:
 
 ```bash
-# Ensure you have a PostgreSQL instance running locally or in the cloud
 # Create a new database named 'trafficsync'
 createdb trafficsync
+```
 
-# Navigate to the server directory to prepare for schema initialization
+Navigate to the server directory to prepare for schema initialization:
+
+```bash
+# Move from the client folder to the server folder
 cd ../server
 ```
 
@@ -164,6 +176,7 @@ cp .env.example .env
 ```
 
 Open `server/.env` in your text editor and fill in your database credentials:
+
 ```env
 PORT=3000
 DATABASE_URL=postgres://your_user:your_password@localhost:5432/trafficsync
@@ -189,15 +202,16 @@ Your API is now listening at **`http://localhost:3000`**!
 
 ### Step 5: Run as a Full Stack Application
 
-To connect the Frontend to your live Backend and switch from LocalStorage to the PostgreSQL database:
+To connect the Frontend to your live Backend and switch from LocalStorage to the PostgreSQL database, open `client/.env` in your preferred text editor and set the following variables:
 
-```bash
-# Open 'client/.env' in your preferred text editor (e.g., VS Code or Notepad)
-# Set the following variables to connect to your local backend:
+```env
 VITE_USE_MOCK_API=false
 VITE_API_BASE_URL=http://localhost:3000
+```
 
-# Start both the frontend and backend servers simultaneously
+Start both the frontend and backend servers simultaneously:
+
+```bash
 # In terminal 1 (client directory):
 npm run dev
 
@@ -214,73 +228,104 @@ Now, TrafficSync will save and load data directly from your PostgreSQL database 
 If you encounter issues during setup, check these common solutions organized by category:
 
 **1. Port Conflicts (5173 or 3000)**
-```bash
-# If you see 'EADDRINUSE', a process is already using the required port.
-# On Windows, identify the process ID (PID) and terminate it:
-netstat -ano | findstr :5173
-taskkill /PID <PID_NUMBER> /F
 
-# On Linux/macOS:
+If you see `EADDRINUSE`, a process is already using the required port. On Windows, identify the process ID (PID) and terminate it:
+
+```bash
+# Identify the PID for the port
+netstat -ano | findstr :5173
+
+# Terminate the process
+taskkill /PID <PID_NUMBER> /F
+```
+
+On Linux or macOS, use the following commands:
+
+```bash
+# Identify the process
 lsof -i :5173
+
+# Terminate the process
 kill -9 <PID>
 ```
 
 **2. Database & Connection Errors**
+
+Verify that PostgreSQL is active on your system. On Windows, open the "Services" app and ensure `postgresql-x64` is **Running**. On Linux or macOS, check the service status:
+
 ```bash
-# Verify PostgreSQL is active on your system
-# Windows: Open 'Services' and ensure 'postgresql-x64' is "Running"
-# Linux/macOS:
+# Check PostgreSQL status
 sudo service postgresql status
+```
 
-# If 'npm run db:reset' fails, ensure the database 'trafficsync' exists:
-# Log into PostgreSQL and create it manually if necessary
+If `npm run db:reset` fails, ensure the database `trafficsync` exists. Log into PostgreSQL and create it manually if necessary:
+
+```bash
+# Log into PostgreSQL
 psql -U postgres
-CREATE DATABASE trafficsync;
 
-# Check 'server/.env' format (avoid spaces around the '=' sign)
+# Create the database
+CREATE DATABASE trafficsync;
+```
+
+Check the `server/.env` format and avoid spaces around the `=` sign:
+
+```env
 DATABASE_URL=postgres://user:pass@localhost:5432/trafficsync
 ```
 
 **3. Frontend-Backend Communication (CORS)**
-```bash
-# If the frontend cannot talk to the backend, verify CORS_ORIGINS in 'server/.env'
-# It must match your frontend's exact URL (e.g., http://localhost:5173)
-CORS_ORIGINS=http://localhost:5173
 
-# Ensure your client is configured to use the API, not Mock Mode:
-# In 'client/.env':
+If the frontend cannot communicate with the backend, verify the `CORS_ORIGINS` in `server/.env`. It must match your frontend's exact URL:
+
+```env
+CORS_ORIGINS=http://localhost:5173
+```
+
+Ensure your client is configured to use the API instead of Mock Mode in `client/.env`:
+
+```env
 VITE_USE_MOCK_API=false
 ```
 
 **4. Node.js & Dependency Issues**
-```bash
-# Verify you are using the supported Node.js version (v18+)
-node -v
 
-# If dependencies are corrupted, perform a clean reinstall:
-# Run this in both 'client' and 'server' directories
+Verify you are using the supported Node.js version (v18 or higher):
+
+```bash
+# Check Node version
+node -v
+```
+
+If dependencies are corrupted, perform a clean reinstall in both `client` and `server` directories:
+
+```bash
+# Delete existing modules and reinstall
 rm -rf node_modules package-lock.json
 npm install
 ```
 
 **5. Environment Variables Missing**
+
+If you get `undefined` errors, ensure `.env` files exist in **BOTH** directories:
+
 ```bash
-# If you get 'undefined' errors, ensure .env files exist in BOTH directories
-# Both 'client/.env' and 'server/.env' must be populated
+# Check for .env files
 ls -a client/.env server/.env
 ```
 
 **6. Script Execution Permissions**
+
+On Linux or macOS, if scripts fail to run, grant execution permissions:
+
 ```bash
-# On Linux/macOS, if scripts fail to run, grant execution permissions:
+# Grant execution rights
 chmod +x node_modules/.bin/*
 ```
 
 **7. Browser-Specific Issues**
-```bash
-# If data seems stuck or UI is inconsistent, clear LocalStorage:
-# Open Browser DevTools -> Application Tab -> Local Storage -> Clear All
-```
+
+If data seems stuck or the UI is inconsistent, clear your browser's LocalStorage. Open Browser DevTools, navigate to the **Application** tab, select **Local Storage**, and click **Clear All**.
 
 ---
 
