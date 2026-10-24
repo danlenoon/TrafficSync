@@ -13,7 +13,7 @@ async function request(path, options = {}) {
 
   // Provide Basic Authentication credentials if configured
   const username = import.meta.env.VITE_APP_USERNAME || 'admin'
-  const password = import.meta.env.VITE_APP_PASSWORD || 'supersecretpassword'
+  const password = import.meta.env.VITE_APP_PASSWORD || 'your_secure_password'
   if (username && password) {
     try {
       headers['Authorization'] = `Basic ${btoa(`${username}:${password}`)}`
