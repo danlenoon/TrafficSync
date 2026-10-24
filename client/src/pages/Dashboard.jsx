@@ -86,6 +86,7 @@ export default function Dashboard() {
                 onClick={() => {
                   resetAll();
                   setShowResetConfirm(false);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
                 }} 
                 variant="danger" 
                 className="rounded-full"
