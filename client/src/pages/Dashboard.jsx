@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Plus, RotateCcw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/atoms/Button';
@@ -10,6 +10,10 @@ export default function Dashboard() {
   const { savedSimulations, deleteSimulation, loadSimulation, resetSimulation, resetAll, glassClarity } = useContext(SimulationContext);
   const [deleteDialogId, setDeleteDialogId] = useState(null);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleLoad = (sim) => {
     loadSimulation(sim);
