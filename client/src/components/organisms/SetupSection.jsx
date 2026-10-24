@@ -50,7 +50,7 @@ export default function SetupSection() {
         <div>
           <label className="block text-xs font-extrabold text-gray-700 mb-2 uppercase tracking-wider">Directions</label>
           <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-3">
-            {Object.keys(directions).map(dir => (
+            {['Northbound', 'Southbound', 'Eastbound', 'Westbound'].map(dir => (
               <label 
                 key={dir} 
                 className={`flex items-center gap-3 p-3 sm:p-3.5 border rounded-full cursor-pointer transition-all duration-300 shadow-2xs hover:scale-[1.02] ${
