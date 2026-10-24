@@ -1,10 +1,10 @@
 [
   {
     "id": "1",
-    "title": "Fil-Am Friendship Highway / Clark Main Gate",
-    "road_name": "Fil-Am Friendship Highway / Clark Main Gate",
+    "title": "Fil-Am Friendship Highway x Clark Main Gate",
+    "road_name": "Fil-Am Friendship Highway x Clark Main Gate",
     "data": {
-      "roadName": "Fil-Am Friendship Highway / Clark Main Gate",
+      "roadName": "Fil-Am Friendship Highway x Clark Main Gate",
       "directions": {
         "Northbound": true,
         "Southbound": false,
@@ -143,10 +143,10 @@
   },
   {
     "id": "2",
-    "title": "MacArthur Highway / Brgy. Del Rosario Road",
-    "road_name": "MacArthur Highway / Brgy. Del Rosario Road",
+    "title": "MacArthur Highway x Brgy. Del Rosario Road",
+    "road_name": "MacArthur Highway x Brgy. Del Rosario Road",
     "data": {
-      "roadName": "MacArthur Highway / Brgy. Del Rosario Road",
+      "roadName": "MacArthur Highway x Brgy. Del Rosario Road",
       "directions": {
         "Northbound": true,
         "Southbound": true,
