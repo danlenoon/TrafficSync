@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Save, BarChart3, Check, ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/atoms/Button';
@@ -10,6 +10,10 @@ export default function Results() {
   const [saved, setSaved] = useState(false);
   const [hoverData, setHoverData] = useState(null); // { text, x, y }
   const [showBackDialog, setShowBackDialog] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleSave = () => {
     saveCurrentSimulation();
