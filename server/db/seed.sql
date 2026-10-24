@@ -99,7 +99,7 @@ INSERT INTO simulations (title, road_name, data, created_at, updated_at) VALUES
       },
       {
         "id": 3,
-        "name": "Phase 2: Eastbound Straight & Right and Westbound Straight",
+        "name": "Phase 3: Eastbound Straight & Right and Westbound Straight",
         "lights": {
           "Northbound-1": "red",
           "Northbound-2": "red",
@@ -118,7 +118,7 @@ INSERT INTO simulations (title, road_name, data, created_at, updated_at) VALUES
       },
       {
         "id": 4,
-        "name": "Phase 3: Westbound Left & Straight",
+        "name": "Phase 4: Westbound Left & Straight",
         "lights": {
           "Northbound-1": "red",
           "Northbound-2": "red",
@@ -133,7 +133,7 @@ INSERT INTO simulations (title, road_name, data, created_at, updated_at) VALUES
           "Westbound-2": "green",
           "Westbound-3": "green",
           "Westbound-4": "green",
-          "Westbound_pedestrian": "green"
+          "Westbound_pedestrian": "red"
         }
       }
     ],
@@ -259,7 +259,7 @@ INSERT INTO simulations (title, road_name, data, created_at, updated_at) VALUES
       },
       {
         "id": 4,
-        "name": "Phase 4: Eastbound Movement",
+        "name": "Phase 4: Eastbound Left, Straight, & Right",
         "lights": {
           "Northbound-1": "red",
           "Northbound-2": "red",
@@ -278,7 +278,7 @@ INSERT INTO simulations (title, road_name, data, created_at, updated_at) VALUES
       },
       {
         "id": 5,
-        "name": "Phase 5: Westbound Movement",
+        "name": "Phase 5: Westbound Left, Straight, & Right",
         "lights": {
           "Northbound-1": "red",
           "Northbound-2": "red",
@@ -290,7 +290,7 @@ INSERT INTO simulations (title, road_name, data, created_at, updated_at) VALUES
           "Southbound-4": "red",
           "Eastbound-1": "red",
           "Eastbound-2": "red",
-      "Westbound-1": "green",
+          "Westbound-1": "green",
           "Westbound-2": "green",
           "Westbound-3": "green"
         }
