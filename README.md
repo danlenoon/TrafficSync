@@ -1,12 +1,12 @@
 # 🚦 TrafficSync
 
 <p align="center">
-  <img src="https://img.shields.io/badge/status-active-success.svg" alt="Status">
-  <img src="https://img.shields.io/badge/React-18.3-blue.svg" alt="React">
-  <img src="https://img.shields.io/badge/Node.js-Express-green.svg" alt="Express">
-  <img src="https://img.shields.io/badge/PostgreSQL-Neon-blueviolet.svg" alt="PostgreSQL">
-  <img src="https://img.shields.io/badge/Made%20with-AI%20Assistance-blue.svg" alt="Made with AI Assistance">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
+  <a href="https://github.com/danlenoon/TrafficSync/actions"><img src="https://img.shields.io/badge/status-active-success.svg" alt="Status"></a>
+  <a href="https://react.dev"><img src="https://img.shields.io/badge/React-18.3-blue.svg" alt="React"></a>
+  <a href="https://expressjs.com"><img src="https://img.shields.io/badge/Node.js-Express-green.svg" alt="Express"></a>
+  <a href="https://neon.tech"><img src="https://img.shields.io/badge/PostgreSQL-Neon-blueviolet.svg" alt="PostgreSQL"></a>
+  <a href="AI-USAGE.md"><img src="https://img.shields.io/badge/Made%20with-AI%20Assistance-blue.svg" alt="Made with AI Assistance"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"></a>
 </p>
 
 [![A screenshot of the main screen](docs/assets/main_screen.png)](https://danlenoon.github.io/TrafficSync/)
@@ -100,11 +100,15 @@ Follow these step-by-step instructions to run TrafficSync on your local computer
 Open your command terminal (PowerShell, Bash, or Command Prompt) and clone the repository:
 
 ```bash
-# Clone the project repository from GitHub to your local machine
+# Clone the project repository from GitHub to your local machine via HTTPS
 git clone https://github.com/danlenoon/TrafficSync.git
 
-# Move into the newly cloned project directory
+# Enter the root directory of the cloned repository
 cd TrafficSync
+
+# Verify git remote connection status and current branch tracking
+git remote -v
+git status
 ```
 
 ---
@@ -116,24 +120,28 @@ The frontend runs in **Offline Demo Mode out-of-the-box**, meaning you can test 
 Navigate into the client directory from the project root:
 
 ```bash
-# Move into the client folder
+# Navigate from the project root directory into the client folder
 cd client
+
+# Confirm current working directory and verify package.json existence
+pwd
+ls package.json
 ```
 
 Install all frontend dependencies and prepare the environment:
 
 ```bash
-# Install React, Vite, Lucide, and Tailwind dependencies
+# Install all required React 18, Vite, Lucide, and Tailwind CSS packages
 npm install
 
-# (Optional) Copy the example environment file to a real .env file
+# (Optional) Duplicate the template .env file to create your local .env configuration
 cp .env.example .env
 ```
 
 Start the local Vite development server:
 
 ```bash
-# Launch the development server
+# Launch the Vite local development server with hot-module replacement (HMR)
 npm run dev
 ```
 
@@ -149,15 +157,21 @@ You can immediately configure intersections, customize lanes, build phases, calc
 If you intend to run the full-stack version, you will need a PostgreSQL database. Ensure you have a PostgreSQL instance running locally or in the cloud, then create a new database:
 
 ```bash
-# Create a new database named 'trafficsync'
+# Connect to PostgreSQL and create the target database named 'trafficsync'
 createdb trafficsync
+
+# Alternatively, you can open psql interactive shell and execute:
+# CREATE DATABASE trafficsync;
 ```
 
 Navigate to the server directory to prepare for schema initialization:
 
 ```bash
-# Move from the client folder to the server folder
-cd ../server
+# Move from your current directory to the server directory
+cd server
+
+# Verify server directory contents and check database migration scripts
+ls db/
 ```
 
 ---
@@ -169,20 +183,27 @@ If you want to test the full-stack architecture with the live Express server, na
 ```bash
 # Navigate from project root or client directory into the server folder
 cd server
+
+# Verify current working directory and check for backend package.json
+pwd
+ls package.json
 ```
 
 Install backend dependencies (Express, pg, cors, dotenv):
 
 ```bash
-# Install all required backend packages
+# Install all required backend packages and dependencies from npm registry
 npm install
 ```
 
 Create your local environment configuration file from the template:
 
 ```bash
-# Copy .env.example to create your live .env configuration file
+# Duplicate .env.example to generate your local live .env configuration file
 cp .env.example .env
+
+# Verify that the .env file was successfully created
+ls -la .env
 ```
 
 Open `server/.env` in your text editor and fill in your database credentials:
@@ -212,13 +233,13 @@ Your API is now listening at **`http://localhost:3000`**!
 
 ### Step 5: Run as a Full Stack Application
 
-To connect the Frontend to your live Backend and switch from LocalStorage to the PostgreSQL database, navigate to the client folder and open `client/.env`:
+To connect the Frontend to your live Backend and switch from LocalStorage to the PostgreSQL database, navigate to the client folder and configure `client/.env`:
 
 ```bash
 # Navigate to the client directory from project root
 cd client
 
-# Copy example environment configuration if not already done
+# Duplicate template file to create client .env if not already present
 cp .env.example .env
 ```
 
@@ -232,20 +253,26 @@ VITE_API_BASE_URL=http://localhost:3000
 To run the complete full-stack application, start both the frontend and backend servers simultaneously in two separate terminal windows:
 
 ```bash
-# --- TERMINAL 1: Frontend ---
+# ==========================================
+# TERMINAL 1: Frontend Development Server
+# ==========================================
+
 # Navigate to client directory
 cd client
 
-# Start the Vite development server
+# Start the Vite local development server with HMR
 npm run dev
 ```
 
 ```bash
-# --- TERMINAL 2: Backend ---
+# ==========================================
+# TERMINAL 2: Backend Express REST API Server
+# ==========================================
+
 # Navigate to server directory
 cd server
 
-# Start the Express REST API server
+# Start the Node.js Express server
 npm start
 ```
 
@@ -370,6 +397,35 @@ If data seems stuck or the UI is inconsistent due to stale cached state, clear y
 
 ```bash
 # Open Browser DevTools (F12) -> Application Tab -> Local Storage -> Right-click origin -> Clear
+```
+
+**8. SSL / Self-Signed Certificate Errors (Neon / Remote PostgreSQL)**
+
+If you experience TLS/SSL handshake failures or untrusted certificate errors when connecting to cloud PostgreSQL databases (like Neon):
+
+```bash
+# Ensure your DATABASE_URL appends the required SSL mode parameter
+# Example: postgres://user:pass@host/db?sslmode=require
+```
+
+**9. Vite Build / Module Resolution Errors**
+
+If you encounter missing module errors or `vite: command not found`:
+
+```bash
+# Ensure global or local binaries are linked correctly by reinstalling client dependencies
+cd client
+npm install
+npm run build
+```
+
+**10. Basic Authentication Failures (401 Unauthorized)**
+
+If backend API requests return `401 Unauthorized`, verify that your credentials match the server's environment variables:
+
+```bash
+# Check server/.env for matching authentication credentials
+grep -E "APP_USERNAME|APP_PASSWORD" server/.env
 ```
 
 ---
