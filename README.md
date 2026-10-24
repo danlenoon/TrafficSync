@@ -591,29 +591,42 @@ TrafficSync separates responsibilities across three discrete layers to ensure re
 
 ## Screenshots
 
-| Application Screen & State | Interface Preview & Layout Description |
+Explore the responsive user interface across desktop and mobile form factors, featuring the saved simulation portfolio, interactive intersection editor, analytical cycle results breakdown, and dynamic Liquid Glass design system.
+
+### Desktop Interfaces
+
+| Application Screen & State | Comprehensive Layout Description & Interface Features |
 | :--- | :--- |
-| **Home Dashboard (Saved Simulations)** | <img src="docs/assets/saved_simulation_dashboard_desktop.png" alt="Saved Simulation Dashboard" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The TrafficSync Dashboard displaying saved simulation portfolio cards with directional badges, timestamps, deletion controls, and the "+ New Simulation" action. |
-| **Home Dashboard (Mobile View)** | <img src="docs/assets/saved_simulation_dashboard_mobile.png" alt="Saved Simulation Dashboard Mobile" width="280" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Mobile presentation of saved simulations showcasing centered actions and touch-friendly card spacing. |
-| **Home Dashboard (Empty State)** | <img src="docs/assets/no_saved_simulations_dashboard_desktop.png" alt="Empty Dashboard" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The clean empty state welcoming first-time users to create their inaugural intersection simulation. |
-| **Simulation Editor (Initial State)** | <img src="docs/assets/simulation_editor_without_user_inputs_desktop.png" alt="Simulation Editor Initial" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The Simulation Editor before input configuration, featuring the top Back button, intersection name prompt, and approach selection toggles. |
-| **Simulation Editor (Active Configuration)** | <img src="docs/assets/simulation_editor_with_user_inputs_desktop.png" alt="Simulation Editor Active" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>A fully configured intersection featuring customized lane turning movements, oval number pickers, visual signal head phases, and bottom action buttons. |
-| **Simulation Editor (Mobile View)** | <img src="docs/assets/simulation_editor_with_user_inputs_mobile.png" alt="Simulation Editor Mobile" width="280" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Responsive single-column mobile layout showing centered add-lane controls, pedestrian signal matrices, and contained action buttons. |
-| **Cycle Results Summary (Desktop)** | <img src="docs/assets/cycle_results_summary_desktop.png" alt="Cycle Results Summary Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Comprehensive analytical results screen displaying total stop times, calculated cycle length, and interactive color-coded percentage breakdown bars. |
-| **Cycle Results Summary (Mobile)** | <img src="docs/assets/cycle_results_summary_mobile.png" alt="Cycle Results Summary Mobile" width="280" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Mobile presentation of cycle results with stacked metrics and touch-accessible percentage breakdown telemetry. |
-| **Liquid Glass (Default Appearance)** | <img src="docs/assets/liquid_glass_default_appearance_desktop.png" alt="Liquid Glass Default" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Balanced medium clarity (50%) providing translucent glass styling with optimal readability. |
-| **Liquid Glass (Ultra Clear Appearance)** | <img src="docs/assets/liquid_glass_ultra_clear_appearance_desktop.png" alt="Liquid Glass Ultra Clear" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>High-transparency appearance maximizing backdrop visibility while preserving element border definition. |
-| **Liquid Glass (Ultra Tinted Appearance)** | <img src="docs/assets/liquid_glass_ultra_tinted_appearance_desktop.png" alt="Liquid Glass Ultra Tinted" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Solid high-contrast appearance for high-glare environments or users preferring dense opaque surfaces. |
+| **Home Dashboard (Saved Simulations)** | <img src="docs/assets/saved_simulation_dashboard_desktop.png" alt="Saved Simulation Dashboard Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The master portfolio dashboard presenting saved intersection simulation cards in a responsive grid. Each card displays directional indicators, creation timestamps, quick-load triggers, and deletion controls, anchored by the prominent "+ New Simulation" action. |
+| **Home Dashboard (Empty State)** | <img src="docs/assets/no_saved_simulations_dashboard_desktop.png" alt="Empty Dashboard Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The welcoming initial state displayed when no simulations are saved in local storage or database persistence, providing a clean onboarding call-to-action for new users. |
+| **Simulation Editor (Initial State)** | <img src="docs/assets/simulation_editor_without_user_inputs_desktop.png" alt="Simulation Editor Initial Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The multi-step intersection configuration view prior to data entry. Features a header navigation control with a back button, intersection naming field, and interactive approach toggles (Northbound, Southbound, Eastbound, Westbound). |
+| **Simulation Editor (Active Configuration)** | <img src="docs/assets/simulation_editor_with_user_inputs_desktop.png" alt="Simulation Editor Active Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>A fully parameterized intersection layout featuring custom lane turning geometries (Left Turn, Straight, Right Turn), oval number pickers for go/amber/red timing intervals, interactive 3-lens signal phase builders, and sticky action buttons for saving and calculating cycle timings. |
+| **Cycle Results Summary (Desktop)** | <img src="docs/assets/cycle_results_summary_desktop.png" alt="Cycle Results Summary Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The comprehensive analytical results dashboard displaying master cycle length telemetry, intersection setup overviews (active directions and total lanes), directional stop-time breakdown lists, and interactive color-coded percentage distribution progress bars with live hover tooltips. |
+| **Liquid Glass (Default Appearance)** | <img src="docs/assets/liquid_glass_default_appearance_desktop.png" alt="Liquid Glass Default Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The default balanced appearance (50% clarity slider setting) showcasing translucent glassmorphic card surfaces, soft drop shadows, and high-contrast typography across the desktop navigation header and main workspace. |
+| **Liquid Glass (Ultra Clear Appearance)** | <img src="docs/assets/liquid_glass_ultra_clear_appearance_desktop.png" alt="Liquid Glass Ultra Clear Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The ultra-clear appearance mode maximizing backdrop luminosity and translucency while maintaining crisp element borders and legibility for modern glass-panel design aesthetics. |
+| **Liquid Glass (Ultra Tinted Appearance)** | <img src="docs/assets/liquid_glass_ultra_tinted_appearance_desktop.png" alt="Liquid Glass Ultra Tinted Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The high-contrast tinted appearance mode providing a solid, opaque surface styling tailored for high-glare environments or users preferring dense, readable backgrounds over translucent transparency. |
+
+### Mobile Interfaces
+
+| Application Screen & State | Comprehensive Layout Description & Interface Features |
+| :--- | :--- |
+| **Home Dashboard (Saved Simulations - Mobile)** | <img src="docs/assets/saved_simulation_dashboard_mobile.png" alt="Saved Simulation Dashboard Mobile" width="280" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Optimized mobile portfolio layout with single-column simulation cards, centered touch targets, and vertically stacked action buttons ensuring seamless management on smartphones. |
+| **Home Dashboard (Empty State - Mobile)** | <img src="docs/assets/no_saved_simulations_dashboard_mobile.png" alt="Empty Dashboard Mobile" width="280" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Compact empty state layout tailored for mobile viewports, guiding mobile users directly to create their first intersection configuration. |
+| **Simulation Editor (Initial State - Mobile)** | <img src="docs/assets/simulation_editor_without_user_inputs_mobile.png" alt="Simulation Editor Initial Mobile" width="280" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Mobile-optimized setup view featuring collapsible card containers, touch-friendly toggle pills, and autofill-protected input fields. |
+| **Simulation Editor (Active Configuration - Mobile)** | <img src="docs/assets/simulation_editor_with_user_inputs_mobile.png" alt="Simulation Editor Active Mobile" width="280" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Stacked smartphone layout presenting lane turning configurations, responsive phase building matrices, and fixed-width bottom action controls (Save & Calculate Cycle) with automatic scroll-to-top navigation. |
+| **Cycle Results Summary (Mobile)** | <img src="docs/assets/cycle_results_summary_mobile.png" alt="Cycle Results Summary Mobile" width="280" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Vertical mobile analytics screen presenting master cycle duration metrics and touch-accessible percentage breakdown bars for single-handed telemetry inspection. |
+| **Liquid Glass (Default Appearance - Mobile)** | <img src="docs/assets/liquid_glass_default_appearance_mobile.jpeg" alt="Liquid Glass Default Mobile" width="280" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Mobile viewport rendering of the default Liquid Glass design system, maintaining fluid blur filters and responsive navbar spacing. |
+| **Liquid Glass (Ultra Clear Appearance - Mobile)** | <img src="docs/assets/liquid_glass_ultra_clear_appearance_mobile.jpeg" alt="Liquid Glass Ultra Clear Mobile" width="280" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Mobile high-transparency glass clarity appearance showcasing backdrop light filtration across smaller screen matrices. |
+| **Liquid Glass (Ultra Tinted Appearance - Mobile)** | <img src="docs/assets/liquid_glass_ultra_tinted_appearance_mobile.jpeg" alt="Liquid Glass Ultra Tinted Mobile" width="280" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>Mobile high-contrast tinted appearance mode ensuring maximum legibility under direct sunlight or mobile glare. |
 
 ---
 
 ## What I would do next
 
-While TrafficSync achieves all its initial objectives, real-world transportation systems present exciting opportunities for future iterations:
-
-* **Automated Dual-Ring NEMA Phase Conflict Detection:** Replace manual light assignment with an automatic conflict matrix algorithm that algorithmically disallows concurrent green signals on conflicting vehicular paths.
-* **Dynamic Webster's Optimum Cycle Formula:** Integrate real-time traffic volume input fields (vehicles per hour per lane) to compute mathematically optimal cycle lengths based on saturation flows.
-* **Interactive 3D WebGL Intersection Canvas:** Render real-time 3D vehicles and animated pedestrian crossing agents moving across the intersection in synchronization with active signal lights using Three.js.
+While TrafficSync successfully achieves all my initial design and architectural objectives, real-world municipal transportation networks present advanced engineering challenges and opportunities for future expansion. My next major roadmap milestones include:
+* **Automated Dual-Ring NEMA Phase Conflict Detection:** Replace manual phase lighting configurations with an automated NEMA dual-ring conflict matrix algorithm that programmatically validates signal states and rejects invalid overlapping green indications.
+* **Dynamic Webster's Optimum Cycle Length Formula Integration:** Expand the parameter input panel to accept empirical vehicular volume counts (Vehicles Per Hour per lane) and saturation flows to compute mathematically rigorous optimum cycle times.
+* **Interactive 3D WebGL Intersection Simulation Canvas:** Integrate Three.js to render real-time 3D intersection geometry complete with animated vehicle queues, turning movement trajectories, and walking pedestrians synchronized with active traffic signal phases.
 
 ---
 
@@ -627,14 +640,13 @@ While TrafficSync achieves all its initial objectives, real-world transportation
 
 ## AI use
 
-This project was built with **AI Assistance**. In accordance with modern engineering standards and academic transparency, we disclose the role of AI in our development lifecycle:
-
-* **AI Assistant:** Google Antigravity (Gemini)
-* **Scope of Assistance:** Component refactoring into Atomic Design, mathematical multi-phase cycle engine validation, responsive cross-device layout engineering, press-and-hold interval timer debouncing, and comprehensive rubric audit compliance.
-* **Full Transparency Log:** For complete prompt transcripts, error corrections, and commit-by-commit attributions, see [AI-USAGE.md](AI-USAGE.md).
+This project was developed with the assistance of artificial intelligence to accelerate prototyping, design system implementation, and algorithmic optimization. In accordance with professional engineering standards and academic transparency, I maintain complete documentation of all AI interactions:
+* **AI Assistant & Platform:** Google Antigravity (Gemini)
+* **Scope of Assistance:** Assisting in Atomic Design component structuring, multi-phase cycle calculation engine mathematics, responsive mobile/desktop layout engineering, oval timing picker debouncing, and rigorous grading rubric verification.
+* **Complete Transparency & Commit Log:** Every prompt, generated artifact, human modification, and corresponding git commit is meticulously logged in [AI-USAGE.md](AI-USAGE.md).
 
 ---
 
 ## Licence
 
-This project is open-source software licensed under the **[MIT License](LICENSE)**.
+TrafficSync is distributed as open-source software under the terms of the **[MIT License](LICENSE)**. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files, to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, subject to the conditions of the MIT License.
