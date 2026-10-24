@@ -1,4 +1,5 @@
 import React, { createContext, useState, useMemo, useEffect } from 'react';
+import { listSimulations, createSimulation, deleteSimulation as apiDeleteSimulation, USING_MOCK_API } from './api';
 
 export const SimulationContext = createContext(null);
 
@@ -76,13 +77,54 @@ export function SimulationProvider({ children }) {
   }, [glassClarity]);
 
   const [savedSimulations, setSavedSimulations] = useState(() => {
-    try {
-      const saved = localStorage.getItem('trafficsync_saved_simulations');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      return [];
+    if (USING_MOCK_API) {
+      try {
+        const saved = localStorage.getItem('trafficsync_saved_simulations');
+        return saved ? JSON.parse(saved) : [];
+      } catch (e) {
+        return [];
+      }
     }
+    return [];
   });
+
+  const formatSavedAt = (dateInput) => {
+    let d;
+    if (typeof dateInput === 'string') {
+      const clean = dateInput.replace('Z', '').replace(/\+\d{2}:\d{2}$/, '').replace(/\.\d+$/, '');
+      d = new Date(clean);
+    } else {
+      d = dateInput ? new Date(dateInput) : new Date();
+    }
+    if (isNaN(d.getTime())) return 'Recent';
+    const dateStr = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    const timeStr = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true });
+    return `${dateStr} at ${timeStr}`;
+  };
+
+  useEffect(() => {
+    if (!USING_MOCK_API) {
+      listSimulations()
+        .then(rows => {
+          const formatted = rows.map(r => ({
+            id: r.id,
+            title: r.title,
+            roadName: r.road_name,
+            directions: r.data?.directions || {},
+            laneConfigs: r.data?.laneConfigs || {},
+            phaseTimings: r.data?.phaseTimings || {},
+            pedestrians: r.data?.pedestrians || {},
+            pedestrianTimings: r.data?.pedestrianTimings || {},
+            phases: r.data?.phases || [],
+            lanesCount: r.data?.lanesCount || 0,
+            cycleLength: r.data?.cycleLength || 0,
+            savedAt: formatSavedAt(r.created_at)
+          }));
+          setSavedSimulations(formatted);
+        })
+        .catch(err => console.error('Failed to load simulations from API:', err));
+    }
+  }, []);
 
   const [hasBeenSaved, setHasBeenSaved] = useState(false);
 
@@ -243,25 +285,31 @@ export function SimulationProvider({ children }) {
     setHasBeenSaved(true);
   };
 
-  const deleteSimulation = (id) => {
+  const deleteSimulation = async (id) => {
+    if (!USING_MOCK_API) {
+      try {
+        await apiDeleteSimulation(id);
+      } catch (err) {
+        console.error('Failed to delete simulation from API:', err);
+      }
+    }
     setSavedSimulations(prev => {
       const updated = prev.filter(s => s.id !== id);
-      try {
-        localStorage.setItem('trafficsync_saved_simulations', JSON.stringify(updated));
-      } catch (e) {}
+      if (USING_MOCK_API) {
+        try {
+          localStorage.setItem('trafficsync_saved_simulations', JSON.stringify(updated));
+        } catch (e) {}
+      }
       return updated;
     });
   };
 
-  const saveCurrentSimulation = () => {
-    const simId = Date.now().toString();
+  const saveCurrentSimulation = async () => {
     const title = roadName.trim() || 'Untitled Intersection';
     const activeLanesCount = results.stats.length;
     const cycleLength = results.maxCycle;
 
-    const newSim = {
-      id: simId,
-      title,
+    const dataPayload = {
       roadName: title,
       directions: { ...directions },
       laneConfigs: JSON.parse(JSON.stringify(laneConfigs)),
@@ -270,8 +318,37 @@ export function SimulationProvider({ children }) {
       pedestrianTimings: JSON.parse(JSON.stringify(pedestrianTimings)),
       phases: JSON.parse(JSON.stringify(phases)),
       lanesCount: activeLanesCount,
-      cycleLength,
-      savedAt: `${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })} at ${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true })}`
+      cycleLength
+    };
+
+    if (!USING_MOCK_API) {
+      try {
+        const created = await createSimulation({
+          title,
+          road_name: title,
+          data: dataPayload
+        });
+        const newSim = {
+          id: created.id,
+          title: created.title,
+          roadName: created.road_name,
+          ...dataPayload,
+          savedAt: formatSavedAt(created.created_at)
+        };
+        setSavedSimulations(prev => [newSim, ...prev.filter(s => s.id !== newSim.id)]);
+        setHasBeenSaved(true);
+        return newSim;
+      } catch (err) {
+        console.error('Failed to save simulation to API:', err);
+      }
+    }
+
+    const simId = Date.now().toString();
+    const newSim = {
+      id: simId,
+      title,
+      ...dataPayload,
+      savedAt: formatSavedAt()
     };
 
     setSavedSimulations(prev => {
