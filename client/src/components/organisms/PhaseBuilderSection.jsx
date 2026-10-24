@@ -60,7 +60,7 @@ export default function PhaseBuilderSection() {
     }
   };
 
-  const activeDirections = Object.keys(directions || {}).filter(d => directions[d]);
+  const activeDirections = ['Northbound', 'Southbound', 'Eastbound', 'Westbound'].filter(d => directions && directions[d]);
 
   const glassStyle = {
     backgroundColor: 'var(--card-bg)',
