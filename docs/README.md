@@ -11,10 +11,9 @@ All technical documentation, system specifications, design system artifacts, wee
 | **[01-proposal.md](01-proposal.md)** | Revised project proposal, target audience, five-screen user flows, state architecture, deployment structure, and risk mitigation strategies. | **Completed (Finals, M8A1)** |
 | **[02-mockup.md](02-mockup.md)** | UI/UX responsive wireframe specifications (desktop grid vs. stacked phone layouts), and Atomic Design hierarchy. | **Completed (Finals, M8A2)** |
 | **[03-design-system.md](03-design-system.md)** | Design tokens, color palette, typography scale in exact pixels, 8px spacing grid, concentric rounded-pill geometry, custom scrollbars, and dynamic Liquid Glass formulas. | **Completed (Finals, M8A3)** |
-| **[04-weekly-reports.md](04-weekly-reports.md)** | Chronological weekly engineering journal covering Week 1 through Week 5 (including 2026-10-11 and 2026-10-23 iterations), detailing accomplishments, blockers, and hours. | **Maintained Weekly** |
+| **[04-weekly-reports.md](04-weekly-reports.md)** | Chronological weekly engineering journal covering all weeks, detailing accomplishments, blockers, and hours. | **Maintained Weekly** |
 | **[05-demo-video.md](05-demo-video.md)** | Demonstration video guide featuring a structured 3-to-5 minute presentation script, live walkthrough scenario, Canva slide deck outlines, and pre-recording checklist. | **Completed (Final Submission)** |
 | **[06-security-and-privacy.md](06-security-and-privacy.md)** | Security checklist covering credential hygiene, GitHub Actions SHA pinning, parameterized SQL queries, Express Basic Auth, server input validation, and CORS whitelisting. | **Completed** |
-| **[slides.html](slides.html)** | Ready-to-present, self-contained 16:9 interactive HTML presentation slide deck built with Tailwind CSS and glassmorphism styling for immediate screen recording. | **Ready for Presentation** |
 
 ---
 
@@ -22,12 +21,21 @@ All technical documentation, system specifications, design system artifacts, wee
 
 All real project screenshots, logos, and visual presentation assets are stored in the [`docs/assets/`](assets/) directory and referenced directly across the repository:
 
-| Asset File | Format / Dimensions | Description |
+| Asset File | Format / Context | Description |
 | :--- | :---: | :--- |
-| **[`assets/dashboard.jpg`](assets/dashboard.jpg)** | JPG / High Resolution | Real screenshot of the TrafficSync Home Dashboard showing saved simulation cards, directional badges, and deletion controls. |
-| **[`assets/results.jpg`](assets/results.jpg)** | JPG / High Resolution | Real screenshot of the Cycle Results Summary showing red stop durations, total cycle lengths, and the interactive percentage bar. |
-| **[`assets/trafficsync-logo-1080x1080.png`](assets/trafficsync-logo-1080x1080.png)** | PNG / $1080 \times 1080$ Square | High-resolution square app logo icon with glowing traffic signal head and synchronization waves for presentation thumbnails. |
-| **[`assets/trafficsync-logo-1080x1080.jpg`](assets/trafficsync-logo-1080x1080.jpg)** | JPG / $1080 \times 1080$ Square | Compressed version of the square logo icon for web banners and social previews. |
+| **[`assets/main_screen.png`](assets/main_screen.png)** | PNG / High-Res Banner | Hero visual banner displaying the complete TrafficSync workspace. |
+| **[`assets/saved_simulation_dashboard_desktop.png`](assets/saved_simulation_dashboard_desktop.png)** | PNG / Desktop Display | Saved simulation portfolio cards showing directional badges, lane counts, and timestamps. |
+| **[`assets/saved_simulation_dashboard_mobile.png`](assets/saved_simulation_dashboard_mobile.png)** | PNG / Mobile Display | Responsive mobile layout of saved simulation cards with touch-friendly spacing. |
+| **[`assets/no_saved_simulations_dashboard_desktop.png`](assets/no_saved_simulations_dashboard_desktop.png)** | PNG / Empty State | Clean prompt card welcoming first-time users to start a new simulation. |
+| **[`assets/simulation_editor_without_user_inputs_desktop.png`](assets/simulation_editor_without_user_inputs_desktop.png)** | PNG / Desktop Display | Clean initial configuration card before adding directional approaches. |
+| **[`assets/simulation_editor_with_user_inputs_desktop.png`](assets/simulation_editor_with_user_inputs_desktop.png)** | PNG / Desktop Display | Configured intersection with lane customizer, number pickers, and phase builder. |
+| **[`assets/simulation_editor_with_user_inputs_mobile.png`](assets/simulation_editor_with_user_inputs_mobile.png)** | PNG / Mobile Display | Single-column mobile layout showing centered add-lane controls and signal heads. |
+| **[`assets/cycle_results_summary_desktop.png`](assets/cycle_results_summary_desktop.png)** | PNG / Desktop Display | Master cycle summary badges, calculated stop times, and percentage breakdown bars. |
+| **[`assets/cycle_results_summary_mobile.png`](assets/cycle_results_summary_mobile.png)** | PNG / Mobile Display | Mobile view of analytical cycle output and timing distribution bars. |
+| **[`assets/liquid_glass_default_appearance_desktop.png`](assets/liquid_glass_default_appearance_desktop.png)** | PNG / Default Glass | Balanced medium clarity (50%) providing translucent glass styling. |
+| **[`assets/liquid_glass_ultra_clear_appearance_desktop.png`](assets/liquid_glass_ultra_clear_appearance_desktop.png)** | PNG / Ultra Clear | High-transparency appearance maximizing backdrop visibility. |
+| **[`assets/liquid_glass_ultra_tinted_appearance_desktop.png`](assets/liquid_glass_ultra_tinted_appearance_desktop.png)** | PNG / Ultra Tinted | High-contrast opaque slate for high-glare lighting environments. |
+| **[`assets/logo.jpg`](assets/logo.jpg)** | JPG / Visual Thumbnail | Official TrafficSync application logo icon with glowing signal head. |
 
 ---
 
