@@ -24,7 +24,10 @@
 import * as mockApi from './mockApi.js'
 import * as httpApi from './httpApi.js'
 
-export const USING_MOCK_API = import.meta.env.VITE_USE_MOCK_API !== 'false'
+const envSetting = import.meta.env.VITE_USE_MOCK_API
+export const USING_MOCK_API = envSetting !== undefined
+  ? String(envSetting) === 'true'
+  : import.meta.env.PROD // default to true in production, false in development (uses Vite proxy)
 
 const implementation = USING_MOCK_API ? mockApi : httpApi
 
