@@ -7,9 +7,9 @@ TrafficSync utilizes a purposeful, high-contrast engineering color palette paire
 | :--- | :--- | :--- | :--- |
 | **Primary Brand** | `#2563EB` | `bg-blue-600` | Primary call-to-action buttons, active navigation states, lane badges, and focus rings. |
 | **Primary Hover** | `#1D4ED8` | `hover:bg-blue-700` | Elevated hover state for interactive controls and primary buttons. |
-| **Accent / Success** | `#16A34A` | `text-emerald-600` | Active signal Go states, saved confirmation alerts, and success badges. |
-| **Warning / Caution** | `#F59E0B` | `text-amber-500` | Active signal Caution (Amber) intervals and intermediate clearance badges. |
-| **Destructive / Stop** | `#DC2626` | `text-red-600` | Active signal Stop (Red) states, delete action buttons, and confirmation warning modals. |
+| **Accent / Success** | `#16A34A` | `text-emerald-600` | Active signal Go states (Go 🟢), saved confirmation alerts, and success badges. |
+| **Warning / Caution** | `#F59E0B` | `text-amber-500` | Active signal Caution 🟡 intervals and intermediate clearance badges. |
+| **Destructive / Stop** | `#DC2626` | `text-red-600` | Active signal Stop / Red Clearance 🔴 states, delete action buttons, and confirmation warning modals. |
 | **Surface (Card)** | Dynamic CSS | `var(--card-bg)` | Translucent card backing scaling dynamically from $8\%$ to $88\%$ opacity based on slider. |
 | **Surface (Input)** | Dynamic CSS | `var(--input-bg)` | Translucent form inputs and button backing scaling with clarity. |
 | **Text (Main)** | `#111827` / `#F8FAFC` | `var(--text-main)` | High-contrast dark charcoal (light mode) or crisp off-white (dark mode). |
@@ -72,7 +72,7 @@ All scrollable containers inside the application—including dense timing matric
 
 ---
 
-## 6. The Liquid Glass Dynamic Clarity Engine
+## 5. The Liquid Glass Dynamic Clarity Engine
 
 TrafficSync features a real-time visual customization engine that calculates root CSS custom properties dynamically based on the navbar slider ($0.0 \le \text{clarity} \le 1.0$):
 
