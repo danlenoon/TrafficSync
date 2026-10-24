@@ -97,7 +97,7 @@
         },
         {
           "id": 3,
-          "name": "Phase 2: Eastbound Straight & Right and Westbound Straight",
+          "name": "Phase 3: Eastbound Straight & Right and Westbound Straight",
           "lights": {
             "Northbound-1": "red",
             "Northbound-2": "red",
@@ -116,7 +116,7 @@
         },
         {
           "id": 4,
-          "name": "Phase 3: Westbound Left & Straight",
+          "name": "Phase 4: Westbound Left & Straight",
           "lights": {
             "Northbound-1": "red",
             "Northbound-2": "red",
@@ -131,7 +131,7 @@
             "Westbound-2": "green",
             "Westbound-3": "green",
             "Westbound-4": "green",
-            "Westbound_pedestrian": "green"
+            "Westbound_pedestrian": "red"
           }
         }
       ],
