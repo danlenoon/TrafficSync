@@ -164,14 +164,24 @@ cd ../server
 
 ### Step 4: Install and run the Backend Server (Optional)
 
-If you want to test the full-stack architecture with the live Express server:
+If you want to test the full-stack architecture with the live Express server, navigate into the server directory:
 
 ```bash
-# (Already in the server directory)
-# Install backend dependencies (Express, pg, cors, dotenv)
-npm install
+# Navigate from project root or client directory into the server folder
+cd server
+```
 
-# Create your local environment configuration file from the template
+Install backend dependencies (Express, pg, cors, dotenv):
+
+```bash
+# Install all required backend packages
+npm install
+```
+
+Create your local environment configuration file from the template:
+
+```bash
+# Copy .env.example to create your live .env configuration file
 cp .env.example .env
 ```
 
@@ -189,10 +199,10 @@ NODE_ENV=development
 Run database schema setup and launch the server:
 
 ```bash
-# Initialize the database table and seed realistic intersection records
+# Run database migration and seed script to initialize tables
 npm run db:reset
 
-# Start the Express REST API server with local environment configuration
+# Start the Express REST API server in development mode
 npm start
 ```
 
@@ -202,20 +212,40 @@ Your API is now listening at **`http://localhost:3000`**!
 
 ### Step 5: Run as a Full Stack Application
 
-To connect the Frontend to your live Backend and switch from LocalStorage to the PostgreSQL database, open `client/.env` in your preferred text editor and set the following variables:
+To connect the Frontend to your live Backend and switch from LocalStorage to the PostgreSQL database, navigate to the client folder and open `client/.env`:
+
+```bash
+# Navigate to the client directory from project root
+cd client
+
+# Copy example environment configuration if not already done
+cp .env.example .env
+```
+
+Set the following variables in `client/.env` to connect to your local backend:
 
 ```env
 VITE_USE_MOCK_API=false
 VITE_API_BASE_URL=http://localhost:3000
 ```
 
-Start both the frontend and backend servers simultaneously:
+To run the complete full-stack application, start both the frontend and backend servers simultaneously in two separate terminal windows:
 
 ```bash
-# In terminal 1 (client directory):
-npm run dev
+# --- TERMINAL 1: Frontend ---
+# Navigate to client directory
+cd client
 
-# In terminal 2 (server directory):
+# Start the Vite development server
+npm run dev
+```
+
+```bash
+# --- TERMINAL 2: Backend ---
+# Navigate to server directory
+cd server
+
+# Start the Express REST API server
 npm start
 ```
 
@@ -232,20 +262,20 @@ If you encounter issues during setup, check these common solutions organized by 
 If you see `EADDRINUSE`, a process is already using the required port. On Windows, identify the process ID (PID) and terminate it:
 
 ```bash
-# Identify the PID for the port
+# Search for active process occupying port 5173 or 3000
 netstat -ano | findstr :5173
 
-# Terminate the process
+# Forcefully terminate the conflicting process using its Process ID (PID)
 taskkill /PID <PID_NUMBER> /F
 ```
 
 On Linux or macOS, use the following commands:
 
 ```bash
-# Identify the process
+# Find the process ID listening on port 5173
 lsof -i :5173
 
-# Terminate the process
+# Terminate the process forcefully
 kill -9 <PID>
 ```
 
@@ -254,18 +284,24 @@ kill -9 <PID>
 Verify that PostgreSQL is active on your system. On Windows, open the "Services" app and ensure `postgresql-x64` is **Running**. On Linux or macOS, check the service status:
 
 ```bash
-# Check PostgreSQL status
+# Check systemd status of PostgreSQL service
 sudo service postgresql status
+
+# Alternatively, test connection via psql
+psql -U postgres -c "SELECT version();"
 ```
 
 If `npm run db:reset` fails, ensure the database `trafficsync` exists. Log into PostgreSQL and create it manually if necessary:
 
 ```bash
-# Log into PostgreSQL
+# Open interactive PostgreSQL terminal as superuser
 psql -U postgres
 
-# Create the database
+# Create the target database if missing
 CREATE DATABASE trafficsync;
+
+# Exit psql interactive shell
+\q
 ```
 
 Check the `server/.env` format and avoid spaces around the `=` sign:
@@ -293,39 +329,48 @@ VITE_USE_MOCK_API=false
 Verify you are using the supported Node.js version (v18 or higher):
 
 ```bash
-# Check Node version
+# Check installed Node.js runtime version
 node -v
+
+# Check npm package manager version
+npm -v
 ```
 
 If dependencies are corrupted, perform a clean reinstall in both `client` and `server` directories:
 
 ```bash
-# Delete existing modules and reinstall
+# Remove node_modules and lockfiles to ensure a clean state
 rm -rf node_modules package-lock.json
+
+# Reinstall all fresh dependencies from registry
 npm install
 ```
 
 **5. Environment Variables Missing**
 
-If you get `undefined` errors, ensure `.env` files exist in **BOTH** directories:
+If you get `undefined` or configuration errors, ensure `.env` files exist in **BOTH** directories and contain all required keys:
 
 ```bash
-# Check for .env files
-ls -a client/.env server/.env
+# Check for existence of .env files in client and server directories
+ls -la client/.env server/.env
 ```
 
 **6. Script Execution Permissions**
 
-On Linux or macOS, if scripts fail to run, grant execution permissions:
+On Linux or macOS, if binary scripts fail to run due to permissions:
 
 ```bash
-# Grant execution rights
+# Grant executable permissions to local node binaries
 chmod +x node_modules/.bin/*
 ```
 
 **7. Browser-Specific Issues**
 
-If data seems stuck or the UI is inconsistent, clear your browser's LocalStorage. Open Browser DevTools, navigate to the **Application** tab, select **Local Storage**, and click **Clear All**.
+If data seems stuck or the UI is inconsistent due to stale cached state, clear your browser's LocalStorage:
+
+```bash
+# Open Browser DevTools (F12) -> Application Tab -> Local Storage -> Right-click origin -> Clear
+```
 
 ---
 
