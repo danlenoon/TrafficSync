@@ -3,10 +3,10 @@ TRUNCATE TABLE simulations RESTART IDENTITY CASCADE;
 
 INSERT INTO simulations (title, road_name, data, created_at, updated_at) VALUES
 (
-  'Fil-Am Friendship Highway / Clark Main Gate',
-  'Fil-Am Friendship Highway / Clark Main Gate',
+  'Fil-Am Friendship Highway x Clark Main Gate',
+  'Fil-Am Friendship Highway x Clark Main Gate',
   '{
-    "roadName": "Fil-Am Friendship Highway / Clark Main Gate",
+    "roadName": "Fil-Am Friendship Highway x Clark Main Gate",
     "directions": {
       "Northbound": true,
       "Southbound": false,
@@ -144,10 +144,10 @@ INSERT INTO simulations (title, road_name, data, created_at, updated_at) VALUES
   '2026-10-24 18:54:02'
 ),
 (
-  'MacArthur Highway / Brgy. Del Rosario Road',
-  'MacArthur Highway / Brgy. Del Rosario Road',
+  'MacArthur Highway x Brgy. Del Rosario Road',
+  'MacArthur Highway x Brgy. Del Rosario Road',
   '{
-    "roadName": "MacArthur Highway / Brgy. Del Rosario Road",
+    "roadName": "MacArthur Highway x Brgy. Del Rosario Road",
     "directions": {
       "Northbound": true,
       "Southbound": true,
