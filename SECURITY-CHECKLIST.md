@@ -36,7 +36,7 @@ If your project has no workflows, mark every row N/A and say so once.
 | 13 | Every query taking user input uses parameters, never string concatenation | Yes | Verified in `server/simulationsRepo.js`; all queries (`getAll`, `getById`, `create`, `update`, `remove`) use parameterized queries (`$1, $2, $3, $4`). |
 | 14 | The database is not open to the whole internet, or is reachable only by the app | Yes | Neon cloud PostgreSQL is protected with mandatory SSL encryption (`sslmode=require`), strong authentication, and accessible only via secured connection strings. |
 | 15 | The database user the app connects as has only the permissions it needs | Yes | Neon default user role (`neondb_owner`) is constrained to the `neondb` database and owns only the `simulations` table. |
-| 16 | Seed and sample data is invented, not real people's data | Yes | `server/db/seed.sql` contains only fictional traffic intersection names ("Del Rosario St. & MacArthur Hwy", "Clark x Friendship Crossing"). |
+| 16 | Seed and sample data is invented, not real people's data | Yes | `server/db/seed.sql` and `client/src/api/seed.json` contain only synthetic traffic intersection names ("Del Rosario Intersection", "Clark x Friendship Intersection"). |
 | 17 | Debug, seed and reset routes are removed before going public | Yes | Checked `server/server.js`; schema migrations and seeds are executed via offline CLI scripts (`db/run.js`) and no HTTP debug/seed/reset endpoints exist. |
 
 ## Access control
