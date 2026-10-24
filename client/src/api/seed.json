@@ -1,63 +1,195 @@
 [
   {
     "id": "1",
-    "title": "MacArthur x Del Rosario Intersection",
-    "road_name": "MacArthur Highway / Brgy. Del Rosario Road",
-    "data": {
-      "roadName": "Del Rosario Intersection",
-      "directions": {
-        "Northbound": true,
-        "Southbound": true,
-        "Eastbound": true,
-        "Westbound": true
-      },
-      "laneConfigs": {
-        "Northbound": [{ "id": 1, "type": "Through & Left" }],
-        "Southbound": [{ "id": 1, "type": "Through & Left" }],
-        "Eastbound": [{ "id": 1, "type": "Straight" }],
-        "Westbound": [{ "id": 1, "type": "Straight" }]
-      },
-      "phaseTimings": {
-        "Northbound-1": { "go": 45, "amber": 4, "red": 2 },
-        "Southbound-1": { "go": 45, "amber": 4, "red": 2 },
-        "Eastbound-1": { "go": 40, "amber": 4, "red": 2 },
-        "Westbound-1": { "go": 40, "amber": 4, "red": 2 }
-      },
-      "pedestrians": {
-        "Northbound": "No",
-        "Southbound": "No",
-        "Eastbound": "No",
-        "Westbound": "No"
-      },
-      "lanesCount": 4,
-      "cycleLength": 182
-    },
-    "created_at": "2026-10-04T12:00:00.000Z",
-    "updated_at": "2026-10-24T00:00:00.000Z"
-  },
-  {
-    "id": "2",
-    "title": "Clark x Friendship Intersection",
+    "title": "Fil-Am Friendship Highway / Clark Main Gate",
     "road_name": "Fil-Am Friendship Highway / Clark Main Gate",
     "data": {
-      "roadName": "Clark x Friendship Intersection",
+      "roadName": "Fil-Am Friendship Highway / Clark Main Gate",
       "directions": {
         "Northbound": true,
-        "Southbound": true,
+        "Southbound": false,
         "Eastbound": true,
         "Westbound": true
       },
       "laneConfigs": {
-        "Northbound": [{ "id": 1, "type": "Straight" }],
-        "Southbound": [{ "id": 1, "type": "Straight" }],
-        "Eastbound": [{ "id": 1, "type": "Through & Left" }],
-        "Westbound": [{ "id": 1, "type": "Through & Left" }]
+        "Northbound": [
+          { "id": 1, "type": "Left Turn" },
+          { "id": 2, "type": "Left Turn" },
+          { "id": 3, "type": "Right Turn" }
+        ],
+        "Southbound": [],
+        "Eastbound": [
+          { "id": 1, "type": "Straight" },
+          { "id": 2, "type": "Straight" },
+          { "id": 3, "type": "Straight" },
+          { "id": 4, "type": "Right Turn" }
+        ],
+        "Westbound": [
+          { "id": 1, "type": "Left Turn" },
+          { "id": 2, "type": "Straight" },
+          { "id": 3, "type": "Straight" },
+          { "id": 4, "type": "Straight" }
+        ]
       },
       "phaseTimings": {
         "Northbound-1": { "go": 30, "amber": 3, "red": 2 },
-        "Southbound-1": { "go": 30, "amber": 3, "red": 2 },
-        "Eastbound-1": { "go": 35, "amber": 3, "red": 2 },
-        "Westbound-1": { "go": 35, "amber": 3, "red": 2 }
+        "Northbound-2": { "go": 30, "amber": 3, "red": 2 },
+        "Northbound-3": { "go": 30, "amber": 3, "red": 2 },
+        "Eastbound-1": { "go": 30, "amber": 3, "red": 2 },
+        "Eastbound-2": { "go": 30, "amber": 3, "red": 2 },
+        "Eastbound-3": { "go": 30, "amber": 3, "red": 2 },
+        "Eastbound-4": { "go": 30, "amber": 3, "red": 2 },
+        "Westbound-1": { "go": 25, "amber": 3, "red": 2 },
+        "Westbound-2": { "go": 60, "amber": 3, "red": 2 },
+        "Westbound-3": { "go": 60, "amber": 3, "red": 2 },
+        "Westbound-4": { "go": 60, "amber": 3, "red": 2 }
+      },
+      "pedestrians": {
+        "Northbound": "No",
+        "Southbound": "No",
+        "Eastbound": "Yes",
+        "Westbound": "Yes"
+      },
+      "pedestrianTimings": {
+        "Northbound": {},
+        "Southbound": {},
+        "Eastbound": { "go": 15, "red": 2 },
+        "Westbound": { "go": 15, "red": 2 }
+      },
+      "phases": [
+        {
+          "id": 1,
+          "name": "Phase 1: Northbound Left & Right",
+          "lights": {
+            "Northbound-1": "green",
+            "Northbound-2": "green",
+            "Northbound-3": "green",
+            "Eastbound-1": "red",
+            "Eastbound-2": "red",
+            "Eastbound-3": "red",
+            "Eastbound-4": "red",
+            "Eastbound_pedestrian": "red",
+            "Westbound-1": "red",
+            "Westbound-2": "red",
+            "Westbound-3": "red",
+            "Westbound-4": "red",
+            "Westbound_pedestrian": "red"
+          }
+        },
+        {
+          "id": 2,
+          "name": "Phase 2: Eastbound and Westbound Pedestrian",
+          "lights": {
+            "Northbound-1": "red",
+            "Northbound-2": "red",
+            "Northbound-3": "red",
+            "Eastbound-1": "red",
+            "Eastbound-2": "red",
+            "Eastbound-3": "red",
+            "Eastbound-4": "red",
+            "Eastbound_pedestrian": "green",
+            "Westbound-1": "red",
+            "Westbound-2": "red",
+            "Westbound-3": "red",
+            "Westbound-4": "red",
+            "Westbound_pedestrian": "green"
+          }
+        },
+        {
+          "id": 3,
+          "name": "Phase 2: Eastbound Straight & Right and Westbound Straight",
+          "lights": {
+            "Northbound-1": "red",
+            "Northbound-2": "red",
+            "Northbound-3": "red",
+            "Eastbound-1": "green",
+            "Eastbound-2": "green",
+            "Eastbound-3": "green",
+            "Eastbound-4": "green",
+            "Eastbound_pedestrian": "red",
+            "Westbound-1": "red",
+            "Westbound-2": "green",
+            "Westbound-3": "green",
+            "Westbound-4": "green",
+            "Westbound_pedestrian": "red"
+          }
+        },
+        {
+          "id": 4,
+          "name": "Phase 3: Westbound Left & Straight",
+          "lights": {
+            "Northbound-1": "red",
+            "Northbound-2": "red",
+            "Northbound-3": "red",
+            "Northbound_pedestrian": "red",
+            "Eastbound-1": "red",
+            "Eastbound-2": "red",
+            "Eastbound-3": "red",
+            "Eastbound-4": "red",
+            "Eastbound_pedestrian": "red",
+            "Westbound-1": "green",
+            "Westbound-2": "green",
+            "Westbound-3": "green",
+            "Westbound-4": "green",
+            "Westbound_pedestrian": "green"
+          }
+        }
+      ],
+      "lanesCount": 11,
+      "cycleLength": 117
+    },
+    "created_at": "2026-10-24T18:54:02",
+    "updated_at": "2026-10-24T18:54:02"
+  },
+  {
+    "id": "2",
+    "title": "MacArthur Highway / Brgy. Del Rosario Road",
+    "road_name": "MacArthur Highway / Brgy. Del Rosario Road",
+    "data": {
+      "roadName": "MacArthur Highway / Brgy. Del Rosario Road",
+      "directions": {
+        "Northbound": true,
+        "Southbound": true,
+        "Eastbound": true,
+        "Westbound": true
+      },
+      "laneConfigs": {
+        "Northbound": [
+          { "id": 1, "type": "Left Turn" },
+          { "id": 2, "type": "Straight" },
+          { "id": 3, "type": "Straight" },
+          { "id": 4, "type": "Right Turn" }
+        ],
+        "Southbound": [
+          { "id": 1, "type": "Left Turn" },
+          { "id": 2, "type": "Straight" },
+          { "id": 3, "type": "Straight" },
+          { "id": 4, "type": "Right Turn" }
+        ],
+        "Eastbound": [
+          { "id": 1, "type": "Left Turn" },
+          { "id": 2, "type": "Straight & Right" }
+        ],
+        "Westbound": [
+          { "id": 1, "type": "Left Turn" },
+          { "id": 2, "type": "Straight" },
+          { "id": 3, "type": "Straight & Right" }
+        ]
+      },
+      "phaseTimings": {
+        "Northbound-1": { "go": 50, "amber": 3, "red": 2 },
+        "Northbound-2": { "go": 150, "amber": 3, "red": 2 },
+        "Northbound-3": { "go": 150, "amber": 3, "red": 2 },
+        "Northbound-4": { "go": 150, "amber": 3, "red": 2 },
+        "Southbound-1": { "go": 55, "amber": 3, "red": 2 },
+        "Southbound-2": { "go": 155, "amber": 3, "red": 2 },
+        "Southbound-3": { "go": 155, "amber": 3, "red": 2 },
+        "Southbound-4": { "go": 155, "amber": 3, "red": 2 },
+        "Eastbound-1": { "go": 55, "amber": 3, "red": 2 },
+        "Eastbound-2": { "go": 55, "amber": 3, "red": 2 },
+        "Westbound-1": { "go": 65, "amber": 3, "red": 2 },
+        "Westbound-2": { "go": 65, "amber": 3, "red": 2 },
+        "Westbound-3": { "go": 65, "amber": 3, "red": 2 }
       },
       "pedestrians": {
         "Northbound": "No",
@@ -65,10 +197,108 @@
         "Eastbound": "No",
         "Westbound": "No"
       },
-      "lanesCount": 4,
-      "cycleLength": 140
+      "pedestrianTimings": {},
+      "phases": [
+        {
+          "id": 1,
+          "name": "Phase 1: Southbound Left, Straight, & Right",
+          "lights": {
+            "Northbound-1": "red",
+            "Northbound-2": "red",
+            "Northbound-3": "red",
+            "Northbound-4": "red",
+            "Southbound-1": "green",
+            "Southbound-2": "green",
+            "Southbound-3": "green",
+            "Southbound-4": "green",
+            "Eastbound-1": "red",
+            "Eastbound-2": "red",
+            "Westbound-1": "red",
+            "Westbound-2": "red",
+            "Westbound-3": "red"
+          }
+        },
+        {
+          "id": 2,
+          "name": "Phase 2: Northbound and Southbound Straight & Right",
+          "lights": {
+            "Northbound-1": "red",
+            "Northbound-2": "green",
+            "Northbound-3": "green",
+            "Northbound-4": "green",
+            "Southbound-1": "red",
+            "Southbound-2": "green",
+            "Southbound-3": "green",
+            "Southbound-4": "green",
+            "Eastbound-1": "red",
+            "Eastbound-2": "red",
+            "Westbound-1": "red",
+            "Westbound-2": "red",
+            "Westbound-3": "red"
+          }
+        },
+        {
+          "id": 3,
+          "name": "Phase 3: Northbound Left, Straight, & Right",
+          "lights": {
+            "Northbound-1": "green",
+            "Northbound-2": "green",
+            "Northbound-3": "green",
+            "Northbound-4": "green",
+            "Southbound-1": "red",
+            "Southbound-2": "red",
+            "Southbound-3": "red",
+            "Southbound-4": "red",
+            "Eastbound-1": "red",
+            "Eastbound-2": "red",
+            "Westbound-1": "red",
+            "Westbound-2": "red",
+            "Westbound-3": "red"
+          }
+        },
+        {
+          "id": 4,
+          "name": "Phase 4: Eastbound Movement",
+          "lights": {
+            "Northbound-1": "red",
+            "Northbound-2": "red",
+            "Northbound-3": "red",
+            "Northbound-4": "red",
+            "Southbound-1": "red",
+            "Southbound-2": "red",
+            "Southbound-3": "red",
+            "Southbound-4": "red",
+            "Eastbound-1": "green",
+            "Eastbound-2": "green",
+            "Westbound-1": "red",
+            "Westbound-2": "red",
+            "Westbound-3": "red"
+          }
+        },
+        {
+          "id": 5,
+          "name": "Phase 5: Westbound Movement",
+          "lights": {
+            "Northbound-1": "red",
+            "Northbound-2": "red",
+            "Northbound-3": "red",
+            "Northbound-4": "red",
+            "Southbound-1": "red",
+            "Southbound-2": "red",
+            "Southbound-3": "red",
+            "Southbound-4": "red",
+            "Eastbound-1": "red",
+            "Eastbound-2": "red",
+            "Westbound-1": "green",
+            "Westbound-2": "green",
+            "Westbound-3": "green"
+          }
+        }
+      ],
+      "lanesCount": 13,
+      "cycleLength": 405
     },
-    "created_at": "2026-10-04T12:30:00.000Z",
-    "updated_at": "2026-10-24T00:00:00.000Z"
+    "created_at": "2026-10-24T18:54:02",
+    "updated_at": "2026-10-24T18:54:02"
   }
 ]
