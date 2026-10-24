@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ChevronLeft, Activity, Save, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/atoms/Button';
@@ -14,6 +14,10 @@ export default function SimulationEditor() {
   const [saved, setSaved] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [showBackDialog, setShowBackDialog] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const hasUnsavedChanges = roadName.trim().length > 0 || Object.values(directions).some(Boolean);
 
