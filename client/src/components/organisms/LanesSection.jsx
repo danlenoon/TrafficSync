@@ -64,7 +64,7 @@ export default function LanesSection() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {Object.keys(directions).filter(d => directions[d]).map(dir => (
+        {['Northbound', 'Southbound', 'Eastbound', 'Westbound'].filter(d => directions && directions[d]).map(dir => (
           <div key={dir} className="border rounded-2xl overflow-hidden shadow-sm transition-all hover:shadow-md" style={glassStyle}>
             <div className="border-b p-4 flex flex-wrap justify-between items-center gap-3" style={{ borderColor: 'var(--glass-border)', backgroundColor: 'var(--card-bg)' }}>
               <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
