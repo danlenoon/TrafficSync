@@ -120,6 +120,10 @@ cd client
 # Install all frontend dependencies (React, Vite, Lucide, Tailwind)
 npm install
 
+# (Optional) Create your client environment configuration
+# Copy the example file to a real .env file
+cp .env.example .env
+
 # Start the local Vite development server
 npm run dev
 ```
@@ -131,15 +135,28 @@ You can immediately configure intersections, customize lanes, build phases, calc
 
 ---
 
-### Step 3: Install and run the Backend Server (Optional)
+### Step 3: Setup the Database (Optional)
 
-If you want to test the full-stack architecture with the live Express server and local/cloud PostgreSQL database:
+If you intend to run the full-stack version, you will need a PostgreSQL database.
 
 ```bash
-# From the client directory, navigate back to the server directory
-cd ../server
+# Ensure you have a PostgreSQL instance running locally or in the cloud
+# Create a new database named 'trafficsync'
+createdb trafficsync
 
-# Install backend dependencies (Express, pg, cors)
+# Navigate to the server directory to prepare for schema initialization
+cd ../server
+```
+
+---
+
+### Step 4: Install and run the Backend Server (Optional)
+
+If you want to test the full-stack architecture with the live Express server:
+
+```bash
+# (Already in the server directory)
+# Install backend dependencies (Express, pg, cors, dotenv)
 npm install
 
 # Create your local environment configuration file from the template
@@ -167,6 +184,103 @@ npm start
 ```
 
 Your API is now listening at **`http://localhost:3000`**!
+
+---
+
+### Step 5: Run as a Full Stack Application
+
+To connect the Frontend to your live Backend and switch from LocalStorage to the PostgreSQL database:
+
+```bash
+# Open 'client/.env' in your preferred text editor (e.g., VS Code or Notepad)
+# Set the following variables to connect to your local backend:
+VITE_USE_MOCK_API=false
+VITE_API_BASE_URL=http://localhost:3000
+
+# Start both the frontend and backend servers simultaneously
+# In terminal 1 (client directory):
+npm run dev
+
+# In terminal 2 (server directory):
+npm start
+```
+
+Now, TrafficSync will save and load data directly from your PostgreSQL database instead of the browser's storage!
+
+---
+
+### Troubleshooting
+
+If you encounter issues during setup, check these common solutions organized by category:
+
+**1. Port Conflicts (5173 or 3000)**
+```bash
+# If you see 'EADDRINUSE', a process is already using the required port.
+# On Windows, identify the process ID (PID) and terminate it:
+netstat -ano | findstr :5173
+taskkill /PID <PID_NUMBER> /F
+
+# On Linux/macOS:
+lsof -i :5173
+kill -9 <PID>
+```
+
+**2. Database & Connection Errors**
+```bash
+# Verify PostgreSQL is active on your system
+# Windows: Open 'Services' and ensure 'postgresql-x64' is "Running"
+# Linux/macOS:
+sudo service postgresql status
+
+# If 'npm run db:reset' fails, ensure the database 'trafficsync' exists:
+# Log into PostgreSQL and create it manually if necessary
+psql -U postgres
+CREATE DATABASE trafficsync;
+
+# Check 'server/.env' format (avoid spaces around the '=' sign)
+DATABASE_URL=postgres://user:pass@localhost:5432/trafficsync
+```
+
+**3. Frontend-Backend Communication (CORS)**
+```bash
+# If the frontend cannot talk to the backend, verify CORS_ORIGINS in 'server/.env'
+# It must match your frontend's exact URL (e.g., http://localhost:5173)
+CORS_ORIGINS=http://localhost:5173
+
+# Ensure your client is configured to use the API, not Mock Mode:
+# In 'client/.env':
+VITE_USE_MOCK_API=false
+```
+
+**4. Node.js & Dependency Issues**
+```bash
+# Verify you are using the supported Node.js version (v18+)
+node -v
+
+# If dependencies are corrupted, perform a clean reinstall:
+# Run this in both 'client' and 'server' directories
+rm -rf node_modules package-lock.json
+npm install
+```
+
+**5. Environment Variables Missing**
+```bash
+# If you get 'undefined' errors, ensure .env files exist in BOTH directories
+# Both 'client/.env' and 'server/.env' must be populated
+ls -a client/.env server/.env
+```
+
+**6. Script Execution Permissions**
+```bash
+# On Linux/macOS, if scripts fail to run, grant execution permissions:
+chmod +x node_modules/.bin/*
+```
+
+**7. Browser-Specific Issues**
+```bash
+# If data seems stuck or UI is inconsistent, clear LocalStorage:
+# Open Browser DevTools -> Application Tab -> Local Storage -> Clear All
+```
 
 ---
 
