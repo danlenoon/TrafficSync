@@ -79,13 +79,36 @@ export function SimulationProvider({ children }) {
   const [savedSimulations, setSavedSimulations] = useState([]);
 
   const formatSavedAt = (dateInput) => {
-    let d = dateInput ? new Date(dateInput) : new Date();
+    let d;
+    if (typeof dateInput === 'string') {
+      let clean = dateInput.trim();
+      if (!clean.endsWith('Z') && !/[+-]\d{2}:\d{2}$/.test(clean)) {
+        clean += 'Z';
+      }
+      d = new Date(clean);
+    } else {
+      d = dateInput ? new Date(dateInput) : new Date();
+    }
     if (isNaN(d.getTime())) {
       d = new Date();
     }
-    const dateStr = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-    const timeStr = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true });
-    return `${dateStr} at ${timeStr}`;
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    const dayName = days[d.getUTCDay()];
+    const monthName = months[d.getUTCMonth()];
+    const dayNum = d.getUTCDate();
+    const year = d.getUTCFullYear();
+    
+    let hours = d.getUTCHours();
+    const minutes = String(d.getUTCMinutes()).padStart(2, '0');
+    const seconds = String(d.getUTCSeconds()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    const timeStr = `${hours}:${minutes}:${seconds} ${ampm}`;
+    
+    return `${dayName}, ${monthName} ${dayNum}, ${year} at ${timeStr}`;
   };
 
   useEffect(() => {
