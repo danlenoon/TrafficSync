@@ -25,7 +25,7 @@
 - [x] **Parameterized SQL Queries:** Every SQL operation in `server/simulationsRepo.js` (`getAll`, `getById`, `create`, `update`, `remove`) uses parameterized queries (`$1, $2, $3, $4`) with user values passed in the query parameter array, preventing SQL injection vulnerabilities.
 - [x] **Encrypted Transport:** Neon cloud PostgreSQL is configured with mandatory SSL encryption (`sslmode=require`), requiring cryptographic TLS encapsulation for all queries.
 - [x] **Principle of Least Privilege:** Database user role is scoped strictly to the `neondb` database and owns solely the `simulations` table without administrative superuser access.
-- [x] **Realistic Seed Data & Timestamp Integrity:** Seed records in `server/db/seed.sql` and client mock data (`client/src/api/seed.json` with UTC 'Z' ISO format and `formatSavedAt` UTC normalizer) feature realistic intersection names with synchronized directional and timing parameters matching the application schema and guaranteeing absolute timezone consistency.
+- [x] **Realistic Seed Data & Timestamp Integrity:** Seed records in `server/db/seed.sql` and client mock data (`client/src/api/seed.json` with robust timestamp formatting) feature realistic intersection names with synchronized directional and timing parameters matching the application schema and guaranteeing absolute timezone consistency.
 - [x] **No Debug/Reset HTTP Routes:** Schema migrations and test seedings are performed exclusively via offline command-line scripts (`node server/db/run.js`) and cannot be triggered over HTTP.
 
 ---
