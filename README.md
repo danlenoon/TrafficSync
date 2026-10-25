@@ -44,7 +44,7 @@ Traffic signal timing is the science of programming the green, yellow, and red l
 TrafficSync is engineered using a modern, decoupled full-stack JavaScript architecture adhering to strict Atomic Design standards:
 
 * **Frontend (Client SPA):**
-  * **React 18.3** — Modern declarative UI built with functional components, hooks (`useState`, `useContext`, `useMemo`, `useRef`, `useEffect`), and custom Context providers.
+  * **React 18.3** — Modern declarative UI built with functional components, hooks (`useState`, `useContext`, `useMemo`, `useRef`, `useEffect`), and a unified `SimulationContext` interacting through a robust abstract API module (`client/src/api/index.js`) supporting zero-latency mock switching and live HTTP fetching.
   * **Vite 6** — Lightning-fast development server, Hot Module Replacement (HMR), and optimized production asset compilation.
   * **Tailwind CSS & CSS Custom Properties** — Utility-first styling coupled with real-time CSS variables for dynamic Liquid Glass clarity and backdrop blur manipulation.
   * **Lucide React** — Crisp, clean iconography across controls, movement arrows, trash action buttons, and directional indicators.
