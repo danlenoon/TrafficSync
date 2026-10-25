@@ -1,4 +1,4 @@
-# Project Proposal: TrafficSync
+# Proposal
 
 ## 1. What the app is for, in one sentence
 **TrafficSync** is an intuitive, web-based simulation tool that calculates total stop seconds, clearance intervals, and complete cycle timings for complex road intersections based on user-defined lane turning geometries, green phases, and pedestrian crossings, offering a fast, visual, and error-free alternative to manual cycle calculation.
