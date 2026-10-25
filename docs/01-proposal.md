@@ -31,7 +31,7 @@ This app is designed specifically for **civil engineering students**, **urban tr
 | `laneConfigs` | `{ [dir]: Array<{ id: number, type: string }> }` | `SimulationContext` | User adds or deletes lanes and assigns turning movement types in Lane Customization. |
 | `phaseTimings` | `{ [laneKey]: { go: number, amber: number, red: number } }` | `SimulationContext` | User increments, decrements, or types timing seconds in the Phase Timings Calculator. |
 | `phases` | `Array<{ id: number, name: string, lights: object, pedestrianLights: object }>` | `SimulationContext` | User adds phases and toggles signal lenses in the Phase Builder. |
-| `savedSimulations` | `Array<{ id: number, title: string, road_name: string, data: object, created_at: string }>` | `SimulationContext` / Unified API Module (`mockApi` / `httpApi`) | User clicks Save, Delete, or loads a project snapshot from the Dashboard. |
+| `savedSimulations` | `Array<{ id: number, title: string, road_name: string, data: object, created_at: string }>` | `SimulationContext` / Unified API Module (`mockApi` / `httpApi`) | User clicks Save, Delete, or loads a project snapshot from the Dashboard (rendered with UTC-standardized `formatSavedAt` normalizer). |
 | `glassClarity` | `number` ($0.0$ to $1.0$) | `SimulationContext` / `localStorage` | User drags the Liquid Glass slider in the navbar, instantly updating root CSS custom properties. |
 
 ---
