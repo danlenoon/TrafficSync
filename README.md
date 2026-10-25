@@ -66,7 +66,7 @@ TrafficSync features a built-in **Dual-Mode Architecture** controlled by an envi
 
 | Mode | Configuration | How It Works | Best For |
 | :--- | :--- | :--- | :--- |
-| **Offline Demo Mode** *(Default)* | `VITE_USE_MOCK_API=true` | The React client intercepts all API calls and reads/writes simulation snapshots directly to browser `localStorage`. No server or database required! | Instant local evaluations, classroom demos, zero-setup testing, and offline presentations. |
+| **Offline Demo Mode** *(Default)* | `VITE_USE_MOCK_API=true` | The React client intercepts all API calls and reads/writes simulation snapshots directly to browser `localStorage` with automatic resilient seeding (`seed.json`) and empty-state fallback protection. No server or database required! | Instant local evaluations, classroom demos, zero-setup testing, and offline presentations. |
 | **Live Database Mode** | `VITE_USE_MOCK_API=false` | The client communicates over HTTPS with the Express REST API and writes snapshots to Neon PostgreSQL. | Multi-device cloud sync, persistence, and real production environments. |
 
 ---
