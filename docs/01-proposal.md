@@ -38,7 +38,7 @@ This app is designed specifically for **civil engineering students**, **urban tr
 
 ## 5. Hosting & Deployment Architecture
 
-* **Frontend:** Production-deployed to **GitHub Pages** ([https://danlenoon.github.io/TrafficSync/](https://danlenoon.github.io/TrafficSync/)) via automated GitHub Actions CI/CD workflows (`.github/workflows/deploy-pages.yml`). Built with Vite and React 18, featuring dual-mode execution (Offline Demo Mode vs. Live API Mode).
+* **Frontend:** Production-deployed to **GitHub Pages** ([https://danlenoon.github.io/TrafficSync/](https://danlenoon.github.io/TrafficSync/)) via automated GitHub Actions CI/CD workflows (`.github/workflows/deploy-pages.yml`). Built with Vite and React 18, featuring dual-mode execution (Offline Demo Mode with automatic resilient `seed.json` auto-seeding and localStorage persistence vs. Live API Mode).
 * **Backend API Gateway:** Deployed to **Render** ([https://trafficsync.onrender.com](https://trafficsync.onrender.com)), built with Node.js and Express 4, secured with HTTP Basic Authentication middleware, request payload validation, and CORS domain restriction.
 * **Database Infrastructure:** Hosted on **Neon Serverless PostgreSQL** ([https://neon.tech](https://neon.tech)), featuring connection pooling (`pg`), JSONB snapshot payloads, and encrypted SSL transport (`sslmode=require`).
 
