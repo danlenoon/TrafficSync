@@ -1,10 +1,10 @@
-# Project Documents: TrafficSync
+# Documents
 
 All technical documentation, system specifications, design system artifacts, weekly engineering development reports, and presentation resources for **TrafficSync** are versioned and maintained directly in this repository.
 
 ---
 
-## 📑 Core Documentation Index
+## Core Documentation Index
 
 | Deliverable File | Overview & Scope | Milestone & Status |
 | :--- | :--- | :--- |
@@ -17,7 +17,7 @@ All technical documentation, system specifications, design system artifacts, wee
 
 ---
 
-## 📸 Media & Visual Assets
+## Media & Visual Assets
 
 All real project screenshots, logos, and visual presentation assets are stored in the [`docs/assets/`](assets/) directory and referenced directly across the repository:
 
@@ -39,7 +39,7 @@ All real project screenshots, logos, and visual presentation assets are stored i
 
 ---
 
-## 🔗 Quick Links
+## Quick Links
 * **Live Application:** [https://danlenoon.github.io/TrafficSync/](https://danlenoon.github.io/TrafficSync/)
 * **REST API Endpoint:** [https://trafficsync.onrender.com/api/simulations](https://trafficsync.onrender.com/api/simulations)
 * **GitHub Repository:** [https://github.com/danlenoon/TrafficSync](https://github.com/danlenoon/TrafficSync)
