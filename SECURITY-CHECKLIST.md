@@ -29,7 +29,7 @@
 | 13 | Every query taking user input uses parameters, never string concatenation | Yes | Verified in `server/simulationsRepo.js`; all queries (`getAll`, `getById`, `create`, `update`, `remove`) use parameterized queries (`$1, $2, $3, $4`). |
 | 14 | The database is not open to the whole internet, or is reachable only by the app | Yes | Neon cloud PostgreSQL is protected with mandatory SSL encryption (`sslmode=require`), strong authentication, and accessible only via secured connection strings. |
 | 15 | The database user the app connects as has only the permissions it needs | Yes | Neon default user role (`neondb_owner`) is constrained to the `neondb` database and owns only the `simulations` table. |
-| 16 | Seed and sample data is invented, not real people's data | Yes | `server/db/seed.sql` and `client/src/api/seed.json` contain only synthetic traffic intersection names ("Del Rosario Intersection", "Clark x Friendship Intersection"). |
+| 16 | Seed and sample data is invented, not real people's data | Yes | `server/db/seed.sql` and client mock data (`client/src/api/seed.json` with resilient auto-seeding fallback) contain only synthetic traffic intersection names. |
 | 17 | Debug, seed and reset routes are removed before going public | Yes | Checked `server/server.js`; schema migrations and seeds are executed via offline CLI scripts (`db/run.js`) and no HTTP debug/seed/reset endpoints exist. |
 
 ## Access control
@@ -47,9 +47,9 @@
 | # | Check | Yes / No / N/A | Evidence |
 | --- | --- | --- | --- |
 | 23 | Input from the user is validated on the server, not only in the browser | Yes | Server validation function `validateSimulation(body)` in `server/server.js` checks string types, length boundaries (<= 120 chars), and JSON structure before SQL insertion. |
-| 24 | User-supplied text is escaped when rendered, so it cannot inject markup or script | Yes | React automatically escapes JSX string expressions (e.g. `{stat.label}`, `{sim.title}`) preventing XSS injection attacks. |
+| 24 | User-supplied text is escaped when rendered, so it cannot inject markup or script | Yes | React automatically escapes JSX string expressions (e.g. `{sim.title}`) and robust timestamp formatting ensures consistent time display. |
 | 25 | Error responses do not expose stack traces, file paths or connection details | Yes | Express global error handler returns a generic `{ error: 'Something went wrong on the server' }` response in `server/server.js` with stack traces hidden. |
-| 26 | CORS is not a wildcard on routes that change data | Yes | `server/server.js` restricts CORS specifically to `process.env.CORS_ORIGINS` (`http://localhost:5173`, `https://danlenoon.github.io`) rather than wildcard `*`. |
+| 26 | CORS is not a wildcard on routes that change data | Yes | `server/server.js` restricts CORS specifically to `process.env.CORS_ORIGINS` (`http://localhost:5173`, `https://danlenoon.github.io`) coupled with a unified client API module (`client/src/api/index.js`). |
 
 ## Repository and privacy
 
@@ -63,4 +63,4 @@
 
 ## Anything I found and fixed
 
-During the security audit, I verified that all legacy development references and unvalidated prototype endpoints were completely scrubbed to prevent unintended exposure. I also hardened the deployment pipeline by pinning all third-party GitHub Actions to immutable 40-character commit SHAs against supply chain tampering. Finally, I confirmed that the Express server enforces HTTP Basic Auth across all simulation routes and strictly restricts CORS to verified production and local development origins.
+During the security audit, I verified that all legacy development references and unvalidated prototype endpoints were completely scrubbed to prevent unintended exposure. I also hardened the deployment pipeline by pinning all third-party GitHub Actions to immutable 40-character commit SHAs against supply chain tampering. Finally, I confirmed that the Express server enforces HTTP Basic Auth across all simulation routes, strictly restricts CORS to verified production and local development origins, and incorporates a unified client API module with resilient auto-seeding and robust timestamp formatting.
