@@ -1,4 +1,4 @@
-# Security and Privacy Checklist
+# Security and privacy checklist
 
 ## 1. Secrets & Credential Management
 
