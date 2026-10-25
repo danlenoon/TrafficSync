@@ -1,4 +1,4 @@
-# Design System & Component Tokens: TrafficSync
+# Design system
 
 ## 1. Color Tokens & Visual Design Palette
 TrafficSync utilizes a purposeful, high-contrast engineering color palette paired with the Liquid Glass system:
