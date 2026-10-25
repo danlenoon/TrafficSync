@@ -485,87 +485,87 @@ The client builds via GitHub Actions on every push to `main` using `.github/work
 TrafficSync follows strict Atomic Design principles on the client and modular repository patterns on the server:
 
 ```text
-TrafficSync/
-├── .github/                          # Automated CI/CD workflows
-│   └── workflows/
-│       └── deploy-pages.yml          # GitHub Pages build & deployment action pipeline
-├── client/                           # Frontend React 18 Application (Vite SPA)
-│   ├── src/                          # Application source code
-│   │   ├── api/                      # Dual-mode API abstraction layer
-│   │   │   ├── httpApi.js            # Live Fetch client with HTTP Basic Auth
-│   │   │   ├── index.js              # Runtime API switcher (Mock vs. Live)
-│   │   │   ├── mockApi.js            # Offline localStorage mock client
-│   │   │   └── seed.json             # Seed intersection records (Del Rosario & Clark)
-│   │   ├── components/               # Strict Atomic Design architecture
-│   │   │   ├── atoms/                # Fundamental elements
-│   │   │   │   └── Button.jsx        # Reusable styled action button component
-│   │   │   ├── molecules/            # Compound UI components
-│   │   │   │   └── SimulationCard.jsx # Saved intersection simulation preview card
-│   │   │   ├── organisms/            # Core feature sections & UI modules
-│   │   │   │   ├── LanesSection.jsx  # Lane turning geometry and customizer view
-│   │   │   │   ├── Navbar.jsx        # Application header, navigation & Liquid Glass controls
-│   │   │   │   ├── PhaseBuilderSection.jsx # Signal phase light builder & matrix
-│   │   │   │   ├── SetupSection.jsx  # Intersection naming & approach direction toggles
-│   │   │   │   └── TimingsSection.jsx # Go, caution, and red clearance time pickers
-│   │   │   └── DemoNotice.jsx        # Non-intrusive offline demo mode indicator badge
-│   │   ├── pages/                    # Routed SPA screen views
-│   │   │   ├── Dashboard.jsx         # Saved simulations portfolio & project launcher
-│   │   │   ├── SimulationEditor.jsx  # Multi-step intersection timing & lane editor
-│   │   │   └── Results.jsx           # Phasing breakdown, bar charts, & cycle metrics
-│   │   ├── App.jsx                   # React Router route registry and layout container
-│   │   ├── index.css                 # Global CSS styles & custom scrollbars
-│   │   ├── main.jsx                  # React DOM mount point & application bootstrap
-│   │   ├── SimulationContext.jsx     # Global simulation state & adaptive clearance engine
-│   │   └── styles.css                # Additional custom CSS styles
-│   ├── .env.example                  # Frontend environment configuration template
-│   ├── index.html                    # Single-page application HTML entry point
-│   ├── package.json                  # Client dependencies (React, Vite, Lucide, Tailwind)
-│   └── vite.config.js                # Vite build settings & subpath base config
-├── server/                           # Backend Node.js Express REST API
-│   ├── db/                           # PostgreSQL database access layer
-│   │   ├── pool.js                   # Neon PostgreSQL connection pool with SSL
-│   │   ├── run.js                    # Cross-platform SQL migration & seed runner
-│   │   ├── schema.sql                # Relational table schema with JSONB support
-│   │   └── seed.sql                  # Ground-truth seed intersections
-│   ├── .env.example                  # Backend environment configuration template
-│   ├── Dockerfile                    # Containerization recipe for containerized hosting
-│   ├── package.json                  # Server dependencies (express, pg, cors)
-│   ├── server.js                     # Express REST API, auth middleware, & routes
-│   ├── sightingsRepo.js              # Traffic sightings database queries
-│   └── simulationsRepo.js            # Parameterized SQL database queries
-├── docs/                             # Technical documentation & design deliverables
-│   ├── assets/                       # High-resolution screenshots & visuals
-│   │   ├── cycle_results_summary_desktop.png
-│   │   ├── cycle_results_summary_mobile.png
-│   │   ├── liquid_glass_default_appearance_desktop.png
-│   │   ├── liquid_glass_default_appearance_mobile.jpeg
-│   │   ├── liquid_glass_ultra_clear_appearance_desktop.png
-│   │   ├── liquid_glass_ultra_clear_appearance_mobile.jpeg
-│   │   ├── liquid_glass_ultra_tinted_appearance_desktop.png
-│   │   ├── liquid_glass_ultra_tinted_appearance_mobile.jpeg
-│   │   ├── main_screen.png
-│   │   ├── no_saved_simulations_dashboard_desktop.png
-│   │   ├── no_saved_simulations_dashboard_mobile.png
-│   │   ├── saved_simulation_dashboard_desktop.png
-│   │   ├── saved_simulation_dashboard_mobile.png
-│   │   ├── simulation_editor_with_user_inputs_desktop.png
-│   │   ├── simulation_editor_with_user_inputs_mobile.png
-│   │   ├── simulation_editor_without_user_inputs_desktop.png
-│   │   └── simulation_editor_without_user_inputs_mobile.png
-│   ├── 01-proposal.md                # Revised project proposal & objectives
-│   ├── 02-mockup.md                  # Responsive wireframe specifications
-│   ├── 03-design-system.md           # Tokens, Atomic Design architecture, & typography
-│   ├── 04-weekly-reports.md          # Chronological development reports
-│   ├── 05-demo-video.md              # Video presentation guide & 3-5 min script
-│   ├── 06-security-and-privacy.md    # Security audit, secrets scrubbing & CORS
-│   └── README.md                     # Documentation index & status summary
-├── .env.example                      # Root environment configuration template
-├── .gitignore                        # Git exclusion rules (.env, node_modules, dist)
-├── AI-USAGE.md                       # Comprehensive AI assistance & commit attribution log
-├── compose.yml                       # Docker Compose orchestration recipe
-├── LICENSE                           # Open-source MIT License
-├── README.md                         # Main comprehensive repository guide
-└── SECURITY-CHECKLIST.md             # Security verification checklist with evidence
+TrafficSync/                                          # Root repository directory
+├── .github/                                          # Automated CI/CD workflows
+│   └── workflows/                                    # GitHub Actions workflows folder
+│       └── deploy-pages.yml                          # GitHub Pages deployment action pipeline
+├── client/                                           # Frontend React 18 Application (Vite SPA)
+│   ├── src/                                          # Application source code
+│   │   ├── api/                                      # Dual-mode API abstraction layer
+│   │   │   ├── httpApi.js                            # Live Fetch client with HTTP Basic Auth
+│   │   │   ├── index.js                              # Runtime API switcher (Mock vs. Live)
+│   │   │   ├── mockApi.js                            # Offline localStorage mock client
+│   │   │   └── seed.json                             # Seed intersection records (Del Rosario & Clark)
+│   │   ├── components/                               # Strict Atomic Design architecture
+│   │   │   ├── atoms/                                # Fundamental atomic elements
+│   │   │   │   └── Button.jsx                        # Reusable styled action button component
+│   │   │   ├── molecules/                            # Compound UI components
+│   │   │   │   └── SimulationCard.jsx                # Saved intersection simulation preview card
+│   │   │   ├── organisms/                            # Core feature sections & UI modules
+│   │   │   │   ├── LanesSection.jsx                  # Lane turning geometry and customizer view
+│   │   │   │   ├── Navbar.jsx                        # Application header, navigation & Liquid Glass controls
+│   │   │   │   ├── PhaseBuilderSection.jsx           # Signal phase light builder & matrix
+│   │   │   │   ├── SetupSection.jsx                  # Intersection naming & approach direction toggles
+│   │   │   │   └── TimingsSection.jsx                # Go, caution, and red clearance time pickers
+│   │   │   └── DemoNotice.jsx                        # Non-intrusive offline demo mode indicator badge
+│   │   ├── pages/                                    # Routed SPA screen views
+│   │   │   ├── Dashboard.jsx                         # Saved simulations portfolio & project launcher
+│   │   │   ├── SimulationEditor.jsx                  # Multi-step intersection timing & lane editor
+│   │   │   └── Results.jsx                           # Phasing breakdown, bar charts, & cycle metrics
+│   │   ├── App.jsx                                   # React Router route registry and layout container
+│   │   ├── index.css                                 # Global CSS styles & custom scrollbars
+│   │   ├── main.jsx                                  # React DOM mount point & application bootstrap
+│   │   ├── SimulationContext.jsx                     # Global simulation state & adaptive clearance engine
+│   │   └── styles.css                                # Additional custom CSS styles
+│   ├── .env.example                                  # Frontend environment configuration template
+│   ├── index.html                                    # Single-page application HTML entry point
+│   ├── package.json                                  # Client dependencies (React, Vite, Lucide, Tailwind)
+│   └── vite.config.js                                # Vite build settings & subpath base config
+├── server/                                           # Backend Node.js Express REST API
+│   ├── db/                                           # PostgreSQL database access layer
+│   │   ├── pool.js                                   # Neon PostgreSQL connection pool with SSL
+│   │   ├── run.js                                    # Cross-platform SQL migration & seed runner
+│   │   ├── schema.sql                                # Relational table schema with JSONB support
+│   │   └── seed.sql                                  # Ground-truth seed intersections
+│   ├── .env.example                                  # Backend environment configuration template
+│   ├── Dockerfile                                    # Containerization recipe for containerized hosting
+│   ├── package.json                                  # Server dependencies (express, pg, cors)
+│   ├── server.js                                     # Express REST API, auth middleware, & routes
+│   ├── sightingsRepo.js                              # Traffic sightings database queries
+│   └── simulationsRepo.js                            # Parameterized SQL database queries
+├── docs/                                             # Technical documentation & design deliverables
+│   ├── assets/                                       # High-resolution screenshots & visuals
+│   │   ├── cycle_results_summary_desktop.png         # Desktop analytical results summary screenshot
+│   │   ├── cycle_results_summary_mobile.png          # Mobile analytical results summary screenshot
+│   │   ├── liquid_glass_default_appearance_desktop.png # Desktop default Liquid Glass screenshot
+│   │   ├── liquid_glass_default_appearance_mobile.jpeg # Mobile default Liquid Glass screenshot
+│   │   ├── liquid_glass_ultra_clear_appearance_desktop.png # Desktop ultra-clear glass screenshot
+│   │   ├── liquid_glass_ultra_clear_appearance_mobile.jpeg # Mobile ultra-clear glass screenshot
+│   │   ├── liquid_glass_ultra_tinted_appearance_desktop.png # Desktop ultra-tinted glass screenshot
+│   │   ├── liquid_glass_ultra_tinted_appearance_mobile.jpeg # Mobile ultra-tinted glass screenshot
+│   │   ├── main_screen.png                           # Primary application screenshot visual
+│   │   ├── no_saved_simulations_dashboard_desktop.png # Desktop empty dashboard screenshot
+│   │   ├── no_saved_simulations_dashboard_mobile.png # Mobile empty dashboard screenshot
+│   │   ├── saved_simulation_dashboard_desktop.png    # Desktop saved simulation portfolio screenshot
+│   │   ├── saved_simulation_dashboard_mobile.png     # Mobile saved simulation portfolio screenshot
+│   │   ├── simulation_editor_with_user_inputs_desktop.png # Desktop active editor screenshot
+│   │   ├── simulation_editor_with_user_inputs_mobile.png # Mobile active editor screenshot
+│   │   ├── simulation_editor_without_user_inputs_desktop.png # Desktop initial setup screenshot
+│   │   └── simulation_editor_without_user_inputs_mobile.png # Mobile initial setup screenshot
+│   ├── 01-proposal.md                                # Revised project proposal & objectives
+│   ├── 02-mockup.md                                  # Responsive wireframe specifications
+│   ├── 03-design-system.md                           # Tokens, Atomic Design architecture, & typography
+│   ├── 04-weekly-reports.md                          # Chronological development reports
+│   ├── 05-demo-video.md                              # Video presentation guide & 3-5 min script
+│   ├── 06-security-and-privacy.md                    # Security audit, secrets scrubbing & CORS
+│   └── README.md                                     # Documentation index & status summary
+├── .env.example                                      # Root environment configuration template
+├── .gitignore                                        # Git exclusion rules (.env, node_modules, dist)
+├── AI-USAGE.md                                       # Comprehensive AI assistance & commit attribution log
+├── compose.yml                                       # Docker Compose orchestration recipe
+├── LICENSE                                           # Open-source MIT License
+├── README.md                                         # Main comprehensive repository guide
+└── SECURITY-CHECKLIST.md                             # Security verification checklist with evidence
 ```
 
 ---
