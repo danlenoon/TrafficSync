@@ -1,4 +1,4 @@
-# UI Mockup & Wireframe Specifications
+# Mockup
 
 ## 1. Overview & Design Principles
 TrafficSync's user interface is purposefully designed for civil engineering students, urban traffic planners, and municipal analysts who demand high operational clarity, precision, and visual feedback. The application implements a fully responsive design system accommodating wide-screen desktop displays, laptop views, and stacked mobile layouts. 
