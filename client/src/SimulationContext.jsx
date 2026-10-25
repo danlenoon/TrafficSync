@@ -76,17 +76,7 @@ export function SimulationProvider({ children }) {
     document.body.style.color = '#1f2937';
   }, [glassClarity]);
 
-  const [savedSimulations, setSavedSimulations] = useState(() => {
-    if (USING_MOCK_API) {
-      try {
-        const saved = localStorage.getItem('trafficsync_saved_simulations');
-        return saved ? JSON.parse(saved) : [];
-      } catch (e) {
-        return [];
-      }
-    }
-    return [];
-  });
+  const [savedSimulations, setSavedSimulations] = useState([]);
 
   const formatSavedAt = (dateInput) => {
     let d;
@@ -103,27 +93,25 @@ export function SimulationProvider({ children }) {
   };
 
   useEffect(() => {
-    if (!USING_MOCK_API) {
-      listSimulations()
-        .then(rows => {
-          const formatted = rows.map(r => ({
-            id: r.id,
-            title: r.title,
-            roadName: r.road_name,
-            directions: r.data?.directions || {},
-            laneConfigs: r.data?.laneConfigs || {},
-            phaseTimings: r.data?.phaseTimings || {},
-            pedestrians: r.data?.pedestrians || {},
-            pedestrianTimings: r.data?.pedestrianTimings || {},
-            phases: r.data?.phases || [],
-            lanesCount: r.data?.lanesCount || 0,
-            cycleLength: r.data?.cycleLength || 0,
-            savedAt: formatSavedAt(r.created_at)
-          }));
-          setSavedSimulations(formatted);
-        })
-        .catch(err => console.error('Failed to load simulations from API:', err));
-    }
+    listSimulations()
+      .then(rows => {
+        const formatted = rows.map(r => ({
+          id: r.id,
+          title: r.title,
+          roadName: r.road_name,
+          directions: r.data?.directions || {},
+          laneConfigs: r.data?.laneConfigs || {},
+          phaseTimings: r.data?.phaseTimings || {},
+          pedestrians: r.data?.pedestrians || {},
+          pedestrianTimings: r.data?.pedestrianTimings || {},
+          phases: r.data?.phases || [],
+          lanesCount: r.data?.lanesCount || 0,
+          cycleLength: r.data?.cycleLength || 0,
+          savedAt: formatSavedAt(r.created_at)
+        }));
+        setSavedSimulations(formatted);
+      })
+      .catch(err => console.error('Failed to load simulations:', err));
   }, []);
 
   const [hasBeenSaved, setHasBeenSaved] = useState(false);
@@ -286,22 +274,27 @@ export function SimulationProvider({ children }) {
   };
 
   const deleteSimulation = async (id) => {
-    if (!USING_MOCK_API) {
-      try {
-        await apiDeleteSimulation(id);
-      } catch (err) {
-        console.error('Failed to delete simulation from API:', err);
-      }
+    try {
+      await apiDeleteSimulation(id);
+      const rows = await listSimulations();
+      const formatted = rows.map(r => ({
+        id: r.id,
+        title: r.title,
+        roadName: r.road_name,
+        directions: r.data?.directions || {},
+        laneConfigs: r.data?.laneConfigs || {},
+        phaseTimings: r.data?.phaseTimings || {},
+        pedestrians: r.data?.pedestrians || {},
+        pedestrianTimings: r.data?.pedestrianTimings || {},
+        phases: r.data?.phases || [],
+        lanesCount: r.data?.lanesCount || 0,
+        cycleLength: r.data?.cycleLength || 0,
+        savedAt: formatSavedAt(r.created_at)
+      }));
+      setSavedSimulations(formatted);
+    } catch (err) {
+      console.error('Failed to delete simulation:', err);
     }
-    setSavedSimulations(prev => {
-      const updated = prev.filter(s => s.id !== id);
-      if (USING_MOCK_API) {
-        try {
-          localStorage.setItem('trafficsync_saved_simulations', JSON.stringify(updated));
-        } catch (e) {}
-      }
-      return updated;
-    });
   };
 
   const saveCurrentSimulation = async () => {
@@ -321,46 +314,33 @@ export function SimulationProvider({ children }) {
       cycleLength
     };
 
-    if (!USING_MOCK_API) {
-      try {
-        const created = await createSimulation({
-          title,
-          road_name: title,
-          data: dataPayload
-        });
-        const newSim = {
-          id: created.id,
-          title: created.title,
-          roadName: created.road_name,
-          ...dataPayload,
-          savedAt: formatSavedAt(created.created_at)
-        };
-        setSavedSimulations(prev => [newSim, ...prev.filter(s => s.id !== newSim.id)]);
-        setHasBeenSaved(true);
-        return newSim;
-      } catch (err) {
-        console.error('Failed to save simulation to API:', err);
-      }
+    try {
+      const created = await createSimulation({
+        title,
+        road_name: title,
+        data: dataPayload
+      });
+      const rows = await listSimulations();
+      const formatted = rows.map(r => ({
+        id: r.id,
+        title: r.title,
+        roadName: r.road_name,
+        directions: r.data?.directions || {},
+        laneConfigs: r.data?.laneConfigs || {},
+        phaseTimings: r.data?.phaseTimings || {},
+        pedestrians: r.data?.pedestrians || {},
+        pedestrianTimings: r.data?.pedestrianTimings || {},
+        phases: r.data?.phases || [],
+        lanesCount: r.data?.lanesCount || 0,
+        cycleLength: r.data?.cycleLength || 0,
+        savedAt: formatSavedAt(r.created_at)
+      }));
+      setSavedSimulations(formatted);
+      setHasBeenSaved(true);
+      return formatted.find(s => String(s.id) === String(created.id)) || formatted[0];
+    } catch (err) {
+      console.error('Failed to save simulation:', err);
     }
-
-    const simId = Date.now().toString();
-    const newSim = {
-      id: simId,
-      title,
-      ...dataPayload,
-      savedAt: formatSavedAt()
-    };
-
-    setSavedSimulations(prev => {
-      const updated = [newSim, ...prev.filter(s => s.title !== newSim.title)];
-      try {
-        localStorage.setItem('trafficsync_saved_simulations', JSON.stringify(updated));
-      } catch (e) {}
-      return updated;
-    });
-
-    setHasBeenSaved(true);
-    return newSim;
   };
 
   // Derived results based on dynamic phase clearance model and exact user clearance equations
