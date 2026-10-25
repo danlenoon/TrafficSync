@@ -15,9 +15,9 @@
   <strong>An intuitive, state-of-the-art interactive traffic signal timing computation engine, lane turning geometry customizer, and signal phasing simulation suite for civil engineering students, urban planners, and municipal traffic authorities.</strong>
 </p>
 
-**Live site:** https://danlenoon.github.io/TrafficSync/  
-**API:** https://trafficsync.onrender.com/api/simulations  
-**Demo video:** [Watch Video Presentation]()   
+**Live site:** [https://danlenoon.github.io/TrafficSync/](https://danlenoon.github.io/TrafficSync/)  
+**API:** [https://trafficsync.onrender.com/api/simulations](https://trafficsync.onrender.com/api/simulations)  
+**Demo video:** 
 
 ---
 
@@ -253,9 +253,9 @@ VITE_API_BASE_URL=http://localhost:3000
 To run the complete full-stack application, start both the frontend and backend servers simultaneously in two separate terminal windows:
 
 ```bash
-# ==========================================
+# ===========================================
 # TERMINAL 1: Frontend Development Server
-# ==========================================
+# ===========================================
 
 # Navigate to client directory
 cd client
@@ -265,9 +265,9 @@ npm run dev
 ```
 
 ```bash
-# ==========================================
+# ===========================================
 # TERMINAL 2: Backend Express REST API Server
-# ==========================================
+# ===========================================
 
 # Navigate to server directory
 cd server
@@ -490,9 +490,6 @@ TrafficSync/
 │   └── workflows/
 │       └── deploy-pages.yml          # GitHub Pages build & deployment action pipeline
 ├── client/                           # Frontend React 18 Application (Vite SPA)
-│   ├── public/                       # Static public assets (transparent favicon)
-│   │   ├── favicon.ico               # Multi-resolution browser tab icon
-│   │   └── favicon.png               # High-res transparent PNG tab favicon
 │   ├── src/                          # Application source code
 │   │   ├── api/                      # Dual-mode API abstraction layer
 │   │   │   ├── httpApi.js            # Live Fetch client with HTTP Basic Auth
@@ -500,10 +497,17 @@ TrafficSync/
 │   │   │   ├── mockApi.js            # Offline localStorage mock client
 │   │   │   └── seed.json             # Seed intersection records (Del Rosario & Clark)
 │   │   ├── components/               # Strict Atomic Design architecture
-│   │   │   ├── atoms/                # Fundamental elements (Button, Input, Badge)
-│   │   │   ├── molecules/            # Compound UI cards (SimulationCard)
-│   │   │   ├── organisms/            # Core sections (Navbar, Setup, Lanes, Timings, PhaseBuilder)
-│   │   │   └── DemoNotice.jsx        # Non-intrusive offline demo indicator badge
+│   │   │   ├── atoms/                # Fundamental elements
+│   │   │   │   └── Button.jsx        # Reusable styled action button component
+│   │   │   ├── molecules/            # Compound UI components
+│   │   │   │   └── SimulationCard.jsx # Saved intersection simulation preview card
+│   │   │   ├── organisms/            # Core feature sections & UI modules
+│   │   │   │   ├── LanesSection.jsx  # Lane turning geometry and customizer view
+│   │   │   │   ├── Navbar.jsx        # Application header, navigation & Liquid Glass controls
+│   │   │   │   ├── PhaseBuilderSection.jsx # Signal phase light builder & matrix
+│   │   │   │   ├── SetupSection.jsx  # Intersection naming & approach direction toggles
+│   │   │   │   └── TimingsSection.jsx # Go, caution, and red clearance time pickers
+│   │   │   └── DemoNotice.jsx        # Non-intrusive offline demo mode indicator badge
 │   │   ├── pages/                    # Routed SPA screen views
 │   │   │   ├── Dashboard.jsx         # Saved simulations portfolio & project launcher
 │   │   │   ├── SimulationEditor.jsx  # Multi-step intersection timing & lane editor
@@ -511,7 +515,8 @@ TrafficSync/
 │   │   ├── App.jsx                   # React Router route registry and layout container
 │   │   ├── index.css                 # Global CSS styles & custom scrollbars
 │   │   ├── main.jsx                  # React DOM mount point & application bootstrap
-│   │   └── SimulationContext.jsx     # Global simulation state & adaptive clearance engine
+│   │   ├── SimulationContext.jsx     # Global simulation state & adaptive clearance engine
+│   │   └── styles.css                # Additional custom CSS styles
 │   ├── .env.example                  # Frontend environment configuration template
 │   ├── index.html                    # Single-page application HTML entry point
 │   ├── package.json                  # Client dependencies (React, Vite, Lucide, Tailwind)
@@ -526,9 +531,27 @@ TrafficSync/
 │   ├── Dockerfile                    # Containerization recipe for containerized hosting
 │   ├── package.json                  # Server dependencies (express, pg, cors)
 │   ├── server.js                     # Express REST API, auth middleware, & routes
+│   ├── sightingsRepo.js              # Traffic sightings database queries
 │   └── simulationsRepo.js            # Parameterized SQL database queries
 ├── docs/                             # Technical documentation & design deliverables
-│   ├── assets/                       # High-resolution screenshots, logos, & visuals
+│   ├── assets/                       # High-resolution screenshots & visuals
+│   │   ├── cycle_results_summary_desktop.png
+│   │   ├── cycle_results_summary_mobile.png
+│   │   ├── liquid_glass_default_appearance_desktop.png
+│   │   ├── liquid_glass_default_appearance_mobile.jpeg
+│   │   ├── liquid_glass_ultra_clear_appearance_desktop.png
+│   │   ├── liquid_glass_ultra_clear_appearance_mobile.jpeg
+│   │   ├── liquid_glass_ultra_tinted_appearance_desktop.png
+│   │   ├── liquid_glass_ultra_tinted_appearance_mobile.jpeg
+│   │   ├── main_screen.png
+│   │   ├── no_saved_simulations_dashboard_desktop.png
+│   │   ├── no_saved_simulations_dashboard_mobile.png
+│   │   ├── saved_simulation_dashboard_desktop.png
+│   │   ├── saved_simulation_dashboard_mobile.png
+│   │   ├── simulation_editor_with_user_inputs_desktop.png
+│   │   ├── simulation_editor_with_user_inputs_mobile.png
+│   │   ├── simulation_editor_without_user_inputs_desktop.png
+│   │   └── simulation_editor_without_user_inputs_mobile.png
 │   ├── 01-proposal.md                # Revised project proposal & objectives
 │   ├── 02-mockup.md                  # Responsive wireframe specifications
 │   ├── 03-design-system.md           # Tokens, Atomic Design architecture, & typography
@@ -600,7 +623,7 @@ Explore the responsive user interface across desktop and mobile form factors, fe
 | **Home Dashboard (Saved Simulations)** | <img src="docs/assets/saved_simulation_dashboard_desktop.png" alt="Saved Simulation Dashboard Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The master portfolio dashboard presenting saved intersection simulation cards in a responsive grid. Each card displays directional indicators, creation timestamps, quick-load triggers, and deletion controls, anchored by the prominent "+ New Simulation" action. |
 | **Home Dashboard (Empty State)** | <img src="docs/assets/no_saved_simulations_dashboard_desktop.png" alt="Empty Dashboard Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The welcoming initial state displayed when no simulations are saved in local storage or database persistence, providing a clean onboarding call-to-action for new users. |
 | **Simulation Editor (Initial State)** | <img src="docs/assets/simulation_editor_without_user_inputs_desktop.png" alt="Simulation Editor Initial Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The multi-step intersection configuration view prior to data entry. Features a header navigation control with a back button, intersection naming field, and interactive approach toggles (Northbound, Southbound, Eastbound, Westbound). |
-| **Simulation Editor (Active Configuration)** | <img src="docs/assets/simulation_editor_with_user_inputs_desktop.png" alt="Simulation Editor Active Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>A fully parameterized intersection layout featuring custom lane turning geometries (Left Turn, Straight, Right Turn), oval number pickers for go/amber/red timing intervals, interactive 3-lens signal phase builders, and sticky action buttons for saving and calculating cycle timings. |
+| **Simulation Editor (Active Configuration)** | <img src="docs/assets/simulation_editor_with_user_inputs_desktop.png" alt="Simulation Editor Active Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>A fully parameterized intersection layout featuring custom lane turning geometries (Left Turn, Straight, Right Turn), oval number pickers for go/caution/red clearance timing intervals, interactive 3-lens signal phase builders, and sticky action buttons for saving and calculating cycle timings. |
 | **Cycle Results Summary (Desktop)** | <img src="docs/assets/cycle_results_summary_desktop.png" alt="Cycle Results Summary Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The comprehensive analytical results dashboard displaying master cycle length telemetry, intersection setup overviews (active directions and total lanes), directional stop-time breakdown lists, and interactive color-coded percentage distribution progress bars with live hover tooltips. |
 | **Liquid Glass (Default Appearance)** | <img src="docs/assets/liquid_glass_default_appearance_desktop.png" alt="Liquid Glass Default Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The default balanced appearance (50% clarity slider setting) showcasing translucent glassmorphic card surfaces, soft drop shadows, and high-contrast typography across the desktop navigation header and main workspace. |
 | **Liquid Glass (Ultra Clear Appearance)** | <img src="docs/assets/liquid_glass_ultra_clear_appearance_desktop.png" alt="Liquid Glass Ultra Clear Desktop" width="550" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" /><br>The ultra-clear appearance mode maximizing backdrop luminosity and translucency while maintaining crisp element borders and legibility for modern glass-panel design aesthetics. |
