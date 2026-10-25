@@ -26,15 +26,20 @@ All real project screenshots, logos, and visual presentation assets are stored i
 | **[`assets/main_screen.png`](assets/main_screen.png)** | PNG / High-Res Banner | Hero visual banner displaying the complete TrafficSync workspace. |
 | **[`assets/saved_simulation_dashboard_desktop.png`](assets/saved_simulation_dashboard_desktop.png)** | PNG / Desktop Display | Saved simulation portfolio cards showing directional badges, lane counts, and timestamps. |
 | **[`assets/saved_simulation_dashboard_mobile.png`](assets/saved_simulation_dashboard_mobile.png)** | PNG / Mobile Display | Responsive mobile layout of saved simulation cards with touch-friendly spacing. |
-| **[`assets/no_saved_simulations_dashboard_desktop.png`](assets/no_saved_simulations_dashboard_desktop.png)** | PNG / Empty State | Clean prompt card welcoming first-time users to start a new simulation. |
+| **[`assets/no_saved_simulations_dashboard_desktop.png`](assets/no_saved_simulations_dashboard_desktop.png)** | PNG / Empty State (Desktop) | Clean prompt card welcoming first-time desktop users to start a new simulation. |
+| **[`assets/no_saved_simulations_dashboard_mobile.png`](assets/no_saved_simulations_dashboard_mobile.png)** | PNG / Empty State (Mobile) | Clean prompt card welcoming mobile users to start a new simulation. |
 | **[`assets/simulation_editor_without_user_inputs_desktop.png`](assets/simulation_editor_without_user_inputs_desktop.png)** | PNG / Desktop Display | Clean initial configuration card before adding directional approaches. |
+| **[`assets/simulation_editor_without_user_inputs_mobile.png`](assets/simulation_editor_without_user_inputs_mobile.png)** | PNG / Mobile Display | Mobile view of clean initial configuration card. |
 | **[`assets/simulation_editor_with_user_inputs_desktop.png`](assets/simulation_editor_with_user_inputs_desktop.png)** | PNG / Desktop Display | Configured intersection with lane customizer, number pickers, and phase builder. |
 | **[`assets/simulation_editor_with_user_inputs_mobile.png`](assets/simulation_editor_with_user_inputs_mobile.png)** | PNG / Mobile Display | Single-column mobile layout showing centered add-lane controls and signal heads. |
 | **[`assets/cycle_results_summary_desktop.png`](assets/cycle_results_summary_desktop.png)** | PNG / Desktop Display | Master cycle summary badges, calculated stop times, and percentage breakdown bars. |
 | **[`assets/cycle_results_summary_mobile.png`](assets/cycle_results_summary_mobile.png)** | PNG / Mobile Display | Mobile view of analytical cycle output and timing distribution bars. |
-| **[`assets/liquid_glass_default_appearance_desktop.png`](assets/liquid_glass_default_appearance_desktop.png)** | PNG / Default Glass | Balanced medium clarity (50%) providing translucent glass styling. |
-| **[`assets/liquid_glass_ultra_clear_appearance_desktop.png`](assets/liquid_glass_ultra_clear_appearance_desktop.png)** | PNG / Ultra Clear | High-transparency appearance maximizing backdrop visibility. |
-| **[`assets/liquid_glass_ultra_tinted_appearance_desktop.png`](assets/liquid_glass_ultra_tinted_appearance_desktop.png)** | PNG / Ultra Tinted | High-contrast opaque slate for high-glare lighting environments. |
+| **[`assets/liquid_glass_default_appearance_desktop.png`](assets/liquid_glass_default_appearance_desktop.png)** | PNG / Default Glass | Balanced medium clarity (50%) providing translucent glass styling on desktop. |
+| **[`assets/liquid_glass_default_appearance_mobile.jpeg`](assets/liquid_glass_default_appearance_mobile.jpeg)** | JPEG / Default Glass | Balanced medium clarity (50%) translucent glass styling on mobile. |
+| **[`assets/liquid_glass_ultra_clear_appearance_desktop.png`](assets/liquid_glass_ultra_clear_appearance_desktop.png)** | PNG / Ultra Clear | High-transparency appearance maximizing backdrop visibility on desktop. |
+| **[`assets/liquid_glass_ultra_clear_appearance_mobile.jpeg`](assets/liquid_glass_ultra_clear_appearance_mobile.jpeg)** | JPEG / Ultra Clear | High-transparency appearance maximizing backdrop visibility on mobile. |
+| **[`assets/liquid_glass_ultra_tinted_appearance_desktop.png`](assets/liquid_glass_ultra_tinted_appearance_desktop.png)** | PNG / Ultra Tinted | High-contrast opaque slate for high-glare desktop lighting environments. |
+| **[`assets/liquid_glass_ultra_tinted_appearance_mobile.jpeg`](assets/liquid_glass_ultra_tinted_appearance_mobile.jpeg)** | JPEG / Ultra Tinted | High-contrast opaque slate for high-glare mobile lighting environments. |
 | **[`assets/logo.jpg`](assets/logo.jpg)** | JPG / Visual Thumbnail | Official TrafficSync application logo icon with glowing signal head. |
 
 ---
