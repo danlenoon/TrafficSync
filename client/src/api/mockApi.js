@@ -20,7 +20,10 @@ function read() {
   const stored = localStorage.getItem(KEY)
   if (stored) {
     try {
-      return JSON.parse(stored)
+      const parsed = JSON.parse(stored)
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed
+      }
     } catch {
       // Corrupted storage. Start again rather than crashing the app.
       localStorage.removeItem(KEY)
