@@ -79,14 +79,10 @@ export function SimulationProvider({ children }) {
   const [savedSimulations, setSavedSimulations] = useState([]);
 
   const formatSavedAt = (dateInput) => {
-    let d;
-    if (typeof dateInput === 'string') {
-      const clean = dateInput.replace('Z', '').replace(/\+\d{2}:\d{2}$/, '').replace(/\.\d+$/, '');
-      d = new Date(clean);
-    } else {
-      d = dateInput ? new Date(dateInput) : new Date();
+    let d = dateInput ? new Date(dateInput) : new Date();
+    if (isNaN(d.getTime())) {
+      d = new Date();
     }
-    if (isNaN(d.getTime())) return 'Recent';
     const dateStr = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
     const timeStr = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true });
     return `${dateStr} at ${timeStr}`;
