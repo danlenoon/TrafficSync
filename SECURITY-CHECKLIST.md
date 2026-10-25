@@ -1,10 +1,5 @@
 # Security checklist
 
-Every row gets one of **Yes**, **No** or **N/A**, and one line of evidence in
-your own words: what you checked, where, and what you found. "N/A" is a correct
-answer when it is true, but it needs its reason. A blank row scores nothing, and
-a Yes your repository contradicts scores nothing either.
-
 ## Secrets and credentials
 
 | # | Check | Yes / No / N/A | Evidence |
@@ -17,8 +12,6 @@ a Yes your repository contradicts scores nothing either.
 | 6 | Production credentials live only in my hosting provider's environment settings | Yes | Production database URL and Basic Auth credentials exist solely in the Render dashboard environment settings. |
 
 ## GitHub Actions
-
-If your project has no workflows, mark every row N/A and say so once.
 
 | # | Check | Yes / No / N/A | Evidence |
 | --- | --- | --- | --- |
