@@ -54,19 +54,16 @@ To maintain clean code separation and reusability, components are organized acco
 
 * **Atoms (`src/components/atoms/`):**
   * `<Button />` — Primary, secondary, outline, and destructive button variants with concentric pill curves (`rounded-full`).
-  * `<Input />` — Form text and numeric inputs with Liquid Glass backgrounds and autofill suppressors.
-  * `<Checkbox />` — Directional selection checkboxes with blue active states.
-  * `<Badge />` — Directional and turning arrow pills.
 * **Molecules (`src/components/molecules/`):**
   * `<SimulationCard />` — Portfolio card with timestamps, badge arrays, load clicks, and stop-propagated delete actions.
-  * `<LaneBadge />` — Circular badge displaying 1 to 3 movement arrows in a single line.
-  * `<TimingPicker />` — Custom oval press-and-hold up/down stepper with continuous typing and global window release listeners.
 * **Organisms (`src/components/organisms/`):**
   * `<Navbar />` — Main header housing the logo, title, and interactive Liquid Glass slider.
   * `<SetupSection />` — Intersection name and directional approach selectors with mobile autofill suppression.
   * `<LanesSection />` — Lane count customizers with centered add-lane controls.
   * `<TimingsSection />` — Numerical timing controls for Go, Caution, and Red Clearance intervals.
-  * `<PhaseBuilderSection />` — Visual traffic signal heads, 3-column pedestrian signal housing, and sequential phase state matrix.
+  * `<PhaseBuilderSection />` — Visual traffic signal heads, pedestrian signal housing, and sequential phase state matrix.
+* **Common Components (`src/components/`):**
+  * `<DemoNotice />` — Notification banner indicating offline mock API mode or backend connection status.
 * **Pages (`src/pages/`):**
   * `<Dashboard />` — Portfolio view and new simulation initiator with wider card grids.
   * `<SimulationEditor />` — Central multi-stage configuration and calculation workspace.
