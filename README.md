@@ -17,7 +17,7 @@
 
 **Live site:** [https://danlenoon.github.io/TrafficSync/](https://danlenoon.github.io/TrafficSync/)  
 **API:** [https://trafficsync.onrender.com/api/simulations](https://trafficsync.onrender.com/api/simulations)  
-**Demo video:** 
+**Demo video:** [https://drive.google.com/file/d/1PjfBFxyJiyv46H7BzruSbd5xOpTnLiVT/view?usp=sharing](https://drive.google.com/file/d/1PjfBFxyJiyv46H7BzruSbd5xOpTnLiVT/view?usp=sharing)
 
 ---
 
